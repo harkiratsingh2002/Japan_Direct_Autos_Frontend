@@ -1,0 +1,17 @@
+.scrollContainer {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+  }
+  
+  .imageWrapper {
+    display: inline-flex;
+  }
+  
+  .image {
+    margin: 10px;
+    /* Add additional styles for image size and appearance */
+    width: 3.2em;
+    height: 3.2em;
+  }
