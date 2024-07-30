@@ -10,13 +10,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from 'sweetalert2'
 import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
+import { useMediaQuery } from '@mui/material';
+
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: '50%',
   bgcolor: "background.paper",
 //   border: "2px solid #000",
   boxShadow: 24,
@@ -27,6 +29,10 @@ function BasicModal({ openModal, handleCloseModal, setReviews }) {
   const navigate = useNavigate()
   const params = useParams();
   const dispatch = useDispatch();
+  const matches = useMediaQuery('(max-width:600px)');
+  if(matches){
+    style.width = '65%'
+  }
     // const [carRatingValue,setCarRatingValue] = React.useState(0);
     let userToken = null
     if(localStorage.getItem('userData')){

@@ -41,6 +41,7 @@ const CarCardComponent = (props) => {
     <Card
       sx={{
         maxWidth: 345,
+        // width: props.inMobile ? 280 : 345,
         minWidth: 280,
         display: "inline-flex",
         justifyContent: "space-between",

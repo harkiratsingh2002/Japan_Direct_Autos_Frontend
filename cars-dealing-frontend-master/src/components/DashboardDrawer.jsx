@@ -40,7 +40,9 @@ export default function DashboardDrawer() {
   const dashboardLinks = ['/add-car-form','/manage-cars','/add-user','/manage-users']
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={closeDrawer}>
+    <Box sx={{ width: 250,
+      height:'100%',
+      backgroundColor: myColors.judiColor }} role="presentation" onClick={closeDrawer}>
       <div>
         <IconButton
           size="large"
@@ -105,12 +107,12 @@ export default function DashboardDrawer() {
             sx={{ mr: 2 }}
             onClick={openDrawer}
           >
-            <SettingsIcon />
+          <SettingsIcon /> 
           </IconButton>
           </Toolbar>
         </AppBar>
       </Box>
-      <Drawer open={open} onClose={closeDrawer}>
+      <Drawer  open={open} onClose={closeDrawer}>
         {DrawerList}
       </Drawer>
     </div>

@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import links from "../assets/util/links";
 import MultipleImageAddingComponent from "./MultipleImageAddingComponent";
 import Swal from 'sweetalert2'
-import { startLoader } from "../reduxStore/loadingSlice";
+import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 
 // import { imageDb } from "../firebase";
 // import { ref } from "firebase/storage";
@@ -213,6 +213,7 @@ const AddCarForm = () => {
     year: "",
     price: "",
     brand: "",
+    description: "",
     // images: new FormData(),
     engine: "",
     suspension: "",
@@ -431,6 +432,44 @@ const AddCarForm = () => {
   //       color: "",
   //     });
   //     return (
+
+  const descriptionForm = (
+    <Grid
+        bgcolor={myColors.myGrey}
+        sx={{
+          paddingY: "1.5em",
+          paddingX: "1.5em",
+
+          border: "1px solid #212121",
+          boxShadow: "3px 3px",
+          borderRadius: "25px",
+        }}
+        xs={10}
+        md={7}
+        mt={3}
+      >
+        <Typography textAlign={"center"} variant="h5">
+          Add Car Description
+        </Typography>
+        <Grid pt={2} container item xs={12}>
+        <TextField
+          id="outlined-multiline-static"
+          label="Car Description"
+          multiline
+          rows={6}
+          onChange={(e) => {
+            setCarFormData((oldState) => {
+              let newState = { ...oldState };
+              newState.description = e.target.value;
+              return newState;
+            });
+          }}
+          fullWidth
+        />
+        </Grid>
+
+      </Grid>
+  )
   const specificationForm = (
     <>
       <Grid
@@ -722,6 +761,7 @@ const AddCarForm = () => {
       <Grid container justifyContent={"center"}>
         {onForm == "basicInformation" && BasicCarInformationForm}
         {onForm == "specificationInformation" && specificationForm}
+        {onForm == "descriptionInformation" && descriptionForm}
         {onForm == "addImages" && (
           <ImageAddingComponent
             allImages = {[]}
@@ -739,6 +779,7 @@ const AddCarForm = () => {
                   const pages = [
                     "basicInformation",
                     "specificationInformation",
+                    "descriptionInformation",
                     "addImages",
                   ];
                   let currPageIndex = pages.findIndex((el) => {
@@ -758,6 +799,7 @@ const AddCarForm = () => {
                   const pages = [
                     "basicInformation",
                     "specificationInformation",
+                    "descriptionInformation",
                     "addImages",
                   ];
                   let currPageIndex = pages.findIndex((el) => {

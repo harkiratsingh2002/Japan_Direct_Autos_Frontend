@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import carTestImage from "../assets/images/car-home-bg-3.jpeg";
 import { useParams } from "react-router-dom";
@@ -17,6 +17,8 @@ const CarDetailsPage = (props) => {
   const [carInfo, setCarInfo] = useState(null);
   // const [loadingData, setLoadingData] = useState(true);
   const [rows, setRows] = useState([]);
+  // const [price, setPrice] = useState(0);
+
   const [currentImage, setCurrentImage] = useState(null);
   const [openEnquiryModal, setOpenEnquiryModal] = useState(false);
   let carId = params.carId;
@@ -58,7 +60,12 @@ const CarDetailsPage = (props) => {
             {color: finalcarInfoResult.car.color},
             {seatingCapacity: finalcarInfoResult.car.seatingCapacity},
             {model: finalcarInfoResult.car.year},
-            {mileage: finalcarInfoResult.car.mileage}
+            {mileage: finalcarInfoResult.car.mileage},
+            {brand: finalcarInfoResult.car.brand},
+            {oldOrNew: finalcarInfoResult.car.oldOrNew},
+            {fuelType: finalcarInfoResult.car.fuelType},
+            {suspension: finalcarInfoResult.car.suspension},
+            {transmission: finalcarInfoResult.car.transmission}
           ]
           setRows(myRows);
           setCurrentImage(finalcarInfoResult.car.images[0])
@@ -87,7 +94,7 @@ const CarDetailsPage = (props) => {
     <>
 
     {carInfo && 
-
+      
       <Grid
         container
         sx={{
@@ -98,7 +105,18 @@ const CarDetailsPage = (props) => {
         }}
         spacing={2}
         p={3}
+        xs={12}
+        md={10}
+        ml={'auto'}
+        mr={'auto'}
+
       >
+        <Grid item xs={11}>
+          <Typography variant="h2">
+
+          {carInfo.name}
+          </Typography>
+        </Grid>
         <Grid item my={3.2} xs={11} md={7}>
            
             <>
@@ -122,11 +140,40 @@ const CarDetailsPage = (props) => {
         </Grid>
         <Grid item my={3.2} xs={11} md={5}>
           
-                      <CustomizedTable headerCols={headCols} rows={rows} />
+            <Grid container sx={{
+              border: '1px solid black',
+              borderRadius: '2em',
+              textAlign: 'center'
+            }} p={3}>
+              <Grid item xs={12}>
+
+            <Typography variant="body1">
+              Avaialable At
+            </Typography>
+              </Grid>
+              <Grid item xs={12}
+              >
+
+            <Typography variant="h4">
+              ${carInfo.price}
+            </Typography>
+              </Grid>
+            </Grid>          
           
+        </Grid>
+        <Grid item xs={11}>
+          <Typography variant="h6">
+            Description
+          </Typography>
+          <Typography mt={1}>
+            {carInfo.description}
+          </Typography>
         </Grid>
       </Grid>
     }
+    <Grid container xs={11} md={10} mb={4} ml={'auto'} mr={'auto'}>
+    <CustomizedTable headerCols={headCols} rows={rows} />
+    </Grid>
     <ReviewsComponent />
     <Button sx={{
       position: 'fixed',

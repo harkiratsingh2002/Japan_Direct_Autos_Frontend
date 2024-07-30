@@ -86,12 +86,14 @@ const ReviewsComponent = () => {
         })
       })
       .then(res=>{
+        dispatch(endLoader())
         return res.json()
       })
       .then(checkResult=>{
+        dispatch(endLoader())
         if(checkResult.topReviewExist){
           // alert('You have already posted a review.')
-          dispatch(endLoader())
+          
           Swal.fire({
             title: 'error',
             text: 'You have already posted a review.' ,
@@ -104,6 +106,10 @@ const ReviewsComponent = () => {
   
           setOpenModal(true)
         }
+      })
+      .catch(err=>{
+        dispatch(endLoader());
+        console.log('err in top review',err)
       })
      
       console.log('top review exist in open:-',topReviewExist)
@@ -170,10 +176,10 @@ const ReviewsComponent = () => {
       }),
     })
       .then((resultStatus) => {
+        dispatch(endLoader())
         if (resultStatus.status < 200 || resultStatus.status > 299) {
           resultStatus.json().then((err) => {
             console.log("err rating bar data:-", err);
-            dispatch(endLoader())
             // alert(err.message);
             Swal.fire({
               title: 'error',
@@ -187,11 +193,17 @@ const ReviewsComponent = () => {
       })
       .then((result) => {
         // setReviewsResult(result.allReviews);
+        dispatch(endLoader())
+
         const percentages = calculatePercentages(result.allReviews);
         setRatingPercentages(percentages);
         let myVoteData = Object.values(result.allReviews);
         setTheVoteData(myVoteData);
-      });
+      })
+      .catch((err) =>{
+        dispatch(endLoader());
+        console.log('err in reviewbar',err)
+      })
       // if(userToken){
 
       //   fetch(links.backendUrl + '/get-top-review',{
@@ -238,10 +250,10 @@ const ReviewsComponent = () => {
       }),
     })
       .then((result) => {
+        dispatch(endLoader())
         if (result.status < 200 || result.status > 299) {
           result.json().then((err) => {
             console.log("err:- ", err);
-            dispatch(endLoader())
             alert(err.messaage);
             Swal.fire({
               title: 'error',
@@ -254,6 +266,8 @@ const ReviewsComponent = () => {
         return result.json();
       })
       .then((reviewsResult) => {
+        dispatch(endLoader())
+
         console.log("reviews result:-", reviewsResult);
         console.log('topReviewExist:-', reviewsResult.topReviewExist)
         setTopReview(reviewsResult.topReviewExist);
@@ -261,6 +275,8 @@ const ReviewsComponent = () => {
         setCount(reviewsResult.count);
       })
       .catch((err) => {
+        dispatch(endLoader())
+
         console.log("last error:- ", err);
       });
   }, []);
@@ -390,15 +406,11 @@ const ReviewsComponent = () => {
               >
                 Post Review
               </Button>
-              <BasicModal
-                openModal={openModal}
-                handleCloseModal={handleCloseModal}
-                setReviews = {setReviews}
-              />
+              
             </Grid>
-            <Grid item pl={2} mt={3}>
+            {/* <Grid item pl={2} mt={3}>
               <DropdownMenu title={"Filters"} options={filterOptions} />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
         {/* {topReviewExist && topReview.map((review)=>{
@@ -418,6 +430,11 @@ const ReviewsComponent = () => {
           />
         </Grid>
       </Grid>
+      <BasicModal
+                openModal={openModal}
+                handleCloseModal={handleCloseModal}
+                setReviews = {setReviews}
+              />
     </>
   );
 };

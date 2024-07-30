@@ -119,6 +119,34 @@ const LoginPage = () => {
     }
   };
 
+  const handleForgotPassword = ()=>{
+    if(loginFormData.email){
+      dispatch(startLoader())
+      let otp =  Math.floor(Math.random() * 9000) + 1000
+      let currentTimeStamp = Date.now()
+      localStorage.setItem('forgotPasswordOtp',JSON.stringify({otp,currentTimeStamp,email: loginFormData.email}))
+      axios.post(links.backendUrl + '/forgot-password',{
+        otp,
+        email: loginFormData.email
+      })
+      .then(()=>{
+        dispatch(endLoader())
+        navigate("/forgot-password")
+      })
+      .catch(err=>{
+        dispatch(endLoader())
+        console.log('err while forgot password',err)
+      })
+    }
+    else{
+      Swal.fire({
+        title: 'Error',
+        text: 'Enter Email',
+        icon: 'error'
+      })
+    }
+  }
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -311,6 +339,16 @@ const LoginPage = () => {
                   onSuccess={responseMessage}
                   onError={errorMessage}
                 /> */}
+              </Grid>
+              <Grid container mt={2} xs={12}>
+                <Button
+                  mt={2}
+                  onClick={handleForgotPassword}
+                  fullWidth
+                  variant="contained"
+                >
+                  Forgot Password
+                </Button>
               </Grid>
             </Grid>
           </form>

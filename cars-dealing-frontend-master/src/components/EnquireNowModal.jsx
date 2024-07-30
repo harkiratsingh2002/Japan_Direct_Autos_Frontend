@@ -10,6 +10,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
+import { useMediaQuery } from '@mui/material';
+
 
 const style = {
   position: "absolute",
@@ -26,6 +28,10 @@ const style = {
 const EnquireNowModal = (props) => {
   const navigate = useNavigate();
   const params = useParams();
+  const matches = useMediaQuery('(max-width:600px)');
+  if(matches){
+    style.width = '65%'
+  }
   // const [carRatingValue,setCarRatingValue] = React.useState(0);
   let userToken = null;
   if (localStorage.getItem("userData")) {
@@ -152,7 +158,7 @@ const EnquireNowModal = (props) => {
   };
   return (
     <>
-      <div>
+      <>
         {/* <Button onClick={handleOpen}>Open modal</Button> */}
         <Modal
           open={props.openModal}
@@ -162,7 +168,8 @@ const EnquireNowModal = (props) => {
         >
           <Box sx={style}>
             <Grid container>
-              <Grid item xs={12}>
+              <Grid item xs={12} 
+              md={12}>
                 {/* <Typography component="legend">Enquiry Subject</Typography> */}
                 <TextField
                   value={EnquiryFormData.subject.value}
@@ -179,7 +186,8 @@ const EnquireNowModal = (props) => {
                   variant="standard"
                 />
               </Grid>
-              <Grid item mt={2} xs={12}>
+              <Grid item mt={2} xs={12}
+              md={12}>
                 <TextField
                   value={EnquiryFormData.enquiryText.value}
                   onChange={(e) => {
@@ -202,6 +210,7 @@ const EnquireNowModal = (props) => {
                 item
                 mt={3}
                 xs={8}
+                md={12}
                 alignSelf={"center"}
               >
                 <Button variant="contained" color="primary">
@@ -214,7 +223,7 @@ const EnquireNowModal = (props) => {
           </Typography> */}
           </Box>
         </Modal>
-      </div>
+      </>
     </>
   );
 };

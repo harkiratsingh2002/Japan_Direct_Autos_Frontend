@@ -12,6 +12,7 @@ import ManageCars from "../components/ManageCars.jsx";
 import HandleEnquiries from "../components/HandleEnquiries.jsx";
 import AddUser from "../components/AddUser.jsx";
 import ManageUsers from "../components/ManageUsers.jsx";
+import DashboardAdminMain from "../components/DashboardAdminMain.jsx";
 const DashboardAdmin = ()=>{
 
     const [isAdmin,setIsAdmin] = useState(false)
@@ -88,6 +89,7 @@ const DashboardAdmin = ()=>{
         <Grid>
 
         <DashboardDrawer />
+        { dashboardOption == 'main' && <DashboardAdminMain />}
         { dashboardOption=='add-car-form' &&  <AddCarForm />}
         { dashboardOption=='manage-cars' && <ManageCars />}
         { dashboardOption=='handle-enquiries' && <HandleEnquiries />}
