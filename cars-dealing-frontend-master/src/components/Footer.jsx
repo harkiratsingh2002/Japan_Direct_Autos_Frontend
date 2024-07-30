@@ -6,6 +6,7 @@ import links from "../assets/util/links";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const inputStyles = {
@@ -111,11 +112,72 @@ const Footer = () => {
           backgroundColor: myColors.textBlack,
           color: myColors.myGrey,
         }}
-        justifyContent={'space-around'}
+        justifyContent={'space-between'}
       >
         <Grid item mb={3.2}  xs={10} md={6}>
          
-          <Typography  mb={1} color={myColors.offWhite} variant="h6">
+          {/* <Typography  mb={1} color={myColors.offWhite} variant="h6">
+            Sign Up For News-Letter.
+          </Typography>
+          <input
+            id="newsletter"
+            onChange={(e) => {
+              setSubscribeEmail(e.target.value);
+            }}
+            value={subscribeEmail}
+            style={inputStyles}
+            placeholder="email"
+            type="text"
+            // onClick={handleSubscribtion}
+          ></input>
+          <Grid ml={2}
+              mt={2} container>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleSubscribtion}
+            >
+              Subscribe
+            </Button>
+          </Grid> */}
+          <Grid container  ml={1} justifyContent={'center'}>
+            <Grid item xs={12}>
+            <Typography mb={1.4} variant="h5">
+                Links
+              </Typography>
+              <Link to={'/'}>
+              
+              <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                Home
+              </Typography>
+              </Link>
+              <Link to={'/new-cars'}>
+              <Typography  color={myColors.offWhite} mb={0.7} variant="body1">
+                New Cars
+              </Typography>
+              </Link>
+              <Link  to={'/used-cars'}>
+              <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                Used Cars
+              </Typography>
+              </Link>
+              <Link to={'/rental-cars'}>
+              
+              <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                Rental Cars
+              </Typography>
+              </Link>
+              <Link to={'/contact-us'}>
+              <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                Contact Us
+              </Typography>
+              </Link>
+             
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item  mb={3.2} xs={10} md={4}>
+        <Typography  mb={1} color={myColors.offWhite} variant="h6">
             Sign Up For News-Letter.
           </Typography>
           <input
@@ -139,19 +201,7 @@ const Footer = () => {
               Subscribe
             </Button>
           </Grid>
-          <Grid container mt={3} ml={1} justifyContent={'center'}>
-            <Grid item xs={12}>
-              <Typography variant="h6">
-                Xyz Street, Mnl City
-              </Typography>
-              <Typography variant="h6">
-                Abc State, 110034
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item  mb={3.2} xs={10} md={6}>
-          <Typography  mb={1} color={myColors.offWhite} variant="h6">
+          {/* <Typography  mb={1} color={myColors.offWhite} variant="h6">
             Contact Us.
           </Typography>
           <input
@@ -167,8 +217,8 @@ const Footer = () => {
             value={contactUsData.name}
             placeholder="Name"
             type="text"
-          ></input>
-          <Grid container mt={2}>
+          ></input> */}
+          {/* <Grid container mt={2}>
             <input
               id="email"
               onChange={(e) => {
@@ -210,7 +260,7 @@ const Footer = () => {
             >
               Send
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </>

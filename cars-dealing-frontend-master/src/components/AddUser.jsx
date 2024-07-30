@@ -197,8 +197,8 @@ const AddUser = () => {
     }
     // const dispatch = useDispatch()
     useEffect(()=>{
-      dispatch(startLoader())
       if(edit){
+        dispatch(startLoader())
         axios.post(links.backendUrl + '/get-user-data',{
           userId
         })

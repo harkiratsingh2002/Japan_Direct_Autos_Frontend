@@ -27,6 +27,8 @@ import CarDetailsPage from "./pageComponents/CarDetailsPage.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import YourEnquiries from "./pageComponents/YourEnquiries.jsx";
 import OurStory from "./pageComponents/OurStory.jsx";
+import ContactUs from "./pageComponents/ContactUs.jsx";
+import ForgotPassword from "./pageComponents/ForgotPassword.jsx";
 
 // const db = getDatabase(app);
 
@@ -66,13 +68,22 @@ const router = createBrowserRouter([
         element: <CarDetailsPage />,
       },
       {
-        path: "/your-enquiries",
+        path: "/profile",
         element: <YourEnquiries />,
       },
       {
         path: "/our-story",
         element: <OurStory />
+      },
+      {
+        path: "/contact-us",
+        element: <ContactUs />
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />
       }
+
     ],
   },
 ]);

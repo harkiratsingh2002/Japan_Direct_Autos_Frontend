@@ -35,7 +35,7 @@ const Jumbotron = () => {
         <section
           style={{
             position: "relative",
-            left: "10vw",
+            left: "25vw",
             top: "10vh",
           }}
         >
@@ -43,8 +43,7 @@ const Jumbotron = () => {
             Get your Dream Car Today!
           </Typography>
           <Typography mt={1} color={"white"} variant="h4" component={"h2"}>
-            Discover Top-Notch New and Pre-Owned Japanese Cars at Unbeatable
-            Prices!
+          Specialist in new and old japanese vehicles.
           </Typography>
         </section>
       </Grid>

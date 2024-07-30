@@ -37,8 +37,8 @@ const navLinks = [
   },
   
   {
-    linkName: "Your Enquiries",
-    link: "/your-enquiries",
+    linkName: "Profile",
+    link: "/profile",
     visibleTo: "All",
   },
   {
@@ -46,12 +46,17 @@ const navLinks = [
     link: "/our-story",
     visibleTo: "All",
   },
+   {
+    linkName: "Contact Us",
+    link: "/contact-us",
+    visibleTo: "All",
+  },
 ];
 
 const adminLinks = [
   {
     linkName: "Dashboard",
-    link: "/Dashboard/add-car-form",
+    link: "/Dashboard/main",
     visibleTo: "Admin",
   },
 ];
@@ -208,7 +213,7 @@ const MobileNavbarDrawer = (props) => {
                     sx={{
                       color: myColors.textBlack,
                     }}
-                    primary={'Cars'}
+                    primary={'Buy/Rent'}
                   />
 
 
@@ -367,7 +372,7 @@ export default function Navbar() {
             </>
           );
         })}
- <Button onClick={handleClick} sx={NavLinkStyles}>{'Cars'}</Button>
+ <Button onClick={handleClick} sx={NavLinkStyles}>{'Buy/Rent'}</Button>
 <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -377,14 +382,14 @@ export default function Navbar() {
           'aria-labelledby': 'basic-button',
         }}
       >
-       <Link color={myColors.textBlack} to={'/new-cars'}>
-       <MenuItem onClick={handleClose}>New Cars</MenuItem>
+       <Link  to={'/new-cars'}>
+       <MenuItem sx={{color: myColors.textBlack}} onClick={handleClose}>New Cars</MenuItem>
        </Link>
        <Link color={myColors.textBlack} to={'/used-cars'}>
-       <MenuItem onClick={handleClose}>Used Cars</MenuItem>
+       <MenuItem sx={{color: myColors.textBlack}} onClick={handleClose}>Used Cars</MenuItem>
        </Link>
        <Link color={myColors.textBlack} to={'/rental-cars'}>
-       <MenuItem onClick={handleClose}>Rental Cars</MenuItem>
+       <MenuItem sx={{color: myColors.textBlack}} onClick={handleClose}>Rental Cars</MenuItem>
        </Link>  
         
       </Menu>
