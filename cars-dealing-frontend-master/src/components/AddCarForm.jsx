@@ -199,8 +199,8 @@ const AddCarForm = () => {
   const [onForm, setOnForm] = React.useState("basicInformation");
   //   const carFormData = new FormData();
   const finalCarFormData = new FormData();
-  const adminEmail = useSelector((state)=>state.userDataSlice.email)
-  console.log('adminEmail:- ',adminEmail);
+  const adminEmail = useSelector((state) => state.userDataSlice.email)
+  console.log('adminEmail:- ', adminEmail);
   // finalCarFormData.append('email',adminEmail)
   const nextClickedHandler = (page) => {
     setOnForm(page);
@@ -325,7 +325,7 @@ const AddCarForm = () => {
             />
           </Grid>
           <Grid pt={2} item xs={5}>
-          <OldNewSelector
+            <OldNewSelector
               onChange={(e, newValue) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -435,23 +435,23 @@ const AddCarForm = () => {
 
   const descriptionForm = (
     <Grid
-        bgcolor={myColors.myGrey}
-        sx={{
-          paddingY: "1.5em",
-          paddingX: "1.5em",
+      bgcolor={myColors.myGrey}
+      sx={{
+        paddingY: "1.5em",
+        paddingX: "1.5em",
 
-          border: "1px solid #212121",
-          boxShadow: "3px 3px",
-          borderRadius: "25px",
-        }}
-        xs={10}
-        md={7}
-        mt={3}
-      >
-        <Typography textAlign={"center"} variant="h5">
-          Add Car Description
-        </Typography>
-        <Grid pt={2} container item xs={12}>
+        border: "1px solid #212121",
+        boxShadow: "3px 3px",
+        borderRadius: "25px",
+      }}
+      xs={10}
+      md={7}
+      mt={3}
+    >
+      <Typography textAlign={"center"} variant="h5">
+        Add Car Description
+      </Typography>
+      <Grid pt={2} container item xs={12}>
         <TextField
           id="outlined-multiline-static"
           label="Car Description"
@@ -466,9 +466,9 @@ const AddCarForm = () => {
           }}
           fullWidth
         />
-        </Grid>
-
       </Grid>
+
+    </Grid>
   )
   const specificationForm = (
     <>
@@ -600,77 +600,77 @@ const AddCarForm = () => {
     </>
   );
 
-  
+
   // const [noOfImages, setNoOfImages] = useState(0);
   const navigate = useNavigate()
   // const [allImages,setAllImages] = useState([]);
   const ImageAddingComponent = (props) => {
     // const [selectedImage, setSelectedImage] = useState(null);
 
-    React.useEffect(()=>{
-      console.log('current image number',currImage);
-      console.log('props current image number',props.currImage);
+    React.useEffect(() => {
+      console.log('current image number', currImage);
+      console.log('props current image number', props.currImage);
 
-    },[])
-   
+    }, [])
+
     const [imageUrl, setImageUrl] = useState(null);
     const [currImage, setcurrImage] = useState(props.currImage);
-    const [allImages,setAllImages] = useState(props.allImages);
+    const [allImages, setAllImages] = useState(props.allImages);
 
     const [showAnotherImageUploader, setShowAnotherImageUploader] =
       useState(false);
 
     // const handleImageChange = (event) => {};
     const handleImageChange = (event) => {
-        console.log('files:-',event.target.files)
-        const imageFile = event.target.files[0];
-        if (!imageFile) return;
-    
-        // Basic image validation (optional)
-        if (!imageFile.type.match("image/.*")) {
-          // alert("Please select a valid image file (JPEG, PNG, etc.)");
-          Swal.fire({
-            title: 'error',
-            text: "Please select a valid image file (JPEG, PNG, etc.)",
-            icon: 'error',
-            // confirmButtonText: 'Cool'
-          })
-          return;
-        }
-    
-        // setSelectedImage(imageFile);
-    
-        console.log("img-", imageFile);
-        // finalCarFormData.append(`carImg-${props.currImage}`, imageFile);
-        // finalCarFormData.append('carImages[]', imageFile);
-        setAllImages((oldState)=>{
-          let newState = [...oldState];
-          // console.log('oldFileState:-', oldState);
-          newState.push(imageFile);
-          finalCarFormData.append('images[]',imageFile)
-          console.log('newImagesState:- ',newState);
-          localStorage.setItem('noOfImages:- ',newState.length)
-          return newState;
-        })
-        // allImages.forEach((file)=>{
-          
-        //   finalCarFormData.append(`carImages[]`, allImages);
-        // })
-        // console.log('allImagesInner:- ',allImages)
+      console.log('files:-', event.target.files)
+      const imageFile = event.target.files[0];
+      if (!imageFile) return;
 
-       
-    
-        // console.log('currImage',props.currImage);
-        // finalCarFormData.append('noOfImages',noOfImages);
-    
-        // console.log("finalCarFormDataIMG", finalCarFormData.get(`carImg-${currImage}`));
-        // console.log("finalNoOFImages",finalCarFormData.get('noOfImages'));
-        // console.log('finalColor',finalCarFormData.get('color'))
-        // Preview image (optional)
-        const reader = new FileReader();
-        reader.readAsDataURL(imageFile);
-        reader.onload = (e) => setImageUrl(e.target.result);
-      };
+      // Basic image validation (optional)
+      if (!imageFile.type.match("image/.*")) {
+        // alert("Please select a valid image file (JPEG, PNG, etc.)");
+        Swal.fire({
+          title: 'error',
+          text: "Please select a valid image file (JPEG, PNG, etc.)",
+          icon: 'error',
+          // confirmButtonText: 'Cool'
+        })
+        return;
+      }
+
+      // setSelectedImage(imageFile);
+
+      console.log("img-", imageFile);
+      // finalCarFormData.append(`carImg-${props.currImage}`, imageFile);
+      // finalCarFormData.append('carImages[]', imageFile);
+      setAllImages((oldState) => {
+        let newState = [...oldState];
+        // console.log('oldFileState:-', oldState);
+        newState.push(imageFile);
+        finalCarFormData.append('images[]', imageFile)
+        console.log('newImagesState:- ', newState);
+        localStorage.setItem('noOfImages:- ', newState.length)
+        return newState;
+      })
+      // allImages.forEach((file)=>{
+
+      //   finalCarFormData.append(`carImages[]`, allImages);
+      // })
+      // console.log('allImagesInner:- ',allImages)
+
+
+
+      // console.log('currImage',props.currImage);
+      // finalCarFormData.append('noOfImages',noOfImages);
+
+      // console.log("finalCarFormDataIMG", finalCarFormData.get(`carImg-${currImage}`));
+      // console.log("finalNoOFImages",finalCarFormData.get('noOfImages'));
+      // console.log('finalColor',finalCarFormData.get('color'))
+      // Preview image (optional)
+      const reader = new FileReader();
+      reader.readAsDataURL(imageFile);
+      reader.onload = (e) => setImageUrl(e.target.result);
+    };
 
 
     return (
@@ -736,7 +736,7 @@ const AddCarForm = () => {
         {showAnotherImageUploader && (
           <ImageAddingComponent
             currImage={currImage}
-            allImages = {allImages}
+            allImages={allImages}
             totalImages={3}
 
           />
@@ -764,7 +764,7 @@ const AddCarForm = () => {
         {onForm == "descriptionInformation" && descriptionForm}
         {onForm == "addImages" && (
           <ImageAddingComponent
-            allImages = {[]}
+            allImages={[]}
             currImage={0}
             totalImages={3}
           />
@@ -815,7 +815,7 @@ const AddCarForm = () => {
               <CustomButton
                 variant="contained"
                 onClick={() => {
-                  if (!finalCarFormData.get('brand')){
+                  if (!finalCarFormData.get('brand')) {
 
                     Object.keys(carFormData).forEach((key) => {
                       finalCarFormData.append(key, carFormData[key]);
@@ -827,13 +827,13 @@ const AddCarForm = () => {
                   console.log(finalCarFormData.get('carImg-1'))
                   console.log(finalCarFormData.get('carImg-0'))
 
-                  console.log('no of images:- ',localStorage.getItem('noOfImages'));
+                  console.log('no of images:- ', localStorage.getItem('noOfImages'));
                   // console.log('all images',finalCarFormData.get('carImages[]'));
 
                   // console.log('all images',)
-                  const userToken = (JSON.parse(localStorage.getItem('userData'))).userToken ;
+                  const userToken = (JSON.parse(localStorage.getItem('userData'))).userToken;
                   dispatch(startLoader())
-                  fetch(links.backendUrl +  "/add-car", {
+                  fetch(links.backendUrl + "/add-car", {
                     method: "POST",
                     body: finalCarFormData,
                     headers: {
@@ -841,40 +841,40 @@ const AddCarForm = () => {
                     }
 
                   })
-                  .then(res=>{
-                    dispatch(endLoader())
-                    console.log('result :-',res);
-                    if(res.status<200 || res.status>299){
-                      let newError = 'some error'
-                      throw newError;
-                    }
-                    return res.json()
-                  })
-                  .then(res=>{
-                    if((finalCarFormData.get('oldOrNew') )== 'new' || (finalCarFormData.get('oldOrNew'))== 'New'){
-                      Swal.fire({
-                        title: 'success',
-                        text: "Car Added Successfully",
-                        icon: 'Success',
-                        // confirmButtonText: 'Cool'
-                      })
-                      navigate('/new-cars');
-                    }
-                      
-                    else {
-                      Swal.fire({
-                        title: 'success',
-                        text: "Car Added Successfully",
-                        icon: 'Success',
-                        // confirmButtonText: 'Cool'
-                      })
-                      navigate('/used-cars');
-                    }
-                  })
-                  .catch(err=>{
-                    console.log('error:-',err);
-                    alert('error while adding car.')
-                  })
+                    .then(res => {
+                      dispatch(endLoader())
+                      console.log('result :-', res);
+                      if (res.status < 200 || res.status > 299) {
+                        let newError = 'some error'
+                        throw newError;
+                      }
+                      return res.json()
+                    })
+                    .then(res => {
+                      if ((finalCarFormData.get('oldOrNew')) == 'new' || (finalCarFormData.get('oldOrNew')) == 'New') {
+                        Swal.fire({
+                          title: 'success',
+                          text: "Car Added Successfully",
+                          icon: 'Success',
+                          // confirmButtonText: 'Cool'
+                        })
+                        navigate('/new-cars');
+                      }
+
+                      else {
+                        Swal.fire({
+                          title: 'success',
+                          text: "Car Added Successfully",
+                          icon: 'Success',
+                          // confirmButtonText: 'Cool'
+                        })
+                        navigate('/used-cars');
+                      }
+                    })
+                    .catch(err => {
+                      console.log('error:-', err);
+                      alert('error while adding car.')
+                    })
 
 
                 }}
