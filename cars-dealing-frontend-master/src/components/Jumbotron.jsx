@@ -29,21 +29,24 @@ const Jumbotron = () => {
           height: "100vh", // Adjust height and width as needed
           width: "100vw",
           position: "absolute",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
         xs={12}
       >
         <section
           style={{
-            position: "relative",
-            left: "25vw",
-            top: "10vh",
+            paddingBottom: "20em",
+            textAlign: "center",
+
           }}
         >
-          <Typography color={"white"} variant="h3" component={"h1"}>
+          <Typography color={"white"} variant="h1" component={"h1"} sx={{ fontFamily: 'Garamond, serif' }}>
             Get your Dream Car Today!
           </Typography>
-          <Typography mt={1} color={"white"} variant="h4" component={"h2"}>
-          Specialist in new and old japanese vehicles.
+          <Typography mt={1} color={"white"} variant="h3" component={"h2"} sx={{ fontFamily: 'Garamond, serif' }}>
+            Specialist in new and old japanese vehicles.
           </Typography>
         </section>
       </Grid>
