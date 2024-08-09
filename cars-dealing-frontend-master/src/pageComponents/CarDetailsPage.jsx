@@ -1,4 +1,5 @@
-import { Button, Grid, Typography, TextField, Container, Box, FormControlLabel, Checkbox } from "@mui/material";
+import { Button, Grid, Typography, TextField, Container, Box, FormControlLabel, Checkbox, ToggleButtonGroup, ToggleButton } from "@mui/material";
+
 import { useEffect, useState } from "react";
 import carTestImage from "../assets/images/car-home-bg-3.jpeg";
 import { useParams } from "react-router-dom";
@@ -10,6 +11,8 @@ import EnquireNowModal from "../components/EnquireNowModal";
 import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 import { BorderAllOutlined } from "@mui/icons-material";
+import * as React from 'react';
+
 const CarDetailsPage = (props) => {
   // const [images, setImages] = useState([]);
   const imageStyles = {};
@@ -80,6 +83,12 @@ const CarDetailsPage = (props) => {
 
 
   }, []);
+  //new code 
+  const [alignment, setAlignment] = React.useState('left');
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
 
   const headCols = ["Specification Type", "Value"];
   // if(carInfo){
@@ -179,12 +188,15 @@ const CarDetailsPage = (props) => {
             </Typography>
             <Typography mt={1}>
               {carInfo.description}
+
             </Typography>
           </Container>
         </Container></>
 
 
       }
+
+
       <Grid container xs={11} md={10} mb={4} ml={'auto'} mr={'auto'}>
         <CustomizedTable headerCols={headCols} rows={rows} />
       </Grid>
