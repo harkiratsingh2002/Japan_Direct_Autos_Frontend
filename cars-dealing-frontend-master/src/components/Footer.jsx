@@ -60,7 +60,7 @@ const Footer = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-    dispatch(endLoader())
+        dispatch(endLoader())
 
         alert(data.message);
         setContactUsData({
@@ -90,7 +90,7 @@ const Footer = () => {
         Swal.fire({
 
           title: 'Success',
-          text:data.message ,
+          text: data.message,
           icon: 'success',
         }
         )
@@ -114,8 +114,9 @@ const Footer = () => {
         }}
         justifyContent={'space-between'}
       >
-        <Grid item mb={3.2}  xs={10} md={6}>
-         
+
+        <Grid item mb={3.2} xs={10} md={6}>
+
           {/* <Typography  mb={1} color={myColors.offWhite} variant="h6">
             Sign Up For News-Letter.
           </Typography>
@@ -140,44 +141,44 @@ const Footer = () => {
               Subscribe
             </Button>
           </Grid> */}
-          <Grid container  ml={1} justifyContent={'center'}>
+          <Grid container ml={1} justifyContent={'center'}>
             <Grid item xs={12}>
-            <Typography mb={1.4} variant="h5">
+              <Typography mb={1.4} variant="h5">
                 Links
               </Typography>
               <Link to={'/'}>
-              
-              <Typography color={myColors.offWhite} mb={0.7} variant="body1">
-                Home
-              </Typography>
+
+                <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  Home
+                </Typography>
               </Link>
               <Link to={'/new-cars'}>
-              <Typography  color={myColors.offWhite} mb={0.7} variant="body1">
-                New Cars
-              </Typography>
+                <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  New Cars
+                </Typography>
               </Link>
-              <Link  to={'/used-cars'}>
-              <Typography color={myColors.offWhite} mb={0.7} variant="body1">
-                Used Cars
-              </Typography>
+              <Link to={'/used-cars'}>
+                <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  Used Cars
+                </Typography>
               </Link>
               <Link to={'/rental-cars'}>
-              
-              <Typography color={myColors.offWhite} mb={0.7} variant="body1">
-                Rental Cars
-              </Typography>
+
+                <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  Rental Cars
+                </Typography>
               </Link>
               <Link to={'/contact-us'}>
-              <Typography color={myColors.offWhite} mb={0.7} variant="body1">
-                Contact Us
-              </Typography>
+                <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  Contact Us
+                </Typography>
               </Link>
-             
+
             </Grid>
           </Grid>
         </Grid>
-        <Grid item  mb={3.2} xs={10} md={4}>
-        <Typography  mb={1} color={myColors.offWhite} variant="h6">
+        <Grid item mb={3.2} xs={10} md={4}>
+          <Typography mb={1} color={myColors.offWhite} variant="h6">
             Sign Up For News-Letter.
           </Typography>
           <input
@@ -189,10 +190,10 @@ const Footer = () => {
             style={inputStyles}
             placeholder="email"
             type="text"
-            // onClick={handleSubscribtion}
+          // onClick={handleSubscribtion}
           ></input>
           <Grid ml={2}
-              mt={2} container>
+            mt={2} container>
             <Button
               variant="contained"
               size="small"

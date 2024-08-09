@@ -8,6 +8,7 @@ import links from "../assets/util/links";
 import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 import SearchCarsComponent from "../components/SearchCarsComponent";
+
 // import { useEffect } from "react";
 // import useDeviceWidth from "../customHooks/useDeviceWidth";
 
@@ -33,9 +34,9 @@ const HomePage = () => {
         setNewCars(carsData.cars);
         // setCount(carsData.count);
       })
-      .catch(err=>{
+      .catch(err => {
         dispatch(endLoader());
-        console.log('err 7 new cars',err)
+        console.log('err 7 new cars', err)
       })
     let url2 = links.backendUrl + "/get-seven-used-cars";
     fetch(url2)
@@ -51,9 +52,9 @@ const HomePage = () => {
         // setCount(carsData.count);
         // dispatch(endLoader());
       })
-      .catch(err=>{
+      .catch(err => {
         dispatch(endLoader());
-        console.log('err 7 used cars',err)
+        console.log('err 7 used cars', err)
       })
   }, []);
 
@@ -118,7 +119,10 @@ const HomePage = () => {
         >
           <ScrollContainer carType={'used'} cars={usedCars} />
         </Grid>
+
       </Grid>
+
+
     </>
   );
 };
