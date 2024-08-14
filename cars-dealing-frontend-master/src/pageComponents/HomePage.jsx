@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 import SearchCarsComponent from "../components/SearchCarsComponent";
 
+
+
 // import { useEffect } from "react";
 // import useDeviceWidth from "../customHooks/useDeviceWidth";
 

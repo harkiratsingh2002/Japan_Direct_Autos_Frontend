@@ -9,6 +9,10 @@ import logo from "../assets/images/logo.png";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useWindowWidth } from "@react-hook/window-size";
 import MenuIcon from "@mui/icons-material/Menu";
+
+import { FloatingWhatsApp } from '@carlos8a/react-whatsapp-floating-button';
+import whatsappDP from '../assets/images/whatsappDP.jpg'
+
 import IconButton from "@mui/material/IconButton";
 import {
   Drawer,
@@ -35,7 +39,7 @@ const navLinks = [
     link: "/",
     visibleTo: "All",
   },
-  
+
   {
     linkName: "Profile",
     link: "/profile",
@@ -46,7 +50,7 @@ const navLinks = [
     link: "/our-story",
     visibleTo: "All",
   },
-   {
+  {
     linkName: "Contact Us",
     link: "/contact-us",
     visibleTo: "All",
@@ -89,14 +93,14 @@ const MobileNavbarDrawer = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  
+
   const logoutHandler = () => {
     dispatch(logoutUser());
     localStorage.removeItem("userData");
     navigate("/login", { replace: true });
   };
 
- 
+
   const loginMobileLink = (
     <>
       <ListItem disablePadding>
@@ -162,6 +166,7 @@ const MobileNavbarDrawer = (props) => {
 
   return (
     <Box sx={{ width: 250 }} role="presentation" >
+
       <div>
         <IconButton
           size="large"
@@ -202,48 +207,48 @@ const MobileNavbarDrawer = (props) => {
                     }}
                     primary={navItem.linkName}
                   />
-                  
+
                 </ListItemButton>
               </Link>
             </ListItem>
           </>
         ))}
         <ListItemButton onClick={handleClick}>
-        <ListItemText
-                    sx={{
-                      color: myColors.textBlack,
-                    }}
-                    primary={'Buy/Rent'}
-                  />
+          <ListItemText
+            sx={{
+              color: myColors.textBlack,
+            }}
+            primary={'Buy/Rent'}
+          />
 
 
         </ListItemButton>
         <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={openCars}
-        onClose={props.closeDrawer}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-       <Link to={'/new-cars'}>
-       <MenuItem  sx={{
-         color:myColors.textBlack
-       }} onClick={props.closeDrawer}>New Cars</MenuItem>
-       </Link>
-       <Link  to={'/used-cars'}>
-       <MenuItem  sx={{
-         color:myColors.textBlack
-       }} onClick={props.closeDrawer}>Used Cars</MenuItem>
-       </Link>
-       <Link  to={'/rental-cars'}>
-       <MenuItem  sx={{
-         color:myColors.textBlack
-       }} onClick={props.closeDrawer}>Rental Cars</MenuItem>
-       </Link>  
-        
-      </Menu>
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={openCars}
+          onClose={props.closeDrawer}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <Link to={'/new-cars'}>
+            <MenuItem sx={{
+              color: myColors.textBlack
+            }} onClick={props.closeDrawer}>New Cars</MenuItem>
+          </Link>
+          <Link to={'/used-cars'}>
+            <MenuItem sx={{
+              color: myColors.textBlack
+            }} onClick={props.closeDrawer}>Used Cars</MenuItem>
+          </Link>
+          <Link to={'/rental-cars'}>
+            <MenuItem sx={{
+              color: myColors.textBlack
+            }} onClick={props.closeDrawer}>Rental Cars</MenuItem>
+          </Link>
+
+        </Menu>
         {role == "admin" &&
           adminLinks.map((linkItem, index) => {
             return (
@@ -297,13 +302,13 @@ export default function Navbar() {
     if (localStorage.getItem("userData")) {
       let userData = JSON.parse(localStorage.getItem("userData"));
       let date = Date.now();
-      console.log('expiry , date',userData.expiry,date)
+      console.log('expiry , date', userData.expiry, date)
       if (userData.expiry < date) {
         // alert("Your session is expired please login again to continue.");
         dispatch(logoutUser());
         Swal.fire({
           title: 'Warning',
-          text:"Your session is expired please login again to continue." ,
+          text: "Your session is expired please login again to continue.",
           icon: 'warning',
           // confirmButtonText: 'Cool'
         })
@@ -372,27 +377,27 @@ export default function Navbar() {
             </>
           );
         })}
- <Button onClick={handleClick} sx={NavLinkStyles}>{'Buy/Rent'}</Button>
-<Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={openCars}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-       <Link  to={'/new-cars'}>
-       <MenuItem sx={{color: myColors.textBlack}} onClick={handleClose}>New Cars</MenuItem>
-       </Link>
-       <Link color={myColors.textBlack} to={'/used-cars'}>
-       <MenuItem sx={{color: myColors.textBlack}} onClick={handleClose}>Used Cars</MenuItem>
-       </Link>
-       <Link color={myColors.textBlack} to={'/rental-cars'}>
-       <MenuItem sx={{color: myColors.textBlack}} onClick={handleClose}>Rental Cars</MenuItem>
-       </Link>  
-        
-      </Menu>
+        <Button onClick={handleClick} sx={NavLinkStyles}>{'Buy/Rent'}</Button>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={openCars}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <Link to={'/new-cars'}>
+            <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>New Cars</MenuItem>
+          </Link>
+          <Link color={myColors.textBlack} to={'/used-cars'}>
+            <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>Used Cars</MenuItem>
+          </Link>
+          <Link color={myColors.textBlack} to={'/rental-cars'}>
+            <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>Rental Cars</MenuItem>
+          </Link>
+
+        </Menu>
         {role == "admin" &&
           adminLinks.map((linkObj) => {
             return (
@@ -449,7 +454,7 @@ export default function Navbar() {
 
   return (
     <>
-    <Loading />
+      <Loading />
       <Box sx={{ flexGrow: 1 }}>
         <AppBar sx={appBarStyles} position="static">
           <Toolbar>
@@ -478,40 +483,58 @@ export default function Navbar() {
       <Outlet />
 
       <Footer />
-            {/* <!--Use the below code snippet to provide real time updates to the live chat plugin without the need of copying and paste each time to your website when changes are made via PBX--> */}
-<call-us-selector phonesystem-url="https://1676.3cx.cloud" party="japandirectautos"></call-us-selector>
- 
- {/* <!--Incase you don't want real time updates to the live chat plugin when options are changed, use the below code snippet. Please note that each time you change the settings you will need to copy and paste the snippet code to your website--> 
- <!--<call-us 
- phonesystem-url="https://1676.3cx.cloud" 
- style="position:fixed;font-size:16px;line-height:17px;z-index: 99999;right: 20px; bottom: 20px;" 
- id="wp-live-chat-by-3CX" 
- minimized="true" 
- animation-style="noanimation" 
- party="japandirectautos" 
- minimized-style="bubbleright" 
- allow-call="false" 
- allow-video="false" 
- allow-soundnotifications="true" 
- enable-mute="true" 
- enable-onmobile="true" 
- offline-enabled="true" 
- enable="true" 
- ignore-queueownership="false" 
- authentication="both" 
- show-operator-actual-name="true" 
- aknowledge-received="true" 
- gdpr-enabled="false" 
- message-userinfo-format="both" 
- message-dateformat="both" 
- lang="browser" 
- button-icon-type="default" 
- greeting-visibility="none" 
- greeting-offline-visibility="none" 
- chat-delay="2000" 
- enable-direct-call="false" 
- enable-ga="false" 
- ></call-us>-->  */}
+
+// whatsapp IconButton
+      <div>
+        <FloatingWhatsApp
+          phoneNumber='61451420125' // Required
+          accountName='Harkirat Singh' // Optional
+          avatar={whatsappDP} // Optional
+          initialMessageByServer='Hi there! How can I assist you?' // Optional
+          statusMessage='Available' // Optional
+          placeholder='Write here...' // Optional
+          allowEsc={true}
+
+        // Explore all available props below
+        />
+      </div>
+
+
+
+      {/* Use the below code snippet to provide real-time updates to the live chat plugin without the need to copy and paste each time changes are made via PBX */}
+      <call-us-selector phonesystem-url="https://1676.3cx.cloud" party="japandirectautos" style={{ position: "fixed", fontSize: "16px", lineHeight: "17px", zIndex: 99999, right: "100px", bottom: "25px" }}></call-us-selector>
+
+      {/* Incase you don't want real-time updates to the live chat plugin when options are changed, use the below code snippet. Please note that each time you change the settings you will need to copy and paste the snippet code to your website */}
+      {/* <call-us 
+        phonesystem-url="https://1676.3cx.cloud" 
+        style="position:fixed;font-size:16px;line-height:17px;z-index: 99999;right: 20px; bottom: 20px;" 
+        id="wp-live-chat-by-3CX" 
+        minimized="true" 
+        animation-style="noanimation" 
+        party="japandirectautos" 
+        minimized-style="bubbleright" 
+        allow-call="false" 
+        allow-video="false" 
+        allow-soundnotifications="true" 
+        enable-mute="true" 
+        enable-onmobile="true" 
+        offline-enabled="true" 
+        enable="true" 
+        ignore-queueownership="false" 
+        authentication="both" 
+        show-operator-actual-name="true" 
+        aknowledge-received="true" 
+        gdpr-enabled="false" 
+        message-userinfo-format="both" 
+        message-dateformat="both" 
+        lang="browser" 
+        button-icon-type="default" 
+        greeting-visibility="none" 
+        greeting-offline-visibility="none" 
+        chat-delay="2000" 
+        enable-direct-call="false" 
+        enable-ga="false" 
+      ></call-us> */}
     </>
   );
 }
