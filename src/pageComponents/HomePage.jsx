@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 import SearchCarsComponent from "../components/SearchCarsComponent";
 
+
 // import { useEffect } from "react";
 // import useDeviceWidth from "../customHooks/useDeviceWidth";
 
@@ -17,6 +18,13 @@ const HomePage = () => {
   const width = useWindowWidth();
   const [newCars, setNewCars] = useState([]);
   const [usedCars, setUsedCars] = useState([]);
+
+  // Overlay Settings
+  const [overlayVisible, setOverlayVisible] = useState(true);
+
+  const handleOverlayClose = () => {
+    setOverlayVisible(false);
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -122,6 +130,9 @@ const HomePage = () => {
 
       </Grid>
 
+      <div>
+
+      </div>
 
     </>
   );

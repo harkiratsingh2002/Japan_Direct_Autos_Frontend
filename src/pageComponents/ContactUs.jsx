@@ -4,6 +4,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import contactbg from "../assets/images/contact-us-bg.png";
 import myColors from "../assets/util/myColors";
 
+import { FloatingWhatsApp } from '@carlos8a/react-whatsapp-floating-button';
+import whatsappDP from '../assets/images/whatsappDP.jpg'
+
 const ContactUs = () => {
 
   const inputStyles = {
@@ -207,6 +210,18 @@ const ContactUs = () => {
           </Grid>
         </Grid>
       </Grid>
+      {/* whatsapp IconButton */}
+      <div>
+        <FloatingWhatsApp
+          phoneNumber='61451420125' // Required
+          accountName='Harkirat Singh' // Optional
+          avatar={whatsappDP} // Optional
+          initialMessageByServer='Hi there! How can I assist you?' // Optional
+          statusMessage='Available' // Optional
+          placeholder='Write here...' // Optional
+          allowEsc={true}
+        />
+      </div>
     </>
   );
 };
