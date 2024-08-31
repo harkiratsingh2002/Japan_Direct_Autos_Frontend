@@ -458,7 +458,7 @@ export default function Navbar() {
             </MenuItem>
           </Link>
         </Menu>
-        {wishlistIcon}
+
         {role == "admin" &&
           adminLinks.map((linkObj) => {
             return (
@@ -471,6 +471,7 @@ export default function Navbar() {
           })}
         {firstName == "Guest" && loginDesktopLink}
         {firstName != "Guest" && logoutDesktopLink}
+        {wishlistIcon}
 
         {/* <Button sx={NavLinkStyles}>Our Story</Button>
 

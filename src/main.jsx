@@ -31,6 +31,10 @@ import ContactUs from "./pageComponents/ContactUs.jsx";
 import ForgotPassword from "./pageComponents/ForgotPassword.jsx";
 import Wishlist from "./pageComponents/Wishlist.jsx";
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+const queryClient = new QueryClient();
+
+
 // const db = getDatabase(app);
 
 // const userContext = createContext();
@@ -93,8 +97,12 @@ const router = createBrowserRouter([
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="378521593401-b7cq8jc0q6es09tn97vv7l2l69kklb5v.apps.googleusercontent.com">
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </QueryClientProvider>
+
   </GoogleOAuthProvider>
 );

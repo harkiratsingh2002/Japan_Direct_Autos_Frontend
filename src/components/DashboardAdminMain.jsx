@@ -1,204 +1,137 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography, Card, CardContent } from "@mui/material";
 import myColors from "../assets/util/myColors";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import links from "../assets/util/links";
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { useQuery, useQueryClient } from "@tanstack/react-query"; // Import react-query hooks
+
+
+// Register necessary Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const fetchCount = async (type) => {
+  const response = await fetch(`${links.backendUrl}/${type}`);
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  const data = await response.json();
+  return data.count;
+};
 
 const DashboardAdminMain = () => {
   let navigate = useNavigate();
-  const [functionalityLinks, setFunctionalityLinks] = useState([
-    "/add-user",
-    "/manage-users",
-    "/add-car-form",
-    "/manage-cars",
-    "/handle-enquiries",
-  ]);
+  const queryClient = useQueryClient(); // Create a query client instance
+
+  // Using react-query to fetch data with caching and optimistic updates
+  const { data: carCount = 0 } = useQuery({
+    queryKey: ['countCars'],
+    queryFn: () => fetchCount('countCars'),
+    staleTime: 5000, // Keep data fresh for 5 seconds
+  });
+
+  const { data: userCount = 0 } = useQuery({
+    queryKey: ['countUsers'],
+    queryFn: () => fetchCount('countUsers'),
+    staleTime: 5000,
+  });
+
+  const { data: enquiryCount = 0 } = useQuery({
+    queryKey: ['countEnquiries'],
+    queryFn: () => fetchCount('countEnquiries'),
+    staleTime: 5000,
+  });
+  // Sample data for the chart
+  const chartData = {
+    labels: ["Users", "Cars", "Enquiries"],
+    datasets: [
+      {
+        label: "Statistics",
+        data: [userCount, carCount, enquiryCount], // Use dynamic data
+        backgroundColor: [myColors.primaryColor, myColors.secondaryColor, myColors.judiColor],
+      },
+    ],
+  };
+
   return (
     <>
-      <Grid container py={5} xs={8} ml={"auto"} mr={"auto"}>
+      <Grid container py={5} xs={10} ml={"auto"} mr={"auto"} spacing={4}>
         <Grid item xs={12}>
-          <Typography variant="h4">Administrator Dashboard</Typography>
+          <Typography variant="h4" align="center" gutterBottom>
+            Administrator Dashboard
+          </Typography>
         </Grid>
-        <Grid container mt={3} justifyContent={"space-between"}>
-          <Grid item xs={6} md={3}>
-            <Grid
-              item
-              sx={{
-                backgroundColor: myColors.judiColor,
-                textAlign: "center",
-                padding: 4,
-                borderRadius: "2em",
-              }}
-            >
-              <Typography variant="h5">12</Typography>
-              <Typography variant="h5">Cars</Typography>
-            </Grid>
-            <Typography textAlign={'center'}>Total Cars</Typography>
+
+        {/* Top Section with Cards */}
+        <Grid container spacing={3} justifyContent="center">
+          {/* Card for Cars */}
+          <Grid item xs={12} md={3}>
+            <Card sx={{ textAlign: 'center', padding: 2 }}>
+              <Typography variant="h6">CARS</Typography>
+              <Typography variant="h2">{carCount}</Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate("/Dashboard/manage-cars")}
+                fullWidth
+              >
+                Manage Cars
+              </Button>
+            </Card>
           </Grid>
 
-          {/* <Grid
-            item
-            sx={{
-              backgroundColor: myColors.judiColor,
-              textAlign: "center",
-              padding: 4,
-              borderRadius: "2em",
-              cursor: "pointer",
-            }}
-            xs={12}
-            md={3}
-            onClick={()=>{
-                navigate('/Dashboard/add-car-form')
-              }}
-          >
-            <Typography variant="h5">Add</Typography>
-            <Typography variant="h5">Car</Typography>
-          </Grid> */}
-          {/* <Grid
-            item
-            sx={{
-              backgroundColor: myColors.judiColor,
-              textAlign: "center",
-              padding: 4,
-              borderRadius: "2em",
-              cursor: "pointer",
-            }}
-            xs={12}
-            md={3}
-            onClick={()=>{
-                navigate('/Dashboard/manage-cars')
-              }}
-          >
-            <Typography variant="h5">Manage</Typography>
-            <Typography variant="h5">Cars</Typography>
-          </Grid> */}
-          <Grid item xs={6} md={3}>
-            <Grid
-              item
-              sx={{
-                backgroundColor: myColors.judiColor,
-                textAlign: "center",
-                padding: 4,
-                borderRadius: "2em",
-              }}
-            >
-              <Typography variant="h5">12</Typography>
-              <Typography variant="h5">Users</Typography>
-            </Grid>
-            <Typography textAlign={'center'}>Total Users</Typography>
+          {/* Card for Users */}
+          <Grid item xs={12} md={3}>
+            <Card sx={{ textAlign: 'center', padding: 2 }}>
+              <Typography variant="h6">USERS</Typography>
+              <Typography variant="h2">{userCount}</Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate("/Dashboard/manage-users")}
+                fullWidth
+              >
+                Manage Users
+              </Button>
+            </Card>
           </Grid>
 
-          <Grid item xs={6} md={3}>
-            <Grid
-              item
-              sx={{
-                backgroundColor: myColors.judiColor,
-                textAlign: "center",
-                padding: 4,
-                borderRadius: "2em",
-              }}
-            >
-              <Typography variant="h5">12</Typography>
-              <Typography variant="h5">Enquiries</Typography>
-            </Grid>
-            <Typography textAlign={'center'}>Total Enquiries</Typography>
-          </Grid>
-          {/* <Grid
-              item
-              sx={{
-                backgroundColor: myColors.judiColor,
-                textAlign: "center",
-                padding: 4,
-                borderRadius: "2em",
-                cursor: "pointer",
-              }}
-              xs={12}
-              md={3}
-              onClick={()=>{
-                navigate('/Dashboard/handle-enquiries')
-              }}
-            >
-              <Typography variant="h5">Handle</Typography>
-              <Typography variant="h5">Enquiries</Typography>
-            </Grid> */}
-          <Grid container mt={3} justifyContent={"space-between"}>
-            <Grid item mb={3} xs={12}>
-              <Typography variant="h4">Admin Functionality</Typography>
-            </Grid>
-            {[
-              "Add user",
-              "Manage users",
-              "Add Car",
-              "Manage Cars",
-              "Handle Enquiries",
-            ].map((name, i) => {
-              return (
-                <>
-                  <Grid item xs={3} md={2} key={name}>
-                    <Link to={"/Dashboard" + functionalityLinks[i]}>
-                      <Button variant="contained" size="small">
-                        {name}
-                      </Button>
-                    </Link>
-                  </Grid>
-                </>
-              );
-            })}
-            {/* <Grid
-              item
-              sx={{
-                backgroundColor: myColors.judiColor,
-                textAlign: "center",
-                padding: 4,
-                borderRadius: "2em",
-                cursor: "pointer",
-              }}
-              xs={12}
-              md={3}
-              onClick={()=>{
-                navigate('/Dashboard/add-user')
-              }}
-            >
-              <Typography variant="h5">Add</Typography>
-              <Typography variant="h5">User</Typography>
-            </Grid>
-            <Grid
-              item
-              sx={{
-                backgroundColor: myColors.judiColor,
-                textAlign: "center",
-                padding: 4,
-                borderRadius: "2em",
-                cursor: "pointer",
-              }}
-              xs={12}
-              md={3}
-              onClick={()=>{
-                navigate('/Dashboard/manage-users')
-              }}
-            >
-              <Typography variant="h5">Manage</Typography>
-              <Typography variant="h5">Users</Typography>
-            </Grid> */}
-          </Grid>
-          <Grid container mt={3} justifyContent={"space-between"}>
-            {/* <Grid
-              item
-              sx={{
-                backgroundColor: myColors.judiColor,
-                textAlign: "center",
-                padding: 4,
-                borderRadius: "2em",
-                cursor: "pointer",
-              }}
-              xs={12}
-              md={3}
-            >
-              <Typography variant="h5">Add</Typography>
-              <Typography variant="h5">User</Typography>
-            </Grid> */}
+          {/* Card for Enquiries */}
+          <Grid item xs={12} md={3}>
+            <Card sx={{ textAlign: 'center', padding: 2 }}>
+              <Typography variant="h6">ENQUIRIES</Typography>
+              <Typography variant="h2">{enquiryCount}</Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate("/Dashboard/handle-enquiries")}
+                fullWidth
+              >
+                Manage Enquiries
+              </Button>
+            </Card>
           </Grid>
         </Grid>
-      </Grid>
+
+        {/* Chart Section */}
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">Dashboard Overview</Typography>
+              <Bar data={chartData} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+      </Grid >
     </>
   );
 };

@@ -51,7 +51,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function DropdownMenu({title, options}) {
+export default function DropdownMenu({ title, options }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -85,18 +85,18 @@ export default function DropdownMenu({title, options}) {
         onClose={handleClose}
       >
         {
-            options.map((option)=>{
-                return (
+          options.map((option) => {
+            return (
 
-        <MenuItem key={option} onClick={()=>{
-            option.fn();
-            handleClose();
-        }} disableRipple>
-          {/* <EditIcon /> */}
-          {option.name}
-        </MenuItem>
-                )
-            })
+              <MenuItem key={option} onClick={() => {
+                option.fn();
+                handleClose();
+              }} disableRipple>
+                {/* <EditIcon /> */}
+                {option.name}
+              </MenuItem>
+            )
+          })
         }
         {/* <MenuItem onClick={handleClose} disableRipple>
           <FileCopyIcon />

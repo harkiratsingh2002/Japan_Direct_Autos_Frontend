@@ -16,9 +16,9 @@ function ScrollContainer(props) {
 
   const handleScroll = (direction) => {
     if (direction === 'left') {
-      scrollRef.current.scrollLeft -= 200; // Adjust the value as needed
+      scrollRef.current.scrollLeft -= 400; // Adjust the value as needed
     } else {
-      scrollRef.current.scrollLeft += 200; // Adjust the value as needed
+      scrollRef.current.scrollLeft += 400; // Adjust the value as needed
     }
   };
 
