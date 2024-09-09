@@ -14,7 +14,8 @@ const YourEnquiries = () => {
   const [rows, setRows] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [userData,setUserData] = useState({});
+  const [userData, setUserData] = useState({});
+  const [twoStepVerify, setTwoStepVerify] = useState(false);
   const dispatch = useDispatch();
   let userToken = "";
   if (localStorage.getItem("userData")) {
@@ -63,6 +64,60 @@ const YourEnquiries = () => {
       navigate("/login");
     }
   };
+
+  const enableTwoStep = () => {
+    dispatch(startLoader());
+    axios
+      .get(links.backendUrl + "/enable-two-step-verify", {
+        headers: {
+          Authorization: `Bearer ${userToken}`, // Assuming it's a Bearer token
+        },
+      })
+      .then((response) => {
+        dispatch(endLoader());
+        setTwoStepVerify(true);
+        Swal.fire({
+          title: "Success",
+          text: response.data.message,
+          icon: "success",
+        });
+      })
+      .catch((err) => {
+        dispatch(endLoader());
+        Swal.fire({
+          title: "Error",
+          text: err.data.message,
+          icon: "error",
+        });
+      });
+  };
+  const disableTwoStep = () => {
+    dispatch(startLoader());
+    axios
+      .get(links.backendUrl + "/disable-two-step-verify", {
+        headers: {
+          Authorization: `Bearer ${userToken}`, // Assuming it's a Bearer token
+        },
+      })
+      .then((response) => {
+        dispatch(endLoader());
+        setTwoStepVerify(false);
+        Swal.fire({
+          title: "Success",
+          text: response.data.message,
+          icon: "success",
+        });
+      })
+      .catch((err) => {
+        dispatch(endLoader());
+        Swal.fire({
+          title: "Error",
+          text: err.data.message,
+          icon: "error",
+        });
+      });
+  };
+
   useEffect(() => {
     if (userToken.length > 0) {
       dispatch(startLoader());
@@ -95,27 +150,33 @@ const YourEnquiries = () => {
             icon: "error",
           });
         });
-        dispatch(startLoader());
-        axios.post(links.backendUrl + "/get-user",{},
-            {
-              headers: {
-                Authorization: `Bearer ${userToken}`, // Assuming it's a Bearer token
-              },
-            })
-        .then(result =>{
-            dispatch(endLoader())
-            if(result.data.status<200 || result.data.status> 299){
-                let newError = {
-                    message: 'some error while geting user data.'
-                }
-                throw newError;
-            }
-            localStorage.setItem('oldEmail',result.data.user.email)
-            setUserData(result.data.user);
+      dispatch(startLoader());
+      axios
+        .post(
+          links.backendUrl + "/get-user",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`, // Assuming it's a Bearer token
+            },
+          }
+        )
+        .then((result) => {
+          dispatch(endLoader());
+          if (result.data.status < 200 || result.data.status > 299) {
+            let newError = {
+              message: "some error while geting user data.",
+            };
+            throw newError;
+          }
+          console.log("user data from get user:- ", result.data.user);
+          localStorage.setItem("oldEmail", result.data.user.email);
+          setTwoStepVerify(result.data.twoStepVerify);
+          setUserData(result.data.user);
         })
-        .catch(err=>{
-            console.log('err while getting user data:- ',err)
-        })
+        .catch((err) => {
+          console.log("err while getting user data:- ", err);
+        });
     } else {
       Swal.fire({
         title: "UnAuthorized",
@@ -127,14 +188,14 @@ const YourEnquiries = () => {
   }, []);
 
   const [openEditUserModal, setOpenEditUserModal] = useState(false);
-//   let carId = params.carId;
+  //   let carId = params.carId;
   // let myRows = [];
-  const handleOpenEditUserModal = ()=>{
+  const handleOpenEditUserModal = () => {
     setOpenEditUserModal(true);
-  }
-  const handleCloseEditUserModal = ()=>{
+  };
+  const handleCloseEditUserModal = () => {
     setOpenEditUserModal(false);
-  }
+  };
   return (
     <>
       <Grid justifyContent={"center"} ml={"auto"} mr={"auto"} container xs={10}>
@@ -142,49 +203,71 @@ const YourEnquiries = () => {
           <Typography mt={5} variant="h4">
             Your Profile Data
           </Typography>
-          
         </Grid>
-        <Grid container mt={3} justifyContent={'center'}>
-            <Grid item mb={1} xs={11}  md={8}>
-                First Name:
-                <span style={{
-                    marginLeft: '1em'
-                }}>
-
-                {userData.firstName}
-                </span>
-            </Grid>
-            <Grid item mb={1} xs={11} md={8}>
-                Last Name:
-                <span style={{
-                    marginLeft: '1em'
-                }}>
-
-                {userData.lastName}
-                </span>
-            </Grid>
-            <Grid item mb={1} xs={11} md={8}>
-                Email:
-                <span style={{
-                    marginLeft: '1em'
-                }}>
-
-                {userData.email}
-                </span>
-            </Grid>
-            <Grid item mb={1} xs={11} md={8}>
-                Role:
-                <span style={{
-                    marginLeft: '1em'
-                }}>
-
-                {userData.role}
-                </span>
-            </Grid>
-
+        <Grid container mt={3} justifyContent={"center"}>
+          <Grid item mb={1} xs={11} md={8}>
+            First Name:
+            <span
+              style={{
+                marginLeft: "1em",
+              }}
+            >
+              {userData.firstName}
+            </span>
+          </Grid>
+          <Grid item mb={1} xs={11} md={8}>
+            Last Name:
+            <span
+              style={{
+                marginLeft: "1em",
+              }}
+            >
+              {userData.lastName}
+            </span>
+          </Grid>
+          <Grid item mb={1} xs={11} md={8}>
+            Email:
+            <span
+              style={{
+                marginLeft: "1em",
+              }}
+            >
+              {userData.email}
+            </span>
+          </Grid>
+          <Grid item mb={1} xs={11} md={8}>
+            Role:
+            <span
+              style={{
+                marginLeft: "1em",
+              }}
+            >
+              {userData.role}
+            </span>
+          </Grid>
         </Grid>
         <Grid container xs={11} mt={2} md={8}>
-            <Button onClick={handleOpenEditUserModal} variant="contained" color="primary">Edit</Button>
+          <Button
+            onClick={handleOpenEditUserModal}
+            variant="contained"
+            color="primary"
+          >
+            Edit
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography mt={3} variant="h6">
+            Two step verification ? {twoStepVerify ? "Enabled" : "Disabled"}{" "}
+            {twoStepVerify ? (
+              <Button variant="contained" onClick={disableTwoStep}>
+                Disable
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={enableTwoStep}>
+                Enable
+              </Button>
+            )}
+          </Typography>
         </Grid>
       </Grid>
       <Grid justifyContent={"center"} ml={"auto"} mr={"auto"} container xs={10}>
@@ -210,7 +293,12 @@ const YourEnquiries = () => {
           )}
         </Grid>
       </Grid>
-      <EditUserModal setUserData={setUserData}  userData = {userData} openModal={openEditUserModal} handleCloseModal={handleCloseEditUserModal} />
+      <EditUserModal
+        setUserData={setUserData}
+        userData={userData}
+        openModal={openEditUserModal}
+        handleCloseModal={handleCloseEditUserModal}
+      />
     </>
   );
 };

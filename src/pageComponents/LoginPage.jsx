@@ -25,6 +25,8 @@ import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import GoogleIcon from "@mui/icons-material/Google";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
+import TwoStepVerifyModal from "../components/TwoStepVerifyModal";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // import { useAuth0 } from "@auth0/auth0-react";
 
@@ -34,10 +36,18 @@ const LoginPage = () => {
     password: "",
   });
 
+  const [openVerifyModal, setOpenVerifyModal] = useState(false);
   // const { loginWithRedirect } = useAuth0();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+
+  function onChange(value) {
+    console.log("Captcha value:", value);
+    setCaptchaVerified(true);
+  }
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -96,18 +106,29 @@ const LoginPage = () => {
           console.log("login Data:- ", data);
           dispatch(endLoader());
 
-          dispatch(loginUser({ userData: data.userData }));
-          const now = Date.now();
-          const expiry = now + 36000000;
-          data.userData.expiry = expiry;
-          localStorage.setItem("userData", JSON.stringify(data.userData));
-          Swal.fire({
-            title: "success",
-            text: "Logged in succeessfully.",
-            icon: "success",
-            // confirmButtonText: 'Cool'
-          });
-          navigate("/", { replace: true });
+          if (data.twoStepVerify) {
+            // add otp and payload data to localstorage
+            localStorage.setItem("twoStepOtp", data.otp);
+            localStorage.setItem(
+              "payloadData",
+              JSON.stringify(data.payloadData)
+            );
+            // open modal to verify otp
+            setOpenVerifyModal(true);
+          } else {
+            dispatch(loginUser({ userData: data.userData }));
+            const now = Date.now();
+            const expiry = now + 36000000;
+            data.userData.expiry = expiry;
+            localStorage.setItem("userData", JSON.stringify(data.userData));
+            Swal.fire({
+              title: "success",
+              text: "Logged in succeessfully.",
+              icon: "success",
+              // confirmButtonText: 'Cool'
+            });
+            navigate("/", { replace: true });
+          }
         })
         .catch((error) => {
           console.error("login error:- ", error);
@@ -321,11 +342,19 @@ const LoginPage = () => {
                 </FormControl>
               </Grid>
               <Grid container mb={2} xs={12}>
+                <ReCAPTCHA
+                  sitekey="6LemBzoqAAAAAOy-2jAS-BgkCFQ41svGM83GzHhG"
+                  onChange={onChange}
+                />
+                {/* secret:- 6LemBzoqAAAAAJAWb_Y2Vkz0jMdWGMHgVsZIOrc2 */}
+              </Grid>
+              <Grid container mb={2} xs={12}>
                 <Button
                   mt={2}
                   onClick={handleLogin}
                   fullWidth
                   variant="contained"
+                  disabled={!captchaVerified}
                 >
                   Login
                 </Button>
@@ -364,6 +393,11 @@ const LoginPage = () => {
           </form>
         </Grid>
       </Grid>
+      <TwoStepVerifyModal
+        openVerifyModal={openVerifyModal}
+        setOpenVerifyModal={setOpenVerifyModal}
+        email={loginFormData.email}
+      />
     </>
   );
 };

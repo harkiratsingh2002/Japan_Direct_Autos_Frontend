@@ -216,12 +216,22 @@ const CarDetailsPage = (props) => {
           let myRows = [
             { name: finalcarInfoResult.car.name },
             { price: finalcarInfoResult.car.price },
-            { carType: finalcarInfoResult.car.carType },
+            {
+              body: finalcarInfoResult.car.carType
+                ? finalcarInfoResult.car.carType
+                : finalcarInfoResult.car.body,
+            },
             { color: finalcarInfoResult.car.color },
             { seatingCapacity: finalcarInfoResult.car.seatingCapacity },
-            { model: finalcarInfoResult.car.year },
+            { year: finalcarInfoResult.car.year },
             { mileage: finalcarInfoResult.car.mileage },
             { brand: finalcarInfoResult.car.brand },
+            { stockId: finalcarInfoResult.car.stockId },
+            { make: finalcarInfoResult.car.make },
+            { grade: finalcarInfoResult.car.grade },
+            { chassisNo: finalcarInfoResult.car.chassisNo },
+            { odometer: finalcarInfoResult.car.odometer },
+            { model: finalcarInfoResult.car.model },
             { oldOrNew: finalcarInfoResult.car.oldOrNew },
             { fuelType: finalcarInfoResult.car.fuelType },
             { suspension: finalcarInfoResult.car.suspension },

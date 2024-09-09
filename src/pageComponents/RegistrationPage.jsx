@@ -1,9 +1,21 @@
-import { Button, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
-import signUpImg from "../assets/images/signup-img.jpg"
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Typography,
+} from "@mui/material";
+import signUpImg from "../assets/images/signup-img.jpg";
 import { useState } from "react";
 import links from "../assets/util/links";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -12,103 +24,105 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { loginUser } from "../reduxStore/userDataSlice";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 
-
-
 const RegistrationPage = () => {
   const navigate = useNavigate();
   const [registerformdata, setRegisterFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  })
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    twoStepVerify: false,
+  });
   const handleSignup = (e) => {
-    console.log('signup data:- ', registerformdata)
+    console.log("signup data:- ", registerformdata);
     let error = {
       err: false,
-      message: ''
-    }
+      message: "",
+    };
     // checking required
     Object.keys(registerformdata).some((key) => {
-      if (registerformdata[key] == '' || registerformdata[key].length == 0) {
-        error.err = true
-        error.message = 'All feilds are Required.'
+      if (registerformdata[key] == "" || registerformdata[key].length == 0) {
+        error.err = true;
+        error.message = "All feilds are Required.";
         return true;
       }
       return false;
-    })
+    });
     // checking email
     if (!error.err) {
       function isValidEmail(email) {
-        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const emailRegex =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return emailRegex.test(email);
       }
       if (!isValidEmail(registerformdata.email)) {
         error.err = true;
-        error.message = 'Not a valid email.'
+        error.message = "Not a valid email.";
       }
     }
     // checking confirm password
     if (!error.err) {
       if (registerformdata.password != registerformdata.confirmPassword) {
         error.err = true;
-        error.message = 'Password and confirm password dosen\'t match';
+        error.message = "Password and confirm password dosen't match";
       }
-
     }
     if (error.err) {
       // alert(error.message);
       Swal.fire({
-        title: 'error',
+        title: "error",
         text: error.message,
-        icon: 'error',
+        icon: "error",
         // confirmButtonText: 'Cool'
-      })
+      });
     }
     if (!error.err) {
       // send data to backend.
-      let url = links.backendUrl + '/signup-customer'
-      dispatch(startLoader())
+      let url = links.backendUrl + "/signup-customer";
+      console.log("register form data:- ", registerformdata);
+      dispatch(startLoader());
       fetch(url, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(registerformdata), // This is the data you want to send
-        headers: { 'Content-Type': 'application/json' } // Specify JSON content
+        headers: { "Content-Type": "application/json" }, // Specify JSON content
       })
-        .then(response => {
+        .then((response) => {
+          dispatch(endLoader);
+
           if (response.status < 200 || response.status > 299) {
             response.json().then((err) => {
               Swal.fire({
-                title: 'error',
+                title: "error",
                 text: err.message,
-                icon: 'error',
+                icon: "error",
                 // confirmButtonText: 'Cool'
-              })
-
-            })
+              });
+            });
             // ('error while signing up');
           }
           return response.json();
-
         })
-        .then(data => {
+        .then((data) => {
           console.log(data);
           Swal.fire({
-            title: 'Success',
-            text: 'Signed Up Successfully.',
-            icon: 'success',
+            title: "Success",
+            text: "Signed Up Successfully.",
+            icon: "success",
             // confirmButtonText: 'Cool'
-          })
-          dispatch(endLoader)
+          });
+          dispatch(endLoader);
 
-          navigate('/login')
+          navigate("/login");
         })
-        .catch(error => {
+        .catch((error) => {
+          dispatch(endLoader);
+
           console.error(error);
           // alert(error.message)
         });
     }
-  }
+  };
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -119,7 +133,8 @@ const RegistrationPage = () => {
   };
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword((show) => !show);
 
   const handleMouseDownConfirmPassword = (event) => {
     event.preventDefault();
@@ -128,7 +143,7 @@ const RegistrationPage = () => {
     onSuccess: (codeResponse) => {
       // setUser(codeResponse),
       console.log("google user:-", codeResponse);
-      dispatch(startLoader())
+      dispatch(startLoader());
       axios
         .get(
           `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${codeResponse.access_token}`,
@@ -160,7 +175,7 @@ const RegistrationPage = () => {
                 "userData",
                 JSON.stringify(response.data.userData)
               );
-              dispatch(endLoader())
+              dispatch(endLoader());
               Swal.fire({
                 title: "success",
                 text: "Logged in succeessfully.",
@@ -170,7 +185,7 @@ const RegistrationPage = () => {
               navigate("/", { replace: true });
             })
             .catch(function (error) {
-              dispatch(endLoader())
+              dispatch(endLoader());
 
               console.error(error);
             });
@@ -182,15 +197,26 @@ const RegistrationPage = () => {
   const dispatch = useDispatch();
   return (
     <Grid container justifyContent={"center"}>
-      <Grid item sx={{
-        display: {
-          xs: 'none',
-          md: 'flex-item'
-        }
-      }} xs={11} md={6}>
-        <img style={{
-          margin: '3em 0 0 7em'
-        }} src={signUpImg} width={'300px'} height={'400px'} alt="sign up image"></img>
+      <Grid
+        item
+        sx={{
+          display: {
+            xs: "none",
+            md: "flex-item",
+          },
+        }}
+        xs={11}
+        md={6}
+      >
+        <img
+          style={{
+            margin: "3em 0 0 7em",
+          }}
+          src={signUpImg}
+          width={"300px"}
+          height={"400px"}
+          alt="sign up image"
+        ></img>
       </Grid>
       <Grid item xs={11} md={6}>
         <form>
@@ -203,12 +229,11 @@ const RegistrationPage = () => {
               <TextField
                 size="small"
                 onChange={(e) => {
-                  setRegisterFormData(oldData => {
-                    let newData = { ...oldData }
-                    newData.firstName = e.target.value
+                  setRegisterFormData((oldData) => {
+                    let newData = { ...oldData };
+                    newData.firstName = e.target.value;
                     return newData;
-                  })
-
+                  });
                 }}
                 value={registerformdata.firstName}
                 fullWidth
@@ -221,12 +246,11 @@ const RegistrationPage = () => {
               <TextField
                 size="small"
                 onChange={(e) => {
-                  setRegisterFormData(oldData => {
-                    let newData = { ...oldData }
-                    newData.lastName = e.target.value
+                  setRegisterFormData((oldData) => {
+                    let newData = { ...oldData };
+                    newData.lastName = e.target.value;
                     return newData;
-                  })
-
+                  });
                 }}
                 value={registerformdata.lastName}
                 fullWidth
@@ -239,12 +263,11 @@ const RegistrationPage = () => {
               <TextField
                 fullWidth
                 onChange={(e) => {
-                  setRegisterFormData(oldData => {
-                    let newData = { ...oldData }
-                    newData.email = e.target.value
+                  setRegisterFormData((oldData) => {
+                    let newData = { ...oldData };
+                    newData.email = e.target.value;
                     return newData;
-                  })
-
+                  });
                 }}
                 value={registerformdata.email}
                 size="small"
@@ -260,12 +283,11 @@ const RegistrationPage = () => {
                   fullWidth
                   size="small"
                   onChange={(e) => {
-                    setRegisterFormData(oldData => {
-                      let newData = { ...oldData }
-                      newData.password = e.target.value
+                    setRegisterFormData((oldData) => {
+                      let newData = { ...oldData };
+                      newData.password = e.target.value;
                       return newData;
-                    })
-
+                    });
                   }}
                   endAdornment={
                     <InputAdornment position="end">
@@ -282,24 +304,25 @@ const RegistrationPage = () => {
                   value={registerformdata.password}
                   id="Password-basic"
                   label="Password"
-                  type={showPassword ? 'text' : 'password'}
-                // variant="outlined"
+                  type={showPassword ? "text" : "password"}
+                  // variant="outlined"
                 />
               </FormControl>
             </Grid>
             <Grid container mt={2} xs={12}>
               <FormControl fullWidth size="small" variant="outlined">
-                <InputLabel htmlFor="Confirm-Password-basic">Confirm Password</InputLabel>
+                <InputLabel htmlFor="Confirm-Password-basic">
+                  Confirm Password
+                </InputLabel>
                 <OutlinedInput
                   fullWidth
                   size="small"
                   onChange={(e) => {
-                    setRegisterFormData(oldData => {
-                      let newData = { ...oldData }
-                      newData.confirmPassword = e.target.value
+                    setRegisterFormData((oldData) => {
+                      let newData = { ...oldData };
+                      newData.confirmPassword = e.target.value;
                       return newData;
-                    })
-
+                    });
                   }}
                   endAdornment={
                     <InputAdornment position="end">
@@ -309,26 +332,58 @@ const RegistrationPage = () => {
                         onMouseDown={handleMouseDownConfirmPassword}
                         edge="end"
                       >
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   }
                   value={registerformdata.confirmPassword}
                   id="Confirm-Password-basic"
                   label="Confirm Password"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                // variant="outlined"
+                  type={showConfirmPassword ? "text" : "password"}
+                  // variant="outlined"
                 />
               </FormControl>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={(e) => {
+                      setRegisterFormData((oldState) => {
+                        let newState = { ...oldState };
+                        newState.twoStepVerify = e.target.checked;
+                        return newState;
+                      });
+                    }}
+                  />
+                }
+                label="Enable 2 step verification ?"
+                labelPlacement="end"
+              />
             </Grid>
 
-            <Grid container mt={3} ml={'auto'} mr={'auto'} textAlign={'center'} xs={10}>
+            <Grid
+              container
+              mt={3}
+              ml={"auto"}
+              mr={"auto"}
+              textAlign={"center"}
+              xs={10}
+            >
               <Button onClick={handleSignup} fullWidth variant="contained">
                 Register
               </Button>
             </Grid>
-            <Grid container mt={3} ml={'auto'} mr={'auto'} textAlign={'center'} xs={10}>
-
+            <Grid
+              container
+              mt={3}
+              ml={"auto"}
+              mr={"auto"}
+              textAlign={"center"}
+              xs={10}
+            >
               <Button
                 mt={2}
                 onClick={() => loginWithGoogle()}
@@ -339,7 +394,6 @@ const RegistrationPage = () => {
                 Continue with Google
               </Button>
             </Grid>
-
           </Grid>
         </form>
       </Grid>

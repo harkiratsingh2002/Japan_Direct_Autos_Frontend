@@ -115,7 +115,9 @@ const CarCardComponent = (props) => {
           <Typography variant="body2" color="text.secondary">
             <button style={buttonStyles}>{props.car.price}</button>
             <button style={buttonStyles}>{props.car.oldOrNew}</button>
-            <button style={buttonStyles}>{props.car.carType}</button>
+            <button style={buttonStyles}>
+              {props.car.body ? props.car.body : props.car.carType}
+            </button>
 
             {/* <Button m={1} variant='outlined'>{props.car.oldOrNew}</Button>
           <Button m={1} variant='outlined'>Type: {props.car.carType}</Button>

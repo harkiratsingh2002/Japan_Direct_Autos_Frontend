@@ -31,9 +31,9 @@ import ContactUs from "./pageComponents/ContactUs.jsx";
 import ForgotPassword from "./pageComponents/ForgotPassword.jsx";
 import Wishlist from "./pageComponents/Wishlist.jsx";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import RentalCars from "./pageComponents/RentalCars.jsx";
 const queryClient = new QueryClient();
-
 
 // const db = getDatabase(app);
 
@@ -69,6 +69,10 @@ const router = createBrowserRouter([
         element: <UsedCars />,
       },
       {
+        path: "/rental-cars",
+        element: <RentalCars />,
+      },
+      {
         path: "/car-details/:carId",
         element: <CarDetailsPage />,
       },
@@ -98,11 +102,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="378521593401-b7cq8jc0q6es09tn97vv7l2l69kklb5v.apps.googleusercontent.com">
     <QueryClientProvider client={queryClient}>
-
       <Provider store={store}>
         <RouterProvider router={router} />
       </Provider>
     </QueryClientProvider>
-
   </GoogleOAuthProvider>
 );

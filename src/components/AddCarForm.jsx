@@ -15,8 +15,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import links from "../assets/util/links";
 import MultipleImageAddingComponent from "./MultipleImageAddingComponent";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
+import axios from "axios";
 
 // import { imageDb } from "../firebase";
 // import { ref } from "firebase/storage";
@@ -173,15 +174,12 @@ function CarTypeSelector(props) {
       onChange={props.onChange}
       value={props.value}
       //   sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Car Type" />}
+      renderInput={(params) => <TextField {...params} label="Body" />}
     />
   );
 }
 function OldNewSelector(props) {
-  const carTypes = [
-    "New",
-    "Used"
-  ];
+  const carTypes = ["New", "Used", "Rental"];
   return (
     <Autocomplete
       disablePortal
@@ -190,7 +188,9 @@ function OldNewSelector(props) {
       onChange={props.onChange}
       value={props.value}
       //   sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Old Or New" />}
+      renderInput={(params) => (
+        <TextField {...params} label="Old Or New or Rental" />
+      )}
     />
   );
 }
@@ -199,17 +199,23 @@ const AddCarForm = () => {
   const [onForm, setOnForm] = React.useState("basicInformation");
   //   const carFormData = new FormData();
   const finalCarFormData = new FormData();
-  const adminEmail = useSelector((state) => state.userDataSlice.email)
-  console.log('adminEmail:- ', adminEmail);
+  const adminEmail = useSelector((state) => state.userDataSlice.email);
+  console.log("adminEmail:- ", adminEmail);
   // finalCarFormData.append('email',adminEmail)
   const nextClickedHandler = (page) => {
     setOnForm(page);
   };
   const carFormDataInitital = {
     id: "",
+    stockId: "",
     name: "",
     oldOrNew: "",
-    carType: "",
+    body: "",
+    make: "",
+    grade: "",
+    chassisNo: "",
+    odometer: "",
+    model: "",
     year: "",
     price: "",
     brand: "",
@@ -224,8 +230,20 @@ const AddCarForm = () => {
     color: "",
   };
 
+  const adminInfoInitial = {
+    costPrice: "",
+    brokerForwarderHandlingFees: "",
+    preShipInspection: "",
+    inlandTransport: "",
+    freightInsurance: "",
+    gst: "",
+    customClearance: "",
+  };
+
   const [carFormData, setCarFormData] = useState(carFormDataInitital);
-  const dispatch = useDispatch()
+  const [adminInfo, setAdminInfo] = useState(adminInfoInitial);
+
+  const dispatch = useDispatch();
   // const carFormDataReducer = (state, action) => {
   //   let oldState = {};
   //   switch (action.type) {
@@ -325,16 +343,48 @@ const AddCarForm = () => {
             />
           </Grid>
           <Grid pt={2} item xs={5}>
-            <OldNewSelector
-              onChange={(e, newValue) => {
+            <CssTextField
+              onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
-                  newState.oldOrNew = newValue;
+                  newState.stockId = e.target.value;
                   return newState;
                 });
               }}
-              value={carFormData.oldOrNew}
+              value={carFormData.stockId}
+              fullWidth
+              label="Stock Id"
+              id="stockId"
             />
+          </Grid>
+          <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
+            <Grid pt={2} item xs={5}>
+              <CssTextField
+                onChange={(e) => {
+                  setCarFormData((oldState) => {
+                    let newState = { ...oldState };
+                    newState.make = e.target.value;
+                    return newState;
+                  });
+                }}
+                value={carFormData.make}
+                fullWidth
+                label="Make"
+                id="make"
+              />
+            </Grid>
+            <Grid pt={2} item xs={5}>
+              <OldNewSelector
+                onChange={(e, newValue) => {
+                  setCarFormData((oldState) => {
+                    let newState = { ...oldState };
+                    newState.oldOrNew = newValue;
+                    return newState;
+                  });
+                }}
+                value={carFormData.oldOrNew}
+              />
+            </Grid>
           </Grid>
         </Grid>
 
@@ -379,11 +429,11 @@ const AddCarForm = () => {
               onChange={(e, newValue) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
-                  newState.carType = newValue;
+                  newState.body = newValue;
                   return newState;
                 });
               }}
-              value={carFormData.carType}
+              value={carFormData.body}
             />
           </Grid>
           <Grid item xs={5}>
@@ -467,9 +517,8 @@ const AddCarForm = () => {
           fullWidth
         />
       </Grid>
-
     </Grid>
-  )
+  );
   const specificationForm = (
     <>
       <Grid
@@ -507,41 +556,114 @@ const AddCarForm = () => {
             />
           </Grid>
           <Grid item xs={5}>
-            <CarSuspensionSelector
-              onChange={(e, newValue) => {
+            <CssTextField
+              onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
-                  newState.suspension = newValue;
+                  newState.suspension = e.target.value;
                   return newState;
                 });
               }}
               value={carFormData.suspension}
+              fullWidth
+              label="Suspension"
+              id="suspension"
             />
           </Grid>
         </Grid>
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
-            <CarTransmissionSelector
-              onChange={(e, newValue) => {
+            <CssTextField
+              onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
-                  newState.transmission = newValue;
+                  newState.grade = e.target.value;
+                  return newState;
+                });
+              }}
+              value={carFormData.grade}
+              fullWidth
+              label="Grade"
+              id="grade"
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <CssTextField
+              onChange={(e) => {
+                setCarFormData((oldState) => {
+                  let newState = { ...oldState };
+                  newState.chassisNo = e.target.value;
+                  return newState;
+                });
+              }}
+              value={carFormData.chassisNo}
+              fullWidth
+              label="Chassis No"
+              id="chassisNo"
+            />
+          </Grid>
+        </Grid>
+        <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
+          <Grid item xs={5}>
+            <CssTextField
+              onChange={(e) => {
+                setCarFormData((oldState) => {
+                  let newState = { ...oldState };
+                  newState.odometer = e.target.value;
+                  return newState;
+                });
+              }}
+              value={carFormData.odometer}
+              fullWidth
+              label="Odometer"
+              id="odometer"
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <CssTextField
+              onChange={(e) => {
+                setCarFormData((oldState) => {
+                  let newState = { ...oldState };
+                  newState.model = e.target.value;
+                  return newState;
+                });
+              }}
+              value={carFormData.model}
+              fullWidth
+              label="Model"
+              id="model"
+            />
+          </Grid>
+        </Grid>
+        <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
+          <Grid item xs={5}>
+            <CssTextField
+              onChange={(e) => {
+                setCarFormData((oldState) => {
+                  let newState = { ...oldState };
+                  newState.transmission = e.target.value;
                   return newState;
                 });
               }}
               value={carFormData.transmission}
+              fullWidth
+              label="Transmission"
+              id="transmission"
             />
           </Grid>
           <Grid item xs={5}>
-            <CarFuelTypeSelector
-              onChange={(e, newValue) => {
+            <CssTextField
+              onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
-                  newState.fuelType = newValue;
+                  newState.fuelType = e.target.value;
                   return newState;
                 });
               }}
               value={carFormData.fuelType}
+              fullWidth
+              label="Fuel Type"
+              id="Fuel"
             />
           </Grid>
         </Grid>
@@ -600,18 +722,151 @@ const AddCarForm = () => {
     </>
   );
 
+  const adminInfoForm = (
+    <>
+      <Grid
+        bgcolor={myColors.myGrey}
+        sx={{
+          paddingY: "1.5em",
+          paddingX: "1.5em",
+
+          border: "1px solid #212121",
+          boxShadow: "3px 3px",
+          borderRadius: "25px",
+        }}
+        xs={10}
+        md={7}
+        mt={3}
+      >
+        <Typography textAlign={"center"} variant="h5">
+          Add Car Admin Information
+        </Typography>
+
+        <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
+          <Grid item xs={5}>
+            <CssTextField
+              onChange={(e) => {
+                setAdminInfo((oldState) => {
+                  let newState = { ...oldState };
+                  newState.costPrice = e.target.value;
+                  return newState;
+                });
+              }}
+              value={adminInfo.costPrice}
+              fullWidth
+              label="Cost Price"
+              id="cp"
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <CssTextField
+              onChange={(e) => {
+                setAdminInfo((oldState) => {
+                  let newState = { ...oldState };
+                  newState.brokerForwarderHandlingFees = e.target.value;
+                  return newState;
+                });
+              }}
+              value={adminInfo.brokerForwarderHandlingFees}
+              fullWidth
+              label="Broker Forwarder Handling Fee"
+              id="bfhf"
+            />
+          </Grid>
+        </Grid>
+        <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
+          <Grid item xs={5}>
+            <CssTextField
+              onChange={(e) => {
+                setAdminInfo((oldState) => {
+                  let newState = { ...oldState };
+                  newState.preShipInspection = e.target.value;
+                  return newState;
+                });
+              }}
+              value={adminInfo.preShipInspection}
+              fullWidth
+              label="Pre-Ship Inspection"
+              id="psi"
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <CssTextField
+              onChange={(e) => {
+                setAdminInfo((oldState) => {
+                  let newState = { ...oldState };
+                  newState.inlandTransport = e.target.value;
+                  return newState;
+                });
+              }}
+              value={adminInfo.inlandTransport}
+              fullWidth
+              label="Inland Transport"
+              id="it"
+            />
+          </Grid>
+        </Grid>
+        <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
+          <Grid item xs={3}>
+            <CssTextField
+              onChange={(e) => {
+                setAdminInfo((oldState) => {
+                  let newState = { ...oldState };
+                  newState.freightInsurance = e.target.value;
+                  return newState;
+                });
+              }}
+              value={adminInfo.freightInsurance}
+              fullWidth
+              label="Freight Insurance"
+              id="fi"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <CssTextField
+              onChange={(e) => {
+                setAdminInfo((oldState) => {
+                  let newState = { ...oldState };
+                  newState.gst = e.target.value;
+                  return newState;
+                });
+              }}
+              value={adminInfo.gst}
+              fullWidth
+              label="GST"
+              id="gst"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <CssTextField
+              onChange={(e) => {
+                setAdminInfo((oldState) => {
+                  let newState = { ...oldState };
+                  newState.customClearance = e.target.value;
+                  return newState;
+                });
+              }}
+              value={adminInfo.customClearance}
+              fullWidth
+              label="Custom Clearance"
+              id="cc"
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+    </>
+  );
 
   // const [noOfImages, setNoOfImages] = useState(0);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // const [allImages,setAllImages] = useState([]);
   const ImageAddingComponent = (props) => {
     // const [selectedImage, setSelectedImage] = useState(null);
 
     React.useEffect(() => {
-      console.log('current image number', currImage);
-      console.log('props current image number', props.currImage);
-
-    }, [])
+      console.log("current image number", currImage);
+      console.log("props current image number", props.currImage);
+    }, []);
 
     const [imageUrl, setImageUrl] = useState(null);
     const [currImage, setcurrImage] = useState(props.currImage);
@@ -622,7 +877,7 @@ const AddCarForm = () => {
 
     // const handleImageChange = (event) => {};
     const handleImageChange = (event) => {
-      console.log('files:-', event.target.files)
+      console.log("files:-", event.target.files);
       const imageFile = event.target.files[0];
       if (!imageFile) return;
 
@@ -630,11 +885,11 @@ const AddCarForm = () => {
       if (!imageFile.type.match("image/.*")) {
         // alert("Please select a valid image file (JPEG, PNG, etc.)");
         Swal.fire({
-          title: 'error',
+          title: "error",
           text: "Please select a valid image file (JPEG, PNG, etc.)",
-          icon: 'error',
+          icon: "error",
           // confirmButtonText: 'Cool'
-        })
+        });
         return;
       }
 
@@ -647,18 +902,16 @@ const AddCarForm = () => {
         let newState = [...oldState];
         // console.log('oldFileState:-', oldState);
         newState.push(imageFile);
-        finalCarFormData.append('images[]', imageFile)
-        console.log('newImagesState:- ', newState);
-        localStorage.setItem('noOfImages:- ', newState.length)
+        finalCarFormData.append("images[]", imageFile);
+        console.log("newImagesState:- ", newState);
+        localStorage.setItem("noOfImages:- ", newState.length);
         return newState;
-      })
+      });
       // allImages.forEach((file)=>{
 
       //   finalCarFormData.append(`carImages[]`, allImages);
       // })
       // console.log('allImagesInner:- ',allImages)
-
-
 
       // console.log('currImage',props.currImage);
       // finalCarFormData.append('noOfImages',noOfImages);
@@ -671,7 +924,6 @@ const AddCarForm = () => {
       reader.readAsDataURL(imageFile);
       reader.onload = (e) => setImageUrl(e.target.result);
     };
-
 
     return (
       // <form onSubmit={handleSubmit}>
@@ -738,7 +990,6 @@ const AddCarForm = () => {
             currImage={currImage}
             allImages={allImages}
             totalImages={3}
-
           />
         )}
       </>
@@ -753,7 +1004,7 @@ const AddCarForm = () => {
     const newImages = Array.from(event.target.files); // Convert FileList to array
     setSelectedImages((prevImages) => [...prevImages, ...newImages]);
     for (const image of newImages) {
-      finalCarFormData.append('images[]', image); // Append each image to the form data with the key 'images[]' (an array)
+      finalCarFormData.append("images[]", image); // Append each image to the form data with the key 'images[]' (an array)
     }
   };
   return (
@@ -762,12 +1013,9 @@ const AddCarForm = () => {
         {onForm == "basicInformation" && BasicCarInformationForm}
         {onForm == "specificationInformation" && specificationForm}
         {onForm == "descriptionInformation" && descriptionForm}
+        {onForm == "adminInfo" && adminInfoForm}
         {onForm == "addImages" && (
-          <ImageAddingComponent
-            allImages={[]}
-            currImage={0}
-            totalImages={3}
-          />
+          <ImageAddingComponent allImages={[]} currImage={0} totalImages={3} />
           // <MultipleImageAddingComponent handleImageChange={handleImageChange} />
         )}
         <Grid container mt={3} xs={12} justifyContent={"center"}>
@@ -780,6 +1028,7 @@ const AddCarForm = () => {
                     "basicInformation",
                     "specificationInformation",
                     "descriptionInformation",
+                    "adminInfo",
                     "addImages",
                   ];
                   let currPageIndex = pages.findIndex((el) => {
@@ -800,6 +1049,7 @@ const AddCarForm = () => {
                     "basicInformation",
                     "specificationInformation",
                     "descriptionInformation",
+                    "adminInfo",
                     "addImages",
                   ];
                   let currPageIndex = pages.findIndex((el) => {
@@ -815,68 +1065,94 @@ const AddCarForm = () => {
               <CustomButton
                 variant="contained"
                 onClick={() => {
-                  if (!finalCarFormData.get('brand')) {
-
+                  if (!finalCarFormData.get("brand")) {
                     Object.keys(carFormData).forEach((key) => {
                       finalCarFormData.append(key, carFormData[key]);
                     });
                   }
                   console.log(finalCarFormData);
-                  console.log(finalCarFormData.get('brand'))
-                  console.log(finalCarFormData.get('carImg-0'))
-                  console.log(finalCarFormData.get('carImg-1'))
-                  console.log(finalCarFormData.get('carImg-0'))
+                  console.log(finalCarFormData.get("brand"));
+                  console.log(finalCarFormData.get("carImg-0"));
+                  console.log(finalCarFormData.get("carImg-1"));
+                  console.log(finalCarFormData.get("carImg-0"));
 
-                  console.log('no of images:- ', localStorage.getItem('noOfImages'));
+                  console.log(
+                    "no of images:- ",
+                    localStorage.getItem("noOfImages")
+                  );
                   // console.log('all images',finalCarFormData.get('carImages[]'));
 
                   // console.log('all images',)
-                  const userToken = (JSON.parse(localStorage.getItem('userData'))).userToken;
-                  dispatch(startLoader())
+                  const userToken = JSON.parse(
+                    localStorage.getItem("userData")
+                  ).userToken;
+                  dispatch(startLoader());
                   fetch(links.backendUrl + "/add-car", {
                     method: "POST",
                     body: finalCarFormData,
                     headers: {
-                      'authorization': `Bearer ${userToken}`,
-                    }
-
+                      authorization: `Bearer ${userToken}`,
+                    },
                   })
-                    .then(res => {
-                      dispatch(endLoader())
-                      console.log('result :-', res);
+                    .then((res) => {
+                      dispatch(endLoader());
+                      console.log("result :-", res);
                       if (res.status < 200 || res.status > 299) {
-                        let newError = 'some error'
+                        let newError = "some error";
                         throw newError;
                       }
-                      return res.json()
+                      return res.json();
                     })
-                    .then(res => {
-                      if ((finalCarFormData.get('oldOrNew')) == 'new' || (finalCarFormData.get('oldOrNew')) == 'New') {
-                        Swal.fire({
-                          title: 'success',
-                          text: "Car Added Successfully",
-                          icon: 'Success',
-                          // confirmButtonText: 'Cool'
+                    .then((res) => {
+                      // add admin info
+                      console.log("saved car data:- ", res);
+                      console.log("admin data", adminInfo);
+                      axios
+                        .post(links.backendUrl + "/add-car-admin-info", {
+                          carId: res.carId,
+                          adminInfo: adminInfo,
                         })
-                        navigate('/new-cars');
-                      }
-
-                      else {
-                        Swal.fire({
-                          title: 'success',
-                          text: "Car Added Successfully",
-                          icon: 'Success',
-                          // confirmButtonText: 'Cool'
+                        .then((response) => {
+                          if (
+                            finalCarFormData.get("oldOrNew") == "new" ||
+                            finalCarFormData.get("oldOrNew") == "New"
+                          ) {
+                            Swal.fire({
+                              title: "Success",
+                              text: "Car Added Successfully",
+                              icon: "success",
+                              // confirmButtonText: 'Cool'
+                            });
+                            navigate("/new-cars");
+                          } else if (
+                            finalCarFormData.get("oldOrNew") == "used" ||
+                            finalCarFormData.get("oldOrNew") == "Used"
+                          ) {
+                            Swal.fire({
+                              title: "Success",
+                              text: "Car Added Successfully",
+                              icon: "success",
+                              // confirmButtonText: 'Cool'
+                            });
+                            navigate("/used-cars");
+                          } else {
+                            Swal.fire({
+                              title: "Success",
+                              text: "Car Added Successfully",
+                              icon: "success",
+                              // confirmButtonText: 'Cool'
+                            });
+                            navigate("/rental-cars");
+                          }
                         })
-                        navigate('/used-cars');
-                      }
+                        .catch((err) => {
+                          console.log("err while adding admin info", err);
+                        });
                     })
-                    .catch(err => {
-                      console.log('error:-', err);
-                      alert('error while adding car.')
-                    })
-
-
+                    .catch((err) => {
+                      console.log("error:-", err);
+                      alert("error while adding car.");
+                    });
                 }}
               >
                 Add Car

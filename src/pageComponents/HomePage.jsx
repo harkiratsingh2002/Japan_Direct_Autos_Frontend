@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 import SearchCarsComponent from "../components/SearchCarsComponent";
 
-
 // import { useEffect } from "react";
 // import useDeviceWidth from "../customHooks/useDeviceWidth";
 
@@ -18,6 +17,7 @@ const HomePage = () => {
   const width = useWindowWidth();
   const [newCars, setNewCars] = useState([]);
   const [usedCars, setUsedCars] = useState([]);
+  const [rentalCars, setRentalCars] = useState([]);
 
   // Overlay Settings
   const [overlayVisible, setOverlayVisible] = useState(true);
@@ -42,10 +42,10 @@ const HomePage = () => {
         setNewCars(carsData.cars);
         // setCount(carsData.count);
       })
-      .catch(err => {
+      .catch((err) => {
         dispatch(endLoader());
-        console.log('err 7 new cars', err)
-      })
+        console.log("err 7 new cars", err);
+      });
     let url2 = links.backendUrl + "/get-seven-used-cars";
     fetch(url2)
       .then((data) => {
@@ -60,10 +60,28 @@ const HomePage = () => {
         // setCount(carsData.count);
         // dispatch(endLoader());
       })
-      .catch(err => {
+      .catch((err) => {
         dispatch(endLoader());
-        console.log('err 7 used cars', err)
+        console.log("err 7 used cars", err);
+      });
+    let url3 = links.backendUrl + "/get-seven-rental-cars";
+    fetch(url3)
+      .then((data) => {
+        dispatch(endLoader());
+
+        console.log("response", data);
+        return data.json();
       })
+      .then((carsData) => {
+        console.log("cars:- ", carsData);
+        setRentalCars(carsData.cars);
+        // setCount(carsData.count);
+        // dispatch(endLoader());
+      })
+      .catch((err) => {
+        dispatch(endLoader());
+        console.log("err 7 rental cars", err);
+      });
   }, []);
 
   return (
@@ -125,15 +143,35 @@ const HomePage = () => {
           xs={10}
           justifyContent={"space-around"}
         >
-          <ScrollContainer carType={'used'} cars={usedCars} />
+          <ScrollContainer carType={"used"} cars={usedCars} />
         </Grid>
-
+        <Grid
+          container
+          marginTop={4}
+          marginLeft={"auto"}
+          marginRight={"auto"}
+          xs={10}
+        >
+          <Grid item xs={12} textAlign={"center"}>
+            <Typography textAlign={"center"} variant="h5">
+              Rental Cars
+            </Typography>
+          </Grid>
+          {/* <Typography variant="h5">Top Rental Cars</Typography> */}
+        </Grid>
+        <Grid
+          container
+          mb={4}
+          marginLeft={"auto"}
+          marginRight={"auto"}
+          xs={10}
+          justifyContent={"space-around"}
+        >
+          <ScrollContainer carType={"Rental"} cars={rentalCars} />
+        </Grid>
       </Grid>
 
-      <div>
-
-      </div>
-
+      <div></div>
     </>
   );
 };
