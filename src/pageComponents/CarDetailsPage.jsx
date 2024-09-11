@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import carTestImage from "../assets/images/car-home-bg-3.jpeg";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import links from "../assets/util/links";
+import links from "../assets/util/links"; ``
 import CustomizedTable from "../components/CustomizedTable";
 import ScrollingImageComponent from "../components/ScrollingImageComponent";
 import ReviewsComponent from "../components/ReviewsComponent";

@@ -17,6 +17,8 @@ import { Refresh as RefreshIcon, Add as AddIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bar } from "react-chartjs-2";
+import RecentReviews from "./recentReviews";
+import link from "../assets/util/links";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -38,7 +40,7 @@ ChartJS.register(
 
 // Function to fetch counts
 const fetchCount = async (type) => {
-  const response = await fetch(`http://localhost:7777/${type}`);
+  const response = await fetch(`${link.backendUrl}/${type}`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -48,7 +50,7 @@ const fetchCount = async (type) => {
 
 // Function to fetch recent reviews
 const fetchRecentReviews = async () => {
-  const response = await fetch(`http://localhost:7777/reviews/recent`);
+  const response = await fetch(`${link.backendUrl}/reviews/recent`);
   if (!response.ok) {
     throw new Error("Failed to fetch recent reviews");
   }
@@ -201,30 +203,7 @@ const DashboardAdminMain = () => {
             <Typography variant="h6" gutterBottom>
               Recent Reviews
             </Typography>
-            <List>
-              {recentReviews.length > 0 ? (
-                recentReviews.map((review, index) => (
-                  <React.Fragment key={index}>
-                    <ListItem alignItems="flex-start">
-                      <ListItemAvatar>
-                        <Avatar>{review.reviewdBy?.firstName.charAt(0)}</Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={`"${review.reviewText}"`}
-                        secondary={`by ${review.reviewdBy?.firstName} ${review.reviewdBy?.lastName} (Rating: ${review.rating}/5) for ${review.carId?.name} `}
-                      />
-                    </ListItem>
-                    {index < recentReviews.length - 1 && (
-                      <Divider variant="inset" component="li" />
-                    )}
-                  </React.Fragment>
-                ))
-              ) : (
-                <Typography variant="body2" sx={{ mt: 2 }}>
-                  No recent reviews available.
-                </Typography>
-              )}
-            </List>
+            <RecentReviews />
           </Card>
         </Grid>
       </Grid>

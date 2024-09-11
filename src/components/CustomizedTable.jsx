@@ -48,7 +48,7 @@ function CustomizedTable(props) {
 
   return (
     <TableContainer component={Paper}>
-      <Table  aria-label="customized table">
+      <Table aria-label="customized table">
         <TableHead>
           <TableRow>
             {/* <StyledTableCell>Dessert (100g serving)</StyledTableCell>
@@ -56,32 +56,32 @@ function CustomizedTable(props) {
             <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
             <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
             <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell> */}
-            {props.headerCols.map((headCol,i) => {
+            {props.headerCols.map((headCol, i) => {
               return <StyledTableCell key={i} align="left">{headCol}</StyledTableCell>;
             })}
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.rows.map((row,i) => (
+          {props.rows.map((row, i) => (
             <StyledTableRow key={i}>
-            {/* //   <StyledTableCell component="th" scope="row">
+              {/* //   <StyledTableCell component="th" scope="row">
             //     {row.name}
             //   </StyledTableCell>
             //   <StyledTableCell align="right">{row.calories}</StyledTableCell>
             //   <StyledTableCell align="right">{row.fat}</StyledTableCell>
             //   <StyledTableCell align="right">{row.carbs}</StyledTableCell> */}
-            {Object.keys(row).map((feild)=>{
+              {Object.keys(row).map((feild) => {
                 return (
                   <>
-                  
-                  <StyledTableCell key={feild} align="left">{camelToSentence(feild) }</StyledTableCell>
-                  <StyledTableCell key={row[feild]} align="left">{row[feild]}</StyledTableCell>
-                  </>
-                    
 
-                )       
-            })
-        }
+                    <StyledTableCell key={feild} align="left">{camelToSentence(feild)}</StyledTableCell>
+                    <StyledTableCell key={row[feild]} align="left">{row[feild]}</StyledTableCell>
+                  </>
+
+
+                )
+              })
+              }
             </StyledTableRow>
           ))}
         </TableBody>
