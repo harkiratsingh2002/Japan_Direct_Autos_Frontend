@@ -203,6 +203,7 @@ const AddCarForm = () => {
   console.log("adminEmail:- ", adminEmail);
   // finalCarFormData.append('email',adminEmail)
   const nextClickedHandler = (page) => {
+
     setOnForm(page);
   };
   const carFormDataInitital = {
@@ -240,72 +241,30 @@ const AddCarForm = () => {
     customClearance: "",
   };
 
+  const validateForm = (currentForm) => {
+    switch (currentForm) {
+      case 'basicInformation':
+        // Check if the basic information fields are not empty
+        return carFormData.name && carFormData.stockId && carFormData.make && carFormData.brand && carFormData.year && carFormData.price && carFormData.body && carFormData.oldOrNew;
+      case 'specificationInformation':
+        // Ensure all specifications are filled
+        return carFormData.engine && carFormData.suspension && carFormData.grade && carFormData.chassisNo && carFormData.odometer && carFormData.model && carFormData.transmission && carFormData.fuelType && carFormData.mileage && carFormData.seatingCapacity && carFormData.mileage && carFormData.color;
+      case 'descriptionInformation':
+        // Description must not be empty
+        return carFormData.description.length > 0;
+      case 'adminInfo':
+        // Check if admin information fields are not empty
+        return adminInfo.costPrice && adminInfo.brokerForwarderHandlingFees && adminInfo.preShipInspection && adminInfo.inlandTransport && adminInfo.freightInsurance && adminInfo.gst && adminInfo.customClearance;
+      default:
+        return true;
+    }
+  }
+
+
   const [carFormData, setCarFormData] = useState(carFormDataInitital);
   const [adminInfo, setAdminInfo] = useState(adminInfoInitial);
 
   const dispatch = useDispatch();
-  // const carFormDataReducer = (state, action) => {
-  //   let oldState = {};
-  //   switch (action.type) {
-  //     case "updateId":
-  //       oldState = {...state};
-  //       oldState.id = action.value.id;
-  //       return oldState;
-
-  //     case "updateName":
-  //       oldState = {...state};
-  //       state.name = action.value;
-  //       return state;
-  //     case "updateCarType":
-  //       oldState = {...state};
-  //       oldState.carType = action.value;
-  //       return oldState;
-  //     case "updateYear":
-  //       oldState = {...state};
-  //       oldState.year = action.value
-  //       return oldState;
-  //     case "updateBrand":
-  //       oldState = {...state};
-  //       oldState.brand = action.value;
-  //       return oldState;
-  //     case "updateEngine":
-  //       oldState = {...state};
-  //       oldState.specification.engine = action.value;
-  //       return oldState;
-  //     case "updateSuspension":
-  //       oldState = {...state};
-  //       oldState.specification.suspension = action.value.suspension;
-  //       return oldState;
-  //     case "updateTransmission":
-  //       oldState = {...state};
-  //       oldState.specification.transmission = action.value.transmission;
-  //       return oldState;
-  //     case "updateFuelType":
-  //       oldState = {...state};
-  //       oldState.specification.fuelType = action.value.fuelType;
-  //       return oldState;
-  //     case "updateMileage":
-  //       oldState = {...state};
-  //       oldState.specification.mileage = action.value.mileage;
-  //       return oldState;
-  //     case "updateSeatingCapacity":
-  //       oldState = {...state};
-  //       oldState.specification.seatingCapacity = action.value.seatingCapacity;
-  //       return oldState;
-  //     case "updateColor":
-  //       oldState = {...state};
-  //       oldState.specification.color = action.value.color;
-  //       return oldState;
-  //     case "updateImages":
-  //       oldState = {...state};
-
-  //   }
-  // };
-  // const [carFormData, carFormDataDispatch] = React.useReducer(
-  //   carFormDataReducer,
-  //   carFormDataInitital
-  // );
-  //   const carFormStyles = {};
 
   const BasicCarInformationForm = (
     <>
@@ -329,6 +288,7 @@ const AddCarForm = () => {
         <Grid container justifyContent={"space-between"}>
           <Grid pt={2} item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -344,6 +304,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid pt={2} item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -360,6 +321,7 @@ const AddCarForm = () => {
           <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
             <Grid pt={2} item xs={5}>
               <CssTextField
+                required
                 onChange={(e) => {
                   setCarFormData((oldState) => {
                     let newState = { ...oldState };
@@ -375,6 +337,7 @@ const AddCarForm = () => {
             </Grid>
             <Grid pt={2} item xs={5}>
               <OldNewSelector
+                required
                 onChange={(e, newValue) => {
                   setCarFormData((oldState) => {
                     let newState = { ...oldState };
@@ -391,6 +354,8 @@ const AddCarForm = () => {
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
             <CssTextField
+
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -406,6 +371,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -426,6 +392,7 @@ const AddCarForm = () => {
              */}
             {/* will add autofocus select */}
             <CarTypeSelector
+              required
               onChange={(e, newValue) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -438,6 +405,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -455,33 +423,7 @@ const AddCarForm = () => {
       </Grid>
     </>
   );
-  // const [basicCarInfoState, setBasicCarInfoState] = useState({
-  //   id: "",
-  //   name: "",
-  //   carType: "",
-  //   year: "",
-  //   price: "",
-  //   brand: "",
-  // });
-  // React.useEffect(()=>{
-  //     return ()=>{
-  //         console.log('hello there')
-  //         localStorage.setItem('basicCarInfoState',JSON.stringify(basicCarInfoState))
 
-  //     }
-  // },[])
-
-  //   const SpecificationForm = () => {
-  //     const [specificationFormState, setBasicCarInfoState] = useState({
-  //       engine: "",
-  //       suspension: "",
-  //       transmission: "",
-  //       fuelType: "",
-  //       mileage: "",
-  //       seatingCapacity: "",
-  //       color: "",
-  //     });
-  //     return (
 
   const descriptionForm = (
     <Grid
@@ -503,6 +445,7 @@ const AddCarForm = () => {
       </Typography>
       <Grid pt={2} container item xs={12}>
         <TextField
+          required
           id="outlined-multiline-static"
           label="Car Description"
           multiline
@@ -542,6 +485,7 @@ const AddCarForm = () => {
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -557,6 +501,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -574,6 +519,7 @@ const AddCarForm = () => {
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -589,6 +535,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -606,6 +553,7 @@ const AddCarForm = () => {
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -621,6 +569,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -638,6 +587,7 @@ const AddCarForm = () => {
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -653,6 +603,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -677,6 +628,7 @@ const AddCarForm = () => {
         >
           <Grid item xs={4}>
             <CarSeatingCapacitySelector
+              required
               onChange={(e, newValue) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -689,6 +641,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={4}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -704,6 +657,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={4}>
             <CssTextField
+              required
               onChange={(e) => {
                 setCarFormData((oldState) => {
                   let newState = { ...oldState };
@@ -738,13 +692,14 @@ const AddCarForm = () => {
         md={7}
         mt={3}
       >
-        <Typography textAlign={"center"} variant="h5">
+        <Typography textAlign={"center"} variant="h5" required>
           Add Car Admin Information
         </Typography>
 
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setAdminInfo((oldState) => {
                   let newState = { ...oldState };
@@ -760,6 +715,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setAdminInfo((oldState) => {
                   let newState = { ...oldState };
@@ -777,6 +733,7 @@ const AddCarForm = () => {
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setAdminInfo((oldState) => {
                   let newState = { ...oldState };
@@ -792,6 +749,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={5}>
             <CssTextField
+              required
               onChange={(e) => {
                 setAdminInfo((oldState) => {
                   let newState = { ...oldState };
@@ -809,6 +767,7 @@ const AddCarForm = () => {
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={3}>
             <CssTextField
+              required
               onChange={(e) => {
                 setAdminInfo((oldState) => {
                   let newState = { ...oldState };
@@ -824,6 +783,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={3}>
             <CssTextField
+              required
               onChange={(e) => {
                 setAdminInfo((oldState) => {
                   let newState = { ...oldState };
@@ -839,6 +799,7 @@ const AddCarForm = () => {
           </Grid>
           <Grid item xs={3}>
             <CssTextField
+              required
               onChange={(e) => {
                 setAdminInfo((oldState) => {
                   let newState = { ...oldState };
@@ -1000,6 +961,24 @@ const AddCarForm = () => {
       // </form>
     );
   };
+  const handleNext = () => {
+    const pages = [
+      "basicInformation",
+      "specificationInformation",
+      "descriptionInformation",
+      "adminInfo",
+      "addImages",
+    ];
+    let currPageIndex = pages.findIndex((el) => el === onForm);
+    if (currPageIndex < pages.length - 1) {
+      if (validateForm(onForm)) {
+        setOnForm(pages[currPageIndex + 1]);
+      } else {
+        // Optionally show an error message
+        alert('Please fill all required fields.');
+      }
+    }
+  };
   const handleImageChange = (event) => {
     const newImages = Array.from(event.target.files); // Convert FileList to array
     setSelectedImages((prevImages) => [...prevImages, ...newImages]);
@@ -1041,25 +1020,15 @@ const AddCarForm = () => {
               </CustomButton>
             )}
 
+
             {onForm != "addImages" && (
               <CustomButton
                 variant="contained"
-                onClick={() => {
-                  const pages = [
-                    "basicInformation",
-                    "specificationInformation",
-                    "descriptionInformation",
-                    "adminInfo",
-                    "addImages",
-                  ];
-                  let currPageIndex = pages.findIndex((el) => {
-                    return el == onForm;
-                  });
-                  setOnForm(pages[currPageIndex + 1]);
-                }}
+                onClick={handleNext}
               >
                 Next
               </CustomButton>
+
             )}
             {onForm == "addImages" && (
               <CustomButton

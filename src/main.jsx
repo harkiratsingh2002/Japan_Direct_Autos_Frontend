@@ -30,6 +30,8 @@ import OurStory from "./pageComponents/OurStory.jsx";
 import ContactUs from "./pageComponents/ContactUs.jsx";
 import ForgotPassword from "./pageComponents/ForgotPassword.jsx";
 import Wishlist from "./pageComponents/Wishlist.jsx";
+import SearchResultPage from './components/searchResultPage.jsx';  // New component for displaying search results
+
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RentalCars from "./pageComponents/RentalCars.jsx";
@@ -96,6 +98,10 @@ const router = createBrowserRouter([
         path: "/wishlist",
         element: <Wishlist />,
       },
+      {
+        path: "/results",
+        element: <SearchResultPage />,  // New route for displaying search results
+      }
     ],
   },
 ]);

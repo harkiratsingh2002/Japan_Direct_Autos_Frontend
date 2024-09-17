@@ -1,21 +1,22 @@
-import {
-  FormControl,
-  Grid,
-  InputAdornment,
-  OutlinedInput,
-  Pagination,
-  Typography,
-} from "@mui/material";
+import { Button, FormControl, Grid, InputAdornment, OutlinedInput, Pagination, Typography } from "@mui/material";
+
 import jumbotronImg from "../assets/images/car-home-bg-3.jpeg";
 import { useState } from "react";
+import { useRef } from "react";
+
 import axios from "axios";
 import CarCardComponent from "./carCardComponent";
 import SearchIcon from "@mui/icons-material/Search";
+import "../components/jumbotron.css";
+import SearchCarsComponent from "./SearchCarsComponent";
 
 const Jumbotron = () => {
-  // const jumbotronContainerStyles = {
-  //     backgroun
-  // }
+  const inventoryRef = useRef(scrollTo);  // Create a reference for the scrolling target
+
+  const scrollToInventory = () => {
+    inventoryRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
 
   return (
     <>
@@ -23,7 +24,7 @@ const Jumbotron = () => {
         container
         sx={{
           backgroundImage: `url(${jumbotronImg})`,
-          backgroundPosition: "center",
+          backgroundPosition: "absolute",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           height: "100vh", // Adjust height and width as needed
@@ -42,16 +43,25 @@ const Jumbotron = () => {
 
           }}
         >
-          <Typography color={"white"} variant="h1" component={"h1"} sx={{ fontFamily: 'Garamond, serif' }}>
-            Get your Dream Car Today!
+          <Typography color={"#fafafa"} variant="h2" component={"h4"} sx={{ fontFamily: 'Garamond, serif', fontSize: '80px' }} id="Tagline" marginTop={10}>
+            Find your Family Budget Car
           </Typography>
-          <Typography mt={1} color={"white"} variant="h3" component={"h2"} sx={{ fontFamily: 'Garamond, serif' }}>
-            Specialist in new and old japanese vehicles.
-          </Typography>
+
+          <Grid container my={5}>
+            <Grid item mb={2} xs={8} ml={"auto"} mr={"auto"}>
+
+            </Grid>
+            <SearchCarsComponent />
+
+          </Grid>
+          <Button variant="contained" onClick={scrollToInventory} sx={{ mt: 2, backgroundColor: "#1b3142", color: "#AF8863", }}>
+            All Cars
+          </Button>
+
         </section>
       </Grid>
 
-      <Grid container height={"100vh"}></Grid>
+      <Grid className='scrollTo' container height={"100vh"}></Grid>
     </>
   );
 };

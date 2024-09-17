@@ -92,12 +92,6 @@ const HomePage = () => {
       <Grid container>
         {width <= 768 ? <JumbotronMobile /> : <Jumbotron />}
 
-        <Grid container my={5}>
-          <Grid item mb={2} xs={8} ml={"auto"} mr={"auto"}>
-            <Typography variant="h4">Looking for cars?</Typography>
-          </Grid>
-          <SearchCarsComponent />
-        </Grid>
         <Grid
           container
           marginTop={3}

@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   FormControl,
   Grid,
   InputAdornment,
@@ -8,6 +9,7 @@ import {
 } from "@mui/material";
 
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import CarCardComponent from "./carCardComponent";
 import SearchIcon from "@mui/icons-material/Search";
@@ -22,6 +24,8 @@ const SearchCarsComponent = () => {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch()
+  const navigate = useNavigate();  // Add navigation hook
+
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -71,6 +75,7 @@ const SearchCarsComponent = () => {
           throw newError;
         } else {
           setSearchResult(response.data.searchResult);
+          navigate('/results', { state: { searchResult: response.data.searchResult } });  // Navigate and pass state
 
           setCount(Math.ceil(response.data.total / 6));
         }
@@ -96,6 +101,14 @@ const SearchCarsComponent = () => {
             variant="filled"
           >
             <OutlinedInput
+              sx={{
+                backgroundColor: "white", // Optional: Set the background color to white
+                color: "black", // Optional: Set the text color to black
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'grey', // Optional: Customize the border color
+                  borderWidth: 3,
+                },
+              }}
               variant="filled"
               id="outlined-adornment-search"
               endAdornment={
@@ -126,32 +139,7 @@ const SearchCarsComponent = () => {
           </FormControl>
         </Grid>
       </Grid>
-      {searchResult && (
-        <Grid container xs={10} my={4} ml={"auto"} mr={"auto"}>
-          <Grid item xs={12}>
-            <Typography mb={2} variant="h5">
-              Search Result
-            </Typography>
-          </Grid>
-          <Grid container justifyContent={"center"} ml={'auto'} mr={'auto'} xs={10} spacing={2} md={10}>
-            {searchResult.map((newCar) => {
-              return (
-                <Grid item sx={{ display: "flex" }} xs={12} mb={2} md={4}>
-                  <CarCardComponent car={newCar} />
-                </Grid>
-              );
-            })}
-          </Grid>
-          <Grid mt={3} container ml={'auto'} mr={'auto'} justifyContent={"center"} xs={10} md={10}>
-            <Pagination
-              count={count}
-              page={page}
-              color="primary"
-              onChange={handleChange}
-            /> 
-          </Grid>
-        </Grid>
-      )}
+
     </>
   );
 };
