@@ -23,6 +23,9 @@ import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import GoogleIcon from "@mui/icons-material/Google";
 import { loginUser } from "../reduxStore/userDataSlice";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
+import ReCAPTCHA from "react-google-recaptcha";
+
+
 
 const RegistrationPage = () => {
   const navigate = useNavigate();
@@ -34,6 +37,14 @@ const RegistrationPage = () => {
     confirmPassword: "",
     twoStepVerify: false,
   });
+
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+
+  function onChange(value) {
+    console.log("Captcha value:", value);
+    setCaptchaVerified(true);
+  }
+
   const handleSignup = (e) => {
     console.log("signup data:- ", registerformdata);
     let error = {
@@ -305,7 +316,7 @@ const RegistrationPage = () => {
                   id="Password-basic"
                   label="Password"
                   type={showPassword ? "text" : "password"}
-                  // variant="outlined"
+                // variant="outlined"
                 />
               </FormControl>
             </Grid>
@@ -344,7 +355,7 @@ const RegistrationPage = () => {
                   id="Confirm-Password-basic"
                   label="Confirm Password"
                   type={showConfirmPassword ? "text" : "password"}
-                  // variant="outlined"
+                // variant="outlined"
                 />
               </FormControl>
               <FormControlLabel
@@ -363,7 +374,13 @@ const RegistrationPage = () => {
                 labelPlacement="end"
               />
             </Grid>
-
+            <Grid container mb={2} xs={12}>
+              <ReCAPTCHA
+                sitekey="6LemBzoqAAAAAOy-2jAS-BgkCFQ41svGM83GzHhG"
+                onChange={onChange}
+              />
+              {/* secret:- 6LemBzoqAAAAAJAWb_Y2Vkz0jMdWGMHgVsZIOrc2 */}
+            </Grid>
             <Grid
               container
               mt={3}
@@ -372,7 +389,8 @@ const RegistrationPage = () => {
               textAlign={"center"}
               xs={10}
             >
-              <Button onClick={handleSignup} fullWidth variant="contained">
+              <Button onClick={handleSignup} disabled={!captchaVerified}
+                fullWidth variant="contained">
                 Register
               </Button>
             </Grid>

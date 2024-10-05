@@ -37,12 +37,14 @@ export default function DashboardDrawer() {
     backgroundColor: myColors.textBlack,
   };
 
-  const dashboardLinks = ['/add-car-form','/manage-cars','/add-user','/manage-users']
+  const dashboardLinks = ['/add-car-form', '/manage-cars', '/add-user', '/manage-users']
 
   const DrawerList = (
-    <Box sx={{ width: 250,
-      height:'100%',
-      backgroundColor: myColors.judiColor }} role="presentation" onClick={closeDrawer}>
+    <Box sx={{
+      width: 250,
+      height: '100%',
+      backgroundColor: myColors.judiColor
+    }} role="presentation" onClick={closeDrawer}>
       <div>
         <IconButton
           size="large"
@@ -58,38 +60,51 @@ export default function DashboardDrawer() {
       <List>
         {["Add Car", "Manage Cars", "Add User", "Manage Users"].map((text, index) => (
           <ListItem key={text} disablePadding>
-          
-          <Link  to={'/Dashboard' + dashboardLinks[index]}>
-            
-            <ListItemButton  sx={{
+
+            <Link to={'/Dashboard' + dashboardLinks[index]}>
+
+              <ListItemButton sx={{
                 color: myColors.textBlack
               }}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <AddCircleIcon /> : <EditRoundedIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <AddCircleIcon /> : <EditRoundedIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
             </Link>
+
           </ListItem>
         ))}
+        {/* Add the external link item here */}
+        <ListItem disablePadding>
+          <a href="https://1676.3cx.cloud/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <ListItemButton sx={{ color: myColors.textBlack }}>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Chat Bot Settings" />
+            </ListItemButton>
+          </a>
+        </ListItem>
       </List>
       <Divider />
       <List>
         {["Handle Enquiries"].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <Link  to={'/Dashboard/handle-enquiries'}>
-            
-            <ListItemButton  sx={{
+            <Link to={'/Dashboard/handle-enquiries'}>
+
+              <ListItemButton sx={{
                 color: myColors.textBlack
               }}>
-              {/* <ListItemIcon>
+                {/* <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon> */}
-              <ListItemText primary={text} />
-            </ListItemButton>
+                <ListItemText primary={text} />
+              </ListItemButton>
             </Link>
           </ListItem>
         ))}
+
       </List>
     </Box>
   );
@@ -100,19 +115,19 @@ export default function DashboardDrawer() {
         <AppBar sx={appBarStyles} position="static">
           <Toolbar>
             <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={openDrawer}
-          >
-          <SettingsIcon /> 
-          </IconButton>
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              onClick={openDrawer}
+            >
+              <SettingsIcon />
+            </IconButton>
           </Toolbar>
         </AppBar>
       </Box>
-      <Drawer  open={open} onClose={closeDrawer}>
+      <Drawer open={open} onClose={closeDrawer}>
         {DrawerList}
       </Drawer>
     </div>

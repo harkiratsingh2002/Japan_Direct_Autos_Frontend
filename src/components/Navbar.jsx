@@ -12,6 +12,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { FloatingWhatsApp } from '@carlos8a/react-whatsapp-floating-button';
 import whatsappDP from '../assets/images/whatsappDP.jpg'
+import UserIcon from '../assets/images/userIcon.png';
 
 import IconButton from "@mui/material/IconButton";
 import {
@@ -30,10 +31,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { loginUser, logoutUser } from "../reduxStore/userDataSlice";
 import Swal from "sweetalert2";
 import Menu from "@mui/material/Menu";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+
 import MenuItem from "@mui/material/MenuItem";
 import Loading from "./Loading";
 import links from "../assets/util/links";
 import axios from "axios";
+import { Margin } from "@mui/icons-material";
 
 const navLinks = [
   {
@@ -42,11 +46,7 @@ const navLinks = [
     visibleTo: "All",
   },
 
-  {
-    linkName: "Profile",
-    link: "/profile",
-    visibleTo: "All",
-  },
+
   {
     linkName: "Our Story",
     link: "/our-story",
@@ -87,7 +87,7 @@ const dynamicLink = [
 //     link: "/login",
 //     visibleTo: "All",
 //   },
-// ]
+
 
 const MobileNavbarDrawer = (props) => {
   const firstName = useSelector((state) => state.userDataSlice.firstName);
@@ -354,6 +354,8 @@ export default function Navbar() {
   };
   const appBarStyles = {
     backgroundColor: myColors.offWhite,
+    height: '70px'
+
   };
   const NavLinkStyles = {
     color: myColors.textBlack,
@@ -388,7 +390,7 @@ export default function Navbar() {
           edge="start"
           color="error"
           aria-label="wishlist"
-          sx={{ ml: "auto" }}
+          sx={{ ml: "auto", marginTop: "0" }}
           onClick={() => {
             navigate("/wishlist");
           }}
@@ -408,78 +410,141 @@ export default function Navbar() {
       )}
     </>
   );
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  // Handlers for User Menu
+  const handleUserMenuOpen = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
+  const handleUserMenuClose = () => {
+    setAnchorElUser(null);
+  };
   const desktopMenu = (
     <>
-      <div style={NavLinkStyles}>
-        {/* <Button sx={NavLinkStyles}>Home</Button>
-        <Button sx={NavLinkStyles}>New Cars</Button>
-        <Button sx={NavLinkStyles}>Used Cars</Button> */}
-
-        {/* <Link to={"/dashboard"}>
-          <Button sx={NavLinkStyles}>Dashboard</Button>
-        </Link> */}
-        <Button sx={NavLinkStyles}>{`Hi ${firstName}`}</Button>
-
-        {navLinks.map((linkObj) => {
-          return (
-            <>
-              <Link to={linkObj.link}>
+      <Box sx={{ flexGrow: 1 }}>
+        <div style={NavLinkStyles}>
+          <Button onClick={handleClick} sx={NavLinkStyles}>
+            {"Buy/Rent"}
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openCars}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <Link to={"/new-cars"}>
+              <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>
+                New Cars
+              </MenuItem>
+            </Link>
+            <Link to={"/used-cars"}>
+              <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>
+                Used Cars
+              </MenuItem>
+            </Link>
+            <Link to={"/rental-cars"}>
+              <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>
+                Rental Cars
+              </MenuItem>
+            </Link>
+          </Menu>
+          {role === "admin" &&
+            adminLinks.map((linkObj) => (
+              <Link to={linkObj.link} key={linkObj.linkName}>
                 <Button sx={NavLinkStyles}>{linkObj.linkName}</Button>
               </Link>
-            </>
-          );
-        })}
-        <Button onClick={handleClick} sx={NavLinkStyles}>
-          {"Buy/Rent"}
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={openCars}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
+            ))}
+          {navLinks.map((linkObj) => (
+            <Link to={linkObj.link} key={linkObj.linkName}>
+              <Button sx={NavLinkStyles}>{linkObj.linkName}</Button>
+            </Link>
+          ))}
+        </div>
+      </Box>
+      {/* User Icon */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <IconButton
+
+          size="large"
+          edge="end"
+          aria-label="account of current user"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          onClick={handleUserMenuOpen}
+          color="black"
+          outline='none'
+          sx={{ mt: 1, mr: .4, p: 0 }}
+
         >
-          <Link to={"/new-cars"}>
-            <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>
-              New Cars
+          <img
+            src={UserIcon}
+            alt="User Icon"
+            style={{ width: 30, height: 30 }} // Adjust size as needed
+          />
+
+        </IconButton>
+        <Typography variant="caption" sx={{ color: myColors.textBlack, mt: 0 }}>
+          Account
+        </Typography>
+      </Box>
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        open={Boolean(anchorElUser)}
+        onClose={handleUserMenuClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        {firstName !== "Guest" ? (
+          <><MenuItem>
+            <Button sx={NavLinkStyles}>{`Hi ${firstName}`}</Button>
+          </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleUserMenuClose();
+                navigate('/profile');
+              }}
+            >
+              Profile
             </MenuItem>
-          </Link>
-          <Link color={myColors.textBlack} to={"/used-cars"}>
-            <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>
-              Used Cars
+            <MenuItem
+              onClick={() => {
+                handleUserMenuClose();
+                logoutHandler();
+              }}
+            >
+              Logout
             </MenuItem>
-          </Link>
-          <Link color={myColors.textBlack} to={"/rental-cars"}>
-            <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>
-              Rental Cars
+          </>
+        ) : (
+          <>
+            <MenuItem>
+              <Button sx={NavLinkStyles}>{`Hi ${firstName}`}</Button>
             </MenuItem>
-          </Link>
-        </Menu>
-
-        {role == "admin" &&
-          adminLinks.map((linkObj) => {
-            return (
-              <>
-                <Link to={linkObj.link}>
-                  <Button sx={NavLinkStyles}>{linkObj.linkName}</Button>
-                </Link>
-              </>
-            );
-          })}
-        {firstName == "Guest" && loginDesktopLink}
-        {firstName != "Guest" && logoutDesktopLink}
-        {wishlistIcon}
-
-        {/* <Button sx={NavLinkStyles}>Our Story</Button>
-
-        <Button sx={NavLinkStyles}>Contact Us</Button>
-
-        <Button sx={NavLinkStyles}>Login</Button>
-        <Button sx={NavLinkStyles}>Sign Up</Button> */}
-      </div>
+            <MenuItem
+              onClick={() => {
+                handleUserMenuClose();
+                navigate('/login');
+              }}
+            >
+              Login
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleUserMenuClose();
+                navigate('/register');
+              }}
+            >
+              Sign Up
+            </MenuItem>
+          </>
+        )}
+      </Menu>
+      {wishlistIcon}
     </>
   );
 
@@ -520,26 +585,15 @@ export default function Navbar() {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar sx={appBarStyles} position="static">
           <Toolbar>
-            {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton> */}
-
             <Typography
               pt={2}
               variant="h6"
               component="div"
               sx={{ flexGrow: 1 }}
             >
-              <img src={logo} alt="" height={70} />
+              <img src={logo} alt="" height={50} />
             </Typography>
-            {/* {wishlistIcon} */}
-            {width <= 768 ? mobileMenu : desktopMenu}
+            {width <= 900 ? mobileMenu : desktopMenu}
           </Toolbar>
         </AppBar>
       </Box>

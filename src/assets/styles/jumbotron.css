@@ -1,0 +1,8 @@
+#Tagline {
+    background: rgba(28, 28, 39, 0.763);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    border-radius: 10px;
+    border: 1px solid rgba(29, 19, 19, 0.18);
+}

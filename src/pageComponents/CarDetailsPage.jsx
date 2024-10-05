@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import carTestImage from "../assets/images/car-home-bg-3.jpeg";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import links from "../assets/util/links"; ``
 import CustomizedTable from "../components/CustomizedTable";
@@ -226,10 +225,7 @@ const CarDetailsPage = (props) => {
             { year: finalcarInfoResult.car.year },
             { mileage: finalcarInfoResult.car.mileage },
             { brand: finalcarInfoResult.car.brand },
-            { stockId: finalcarInfoResult.car.stockId },
             { make: finalcarInfoResult.car.make },
-            { grade: finalcarInfoResult.car.grade },
-            { chassisNo: finalcarInfoResult.car.chassisNo },
             { odometer: finalcarInfoResult.car.odometer },
             { model: finalcarInfoResult.car.model },
             { oldOrNew: finalcarInfoResult.car.oldOrNew },
@@ -294,7 +290,7 @@ const CarDetailsPage = (props) => {
               mr={"auto"}
             >
               <Grid item xs={11}>
-                <Typography variant="h2">{carInfo.name}</Typography>
+                <Typography variant="h2" style={{ fontWeight: 'bold' }}>{carInfo.name}</Typography>
               </Grid>
               <Grid item my={3.2} xs={11} md={7}>
                 <>
@@ -321,7 +317,7 @@ const CarDetailsPage = (props) => {
                   <Box sx={{ textAlign: "center", marginBottom: 1 }}>
                     <Typography>Estimated Price</Typography>
                     <Typography variant="h4" color="error">
-                      {carInfo.price}*
+                      ${carInfo.price}*
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       Excl. Govt. Charges
@@ -405,7 +401,11 @@ const CarDetailsPage = (props) => {
         </>
       )}
 
-      <Grid container xs={11} md={10} mb={4} ml={"auto"} mr={"auto"}>
+      <Grid container xs={11} md={10} mb={4} ml={"auto"} mr={"auto"} mt={4}>
+        <Typography variant="h2">  Key Features</Typography>
+      </Grid>
+
+      <Grid container xs={11} md={10} mb={4} ml={"auto"} mr={"auto"} mt={4}>
         <CustomizedTable headerCols={headCols} rows={rows} />
       </Grid>
       <ReviewsComponent />

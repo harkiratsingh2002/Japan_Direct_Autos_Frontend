@@ -1,4 +1,8 @@
 import React from "react";
+import { AddCircleOutline, Edit, Delete, Visibility } from '@mui/icons-material';
+import addCarImage from "../assets/images/add-car.png";
+import addUserImage from "../assets/images/add-user.png";
+
 import {
   Button,
   Grid,
@@ -123,12 +127,38 @@ const DashboardAdminMain = () => {
   return (
     <Box sx={{ padding: 4, backgroundColor: "#f4f6f8", minHeight: "100vh" }}>
       {/* Header */}
-      <Grid container justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Admin Dashboard</Typography>
-        <IconButton onClick={handleRefresh} color="primary">
-          <RefreshIcon />
-        </IconButton>
+      <Grid container alignItems="center" justifyContent="space-between" mb={2}>
+        <Grid item>
+
+          <Typography variant="h4">Admin Dashboard</Typography>
+        </Grid>
+        {/* Quick Actions Section */}
+        <Grid item >
+          <Grid container spacing={2}>
+            <Grid item>
+              <IconButton color="primary" onClick={() => { navigate("/Dashboard/add-car-form") }}>
+                <img src={addCarImage} alt="Add" style={{ width: 50, height: 50 }} />
+              </IconButton>
+              <Typography variant="h6">Add Car</Typography>
+
+            </Grid>
+            <Grid item>
+              <IconButton color="primary" onClick={() => { navigate("/Dashboard/add-user") }}>
+                <img src={addUserImage} alt="Edit" style={{ width: 50, height: 50 }} />
+              </IconButton>
+              <Typography variant="h6">Add User</Typography>
+
+            </Grid>
+
+
+            <IconButton onClick={handleRefresh} color="primary">
+              <RefreshIcon />
+            </IconButton>
+
+          </Grid>
+        </Grid>
       </Grid>
+
 
       {/* Overview Cards */}
       <Grid container spacing={3} mb={4}>
@@ -191,8 +221,8 @@ const DashboardAdminMain = () => {
       <Grid container spacing={3} mb={4}>
         {/* Smaller Chart */}
         <Grid item xs={12} md={6}>
-          <Card sx={{ p: 3, boxShadow: 3, height: "86%" }}>
-            <Typography variant="h6">Dashboard Overview</Typography>
+          <Card sx={{ p: 2, boxShadow: 3, height: "89.5%" }}>
+            <Typography variant="h4" marginBottom={8}>Dashboard Overview</Typography>
             <Bar data={chartData} />
           </Card>
         </Grid>
@@ -208,35 +238,11 @@ const DashboardAdminMain = () => {
         </Grid>
       </Grid>
 
-      {/* Quick Actions Section */}
-      <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} md={6}>
-          <Card sx={{ p: 3, boxShadow: 3 }}>
-            <Typography variant="h6">Quick Actions</Typography>
-            <Button
-              startIcon={<AddIcon />}
-              variant="outlined"
-              color="primary"
-              fullWidth
-              onClick={() => navigate("/Dashboard/add-car-form")}
-              sx={{ mt: 2 }}
-            >
-              Add Car
-            </Button>
-            <Button
-              startIcon={<AddIcon />}
-              variant="outlined"
-              color="primary"
-              fullWidth
-              onClick={() => navigate("/Dashboard/add-user")}
-              sx={{ mt: 2 }}
-            >
-              Add User
-            </Button>
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
+
+
+
+
+    </Box >
   );
 };
 

@@ -90,7 +90,12 @@ const HomePage = () => {
                 <Outlet />
             </header> */}
       <Grid container>
-        {width <= 768 ? <JumbotronMobile /> : <Jumbotron />}
+        {width <= 900 ? <JumbotronMobile /> : <Jumbotron />}
+        <Grid container mb={2} xs={8} ml={"auto"} mr={"auto"} marginTop={7} >
+          <Typography variant="h3" >Looking for cars?</Typography>
+        </Grid>
+        <SearchCarsComponent />
+
 
         <Grid
           container
@@ -100,7 +105,7 @@ const HomePage = () => {
           xs={10}
         >
           <Grid item xs={12} textAlign={"center"}>
-            <Typography textAlign={"center"} variant="h5">
+            <Typography textAlign={"center"} variant="h2">
               New Cars
             </Typography>
           </Grid>
@@ -111,7 +116,6 @@ const HomePage = () => {
           marginLeft={"auto"}
           marginRight={"auto"}
           xs={10}
-          justifyContent={"space-around"}
         >
           <ScrollContainer carType={"new"} cars={newCars} />
         </Grid>
@@ -123,7 +127,7 @@ const HomePage = () => {
           xs={10}
         >
           <Grid item xs={12} textAlign={"center"}>
-            <Typography textAlign={"center"} variant="h5">
+            <Typography textAlign={"center"} variant="h2">
               Used Cars
             </Typography>
           </Grid>
@@ -141,13 +145,13 @@ const HomePage = () => {
         </Grid>
         <Grid
           container
-          marginTop={4}
+
           marginLeft={"auto"}
           marginRight={"auto"}
           xs={10}
         >
           <Grid item xs={12} textAlign={"center"}>
-            <Typography textAlign={"center"} variant="h5">
+            <Typography textAlign={"center"} variant="h2">
               Rental Cars
             </Typography>
           </Grid>

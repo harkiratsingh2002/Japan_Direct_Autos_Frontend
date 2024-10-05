@@ -19,7 +19,7 @@ const CarCardComponent = (props) => {
     display: "inline-block",
     padding: "8px 16px" /* Adjust padding as needed */,
     border: "none",
-    borderRadius: "50px" /* Creates the cylindrical shape */,
+    borderRadius: "8px" /* Creates the cylindrical shape */,
     backgroundColor: "#d3d3d3",
     color: myColors.textBlack /* Adjust text color as desired */,
     // cursor: pointer,
@@ -98,9 +98,9 @@ const CarCardComponent = (props) => {
           display: "inline-flex",
           justifyContent: "space-between",
           flexDirection: "column",
-          borderRadius: "32px",
+          borderRadius: "15px",
           background: "#e0e0e0",
-          boxShadow: "24px 24px 26px #a8a8a8, -24px -24px 26px #ffffff",
+          // boxShadow: "24px 24px 26px #a8a8a8, -24px -24px 26px #ffffff",
         }}
       >
         <CardMedia
@@ -109,11 +109,11 @@ const CarCardComponent = (props) => {
           title={props.car.name}
         />
         <CardContent>
-          <Typography gutterBottom variant="body2" component="div">
+          <Typography gutterBottom variant="h6" component="div" >
             {props.car.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <button style={buttonStyles}>{props.car.price}</button>
+            <button style={buttonStyles}>${props.car.price}</button>
             <button style={buttonStyles}>{props.car.oldOrNew}</button>
             <button style={buttonStyles}>
               {props.car.body ? props.car.body : props.car.carType}

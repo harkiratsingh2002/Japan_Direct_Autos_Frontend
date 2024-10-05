@@ -196,15 +196,51 @@ const YourEnquiries = () => {
   const handleCloseEditUserModal = () => {
     setOpenEditUserModal(false);
   };
+  const handleForgotPassword = () => {
+    if (userData.email) {
+      dispatch(startLoader());
+      let otp = Math.floor(Math.random() * 9000) + 1000;
+      let currentTimeStamp = Date.now();
+      localStorage.setItem(
+        "forgotPasswordOtp",
+        JSON.stringify({ otp, currentTimeStamp, email: userData.email })
+      );
+      axios
+        .post(links.backendUrl + "/forgot-password", {
+          otp,
+          email: userData.email,
+        })
+        .then(() => {
+          dispatch(endLoader());
+          navigate("/forgot-password");
+        })
+        .catch((err) => {
+          dispatch(endLoader());
+          console.log("Error while sending forgot password request:", err);
+          Swal.fire({
+            title: "Error",
+            text: "Failed to send reset password email.",
+            icon: "error",
+          });
+        });
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: "Email not found.",
+        icon: "error",
+      });
+    }
+  };
+
   return (
     <>
-      <Grid justifyContent={"center"} ml={"auto"} mr={"auto"} container xs={10}>
+      <Grid ml={"auto"} mr={"auto"} container xs={10}>
         <Grid item xs={12}>
           <Typography mt={5} variant="h4">
             Your Profile Data
           </Typography>
         </Grid>
-        <Grid container mt={3} justifyContent={"center"}>
+        <Grid container mt={3} >
           <Grid item mb={1} xs={11} md={8}>
             First Name:
             <span
@@ -252,12 +288,27 @@ const YourEnquiries = () => {
             variant="contained"
             color="primary"
           >
-            Edit
+            Edit Profile
           </Button>
+          <Button sx={{ marginLeft: "1em" }}
+            onClick={handleForgotPassword}
+
+            variant="contained"
+            color="primary"
+          >
+            Change Password
+          </Button>
+
         </Grid>
         <Grid item xs={12}>
           <Typography mt={3} variant="h6">
-            Two step verification ? {twoStepVerify ? "Enabled" : "Disabled"}{" "}
+            Two step verification
+          </Typography>
+          <Typography mt={1} variant="h6">
+            Status : {twoStepVerify ? "Enabled" : "Disabled"}
+          </Typography>
+          <Typography mt={1} variant="h6">
+
             {twoStepVerify ? (
               <Button variant="contained" onClick={disableTwoStep}>
                 Disable

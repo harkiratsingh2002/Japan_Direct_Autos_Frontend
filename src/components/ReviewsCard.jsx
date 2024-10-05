@@ -1,4 +1,6 @@
-import { Grid, Rating, Typography } from "@mui/material";
+import { Grid, Rating, Typography, Button, TextField } from "@mui/material";
+import { useState } from 'react';
+
 import myColors from "../assets/util/myColors";
 
 const ReviewsCard = ({ review }) => {
@@ -21,6 +23,19 @@ const ReviewsCard = ({ review }) => {
       return `${daysAgo} day${daysAgo > 1 ? "s" : ""} ago`;
     }
   }
+
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [reply, setReply] = useState('');
+
+  const handleReplyChange = (event) => {
+    setReply(event.target.value);
+  };
+
+  const submitReply = () => {
+    console.log("Reply submitted: ", reply);
+    // Here you would ideally send the reply to your backend
+    setShowReplyForm(false); // Hide form after submission
+  };
 
   return (
     <>
@@ -46,8 +61,8 @@ const ReviewsCard = ({ review }) => {
               {timeSinceInMonthsOrDays(review.createdAt)}
             </span>
           </Grid>
-          <Grid item  sx={{
-             textAlign: {
+          <Grid item sx={{
+            textAlign: {
               md: 'right'
             }
           }} xs={11} md={4}>
@@ -57,7 +72,7 @@ const ReviewsCard = ({ review }) => {
                 xs: 'start',
                 md: 'end'
               },
-              marginTop:{
+              marginTop: {
                 xs: 1,
                 md: 0
               },
@@ -65,7 +80,7 @@ const ReviewsCard = ({ review }) => {
                 xs: 0,
                 md: 'auto'
               }
-             
+
             }}>
               <Grid item pr={1}>{review.rating.toFixed(1)}</Grid>
               <Grid item>
@@ -80,9 +95,28 @@ const ReviewsCard = ({ review }) => {
             md: 2
           }
         }}>
-              <Typography variant="body1">"{review.reviewText}"</Typography>
+          <Typography variant="body1">"{review.reviewText}"</Typography>
         </Grid>
+
       </Grid>
+      {/* <div>
+        <p>{review.comment}</p>
+        <Button onClick={() => setShowReplyForm(!showReplyForm)}>
+          {showReplyForm ? "Cancel Reply" : "Reply"}
+        </Button>
+        {showReplyForm && (
+          <div>
+            <TextField
+              fullWidth
+              label="Your Reply"
+              value={reply}
+              onChange={handleReplyChange}
+            />
+            <Button onClick={submitReply}>Submit Reply</Button>
+          </div>
+        )}
+      </div> */}
+
     </>
   );
 };

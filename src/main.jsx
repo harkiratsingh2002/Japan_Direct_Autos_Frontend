@@ -31,7 +31,7 @@ import ContactUs from "./pageComponents/ContactUs.jsx";
 import ForgotPassword from "./pageComponents/ForgotPassword.jsx";
 import Wishlist from "./pageComponents/Wishlist.jsx";
 import SearchResultPage from './components/searchResultPage.jsx';  // New component for displaying search results
-
+import InventoryPage from "./pageComponents/InventoryPage.jsx";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RentalCars from "./pageComponents/RentalCars.jsx";
@@ -101,7 +101,12 @@ const router = createBrowserRouter([
       {
         path: "/results",
         element: <SearchResultPage />,  // New route for displaying search results
-      }
+      },
+      {
+        path: "/inventory",
+        element: <InventoryPage />,
+      },
+
     ],
   },
 ]);

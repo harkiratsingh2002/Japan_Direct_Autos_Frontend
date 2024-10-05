@@ -1,89 +1,70 @@
-import * as React from "react";
+import React from "react";
 import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
+    fontWeight: "bold",
+    fontSize: 16,
+    padding: theme.spacing(2),
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    padding: theme.spacing(1.5),
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
 }));
 
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
+function camelToSentence(text) {
+  return text
+    .replace(/([A-Z])/g, " $1")
+    .trim()
+    .replace(/^./, (char) => char.toUpperCase());
+}
 
-// const rows = [
-//   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-//   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-//   createData("Eclair", 262, 16.0, 24, 6.0),
-//   createData("Cupcake", 305, 3.7, 67, 4.3),
-//   createData("Gingerbread", 356, 16.0, 49, 3.9),
-// ];
-
-function CustomizedTable(props) {
-
-  function camelToSentence(text) {
-    return text.replace(/([A-Z])/g, " $1").trim().toLowerCase().replace(/^./, char => char.toUpperCase());
-  }
-
+function CustomizedTable({ headerCols, rows }) {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} elevation={3} sx={{ mt: 2 }}>
       <Table aria-label="customized table">
         <TableHead>
           <TableRow>
-            {/* <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Calories</StyledTableCell>
-            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell> */}
-            {props.headerCols.map((headCol, i) => {
-              return <StyledTableCell key={i} align="left">{headCol}</StyledTableCell>;
-            })}
+            {headerCols.map((headCol, i) => (
+              <StyledTableCell key={i} align="left">
+                {headCol}
+              </StyledTableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.rows.map((row, i) => (
-            <StyledTableRow key={i}>
-              {/* //   <StyledTableCell component="th" scope="row">
-            //     {row.name}
-            //   </StyledTableCell>
-            //   <StyledTableCell align="right">{row.calories}</StyledTableCell>
-            //   <StyledTableCell align="right">{row.fat}</StyledTableCell>
-            //   <StyledTableCell align="right">{row.carbs}</StyledTableCell> */}
-              {Object.keys(row).map((feild) => {
-                return (
-                  <>
-
-                    <StyledTableCell key={feild} align="left">{camelToSentence(feild)}</StyledTableCell>
-                    <StyledTableCell key={row[feild]} align="left">{row[feild]}</StyledTableCell>
-                  </>
-
-
-                )
-              })
-              }
-            </StyledTableRow>
-          ))}
+          {rows.map((row, i) => {
+            const fieldName = Object.keys(row)[0];
+            const fieldValue = row[fieldName];
+            return (
+              <StyledTableRow key={i}>
+                <StyledTableCell component="th" scope="row">
+                  {camelToSentence(fieldName)}
+                </StyledTableCell>
+                <StyledTableCell>{fieldValue}</StyledTableCell>
+              </StyledTableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
