@@ -1,7 +1,6 @@
-require('dotenv').config({ path: '.env' });
 
 const links = {
-    backendUrl: 'process.env.VITE_PROD_BASE_URL'
+    backendUrl: 'https://japan-direct-autos-backend.onrender.com'
 }
 
 export default links;
