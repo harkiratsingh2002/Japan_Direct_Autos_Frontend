@@ -1,7 +1,6 @@
-
+require('dotenv').config({ path: '.env' });
 
 const links = {
-
-    backendUrl: 'http://localhost:7777'
+    backendUrl: 'process.env.VITE_PROD_BASE_URL'
 }
 export default links;
