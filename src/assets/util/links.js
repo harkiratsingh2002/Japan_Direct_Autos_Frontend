@@ -1,6 +1,6 @@
 
 const links = {
-    backendUrl: 'https://japan-direct-autos-backend.onrender.com'
+    backendUrl: 'http://localhost:7777'
 }
 
 export default links;
