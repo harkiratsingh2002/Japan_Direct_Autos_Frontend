@@ -1,6 +1,5 @@
-
 const links = {
-    backendUrl: 'http://localhost:7777'
+    backendUrl: import.meta.env.VITE_APP_BASE_URL
 }
 
 export default links;
