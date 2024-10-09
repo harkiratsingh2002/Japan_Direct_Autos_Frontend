@@ -1,15 +1,16 @@
 import {
-  Autocomplete,
   FormControl,
   Grid,
   InputAdornment,
   OutlinedInput,
   Pagination,
   Typography,
+  Select,
+  MenuItem,
+  InputLabel,
 } from "@mui/material";
 
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import CarCardComponent from "./carCardComponent";
 import SearchIcon from "@mui/icons-material/Search";
@@ -23,48 +24,26 @@ const SearchCarsComponent = () => {
   const [searchText, setSearchText] = useState("");
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const dispatch = useDispatch()
-  const navigate = useNavigate();  // Add navigation hook
-
+  const [sortOption, setSortOption] = useState(""); // New state for sorting
+  const dispatch = useDispatch();
 
   const handleChange = (event, value) => {
     setPage(value);
-    dispatch(startLoader());
-    axios
-      .post(links.backendUrl + "/search-cars", {
-        searchText: searchText,
-        page,
-      })
-      .then((response) => {
-        dispatch(endLoader());
-        if (response.status < 200 || response.status > 299) {
-          let newError = {
-            message: response.data.message,
-          };
-          throw newError;
-        } else {
-          setSearchResult(response.data.searchResult);
-
-          setCount(Math.ceil(response.data.total / 6));
-        }
-      })
-      .catch((err) => {
-        console.log("error while user search:- ", err);
-        Swal.fire({
-          title: "Error",
-          text: err.messaage,
-          icon: "error",
-        });
-      });
+    performSearch();
   };
 
   const handleSearch = () => {
     setPage(1);
+    performSearch();
+  };
+
+  const performSearch = () => {
     dispatch(startLoader());
     axios
       .post(links.backendUrl + "/search-cars", {
         searchText: searchText,
         page,
+        sortOption, // Include the sorting option in the request
       })
       .then((response) => {
         dispatch(endLoader());
@@ -75,8 +54,6 @@ const SearchCarsComponent = () => {
           throw newError;
         } else {
           setSearchResult(response.data.searchResult);
-          navigate('/results', { state: { searchResult: response.data.searchResult } });  // Navigate and pass state
-
           setCount(Math.ceil(response.data.total / 6));
         }
       })
@@ -84,7 +61,7 @@ const SearchCarsComponent = () => {
         console.log("error while user search:- ", err);
         Swal.fire({
           title: "Error",
-          text: err.messaage,
+          text: err.message,
           icon: "error",
         });
       });
@@ -92,54 +69,102 @@ const SearchCarsComponent = () => {
 
   return (
     <>
-      <Grid container xs={8} justifyContent={"center"} ml={"auto"} mr={"auto"}>
-        <Grid item xs={12}>
-          <FormControl
-            sx={{
-              width: "100%",
-            }}
-            variant="filled"
-          >
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        ml="auto"
+        mr="auto"
+        spacing={2}
+        sx={{ width: '100%', maxWidth: 'lg' }}
+      >
+        {/* Search Bar */}
+        <Grid item xs={12} sm={8} md={6}>
+          <FormControl fullWidth variant="filled">
             <OutlinedInput
-              sx={{
-                backgroundColor: "white", // Optional: Set the background color to white
-                color: "black", // Optional: Set the text color to black
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'grey', // Optional: Customize the border color
-                  borderWidth: 3,
-                },
-              }}
-              variant="filled"
               id="outlined-adornment-search"
               endAdornment={
                 <InputAdornment position="end">
-                  <SearchIcon
-                    onClick={() => {
-                      handleSearch();
-                    }}
-                  />
+                  {/* You can add an icon here if needed */}
                 </InputAdornment>
               }
               aria-describedby="outlined-search-helper-text"
-              inputProps={{
-                "aria-label": "search",
-              }}
+              inputProps={{ "aria-label": "search" }}
               placeholder="Search Cars"
-              fullWidth
               onChange={(e) => setSearchText(e.target.value)}
               value={searchText}
               onKeyDown={(e) => {
-                if (e.key == "Enter") {
-                  // console.log('search text',searchText)
+                if (e.key === "Enter") {
                   handleSearch();
                 }
               }}
             />
-            {/* <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText> */}
           </FormControl>
+        </Grid>
+
+        {/* Sorting Dropdown */}
+        <Grid item xs={12} sm={4} md={3}>
+          <FormControl fullWidth variant="filled">
+            <InputLabel id="sort-label">Sort By</InputLabel>
+            <Select
+              labelId="sort-label"
+              id="sort-select"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <MenuItem value="price_asc">Price: Low to High</MenuItem>
+              <MenuItem value="price_desc">Price: High to Low</MenuItem>
+              <MenuItem value="year_asc">Year: Old to New</MenuItem>
+              <MenuItem value="year_desc">Year: New to Old</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
+        {/* Search Button */}
+        <Grid item xs={12} sm={12} md={3}>
+          <button
+            onClick={handleSearch}
+            style={{
+              backgroundColor: '#1976d2',
+              color: 'white',
+              padding: '10px 20px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer',
+              width: '100%',
+            }}
+          >
+            Search
+          </button>
         </Grid>
       </Grid>
 
+      {searchResult && (
+        <Grid container justifyContent="center" my={4} ml="auto" mr="auto" spacing={2} sx={{ width: '100%', maxWidth: 'lg' }}>
+          <Grid item xs={12}>
+            <Typography mb={2} variant="h4" align="center">
+              Search Results
+            </Typography>
+          </Grid>
+          <Grid container justifyContent="center" spacing={2} sx={{ width: '100%' }}>
+            {searchResult.map((newCar, index) => (
+              <Grid item key={index} xs={12} sm={6} md={4} mb={2} display="flex" justifyContent="center">
+                <CarCardComponent car={newCar} />
+              </Grid>
+            ))}
+          </Grid>
+
+          <Grid item xs={12} mt={3}>
+            <Pagination
+              count={count}
+              page={page}
+              color="primary"
+              onChange={handleChange}
+              sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}
+            />
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 };

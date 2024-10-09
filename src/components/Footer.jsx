@@ -118,9 +118,9 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/support" style={{ textDecoration: "none" }}>
+                <Link to="https://api.whatsapp.com/send/?phone=61451420125&text=dsd" style={{ textDecoration: "none" }}>
                   <Typography color={myColors.offWhite} mb={0.7} variant="body1">
-                    Support
+                    Whatsapp Us
                   </Typography>
                 </Link>
               </li>
@@ -200,7 +200,7 @@ const Footer = () => {
 
       {/* Copyright Statement */}
       <Typography variant="body2" color={myColors.offWhite}>
-        &copy; {new Date().getFullYear()} Dealership Name. All rights reserved.
+        &copy; {new Date().getFullYear()} Japan Direct Autos. All rights reserved.
       </Typography>
 
     </Box>

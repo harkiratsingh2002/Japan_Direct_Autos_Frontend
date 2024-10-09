@@ -2,6 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 // import React, { createContext } from 'react';
 import { Provider } from "react-redux";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -32,6 +35,7 @@ import ForgotPassword from "./pageComponents/ForgotPassword.jsx";
 import Wishlist from "./pageComponents/Wishlist.jsx";
 import SearchResultPage from './components/searchResultPage.jsx';  // New component for displaying search results
 import InventoryPage from "./pageComponents/InventoryPage.jsx";
+import lightTheme from './assets/theme.js';  // Import the light theme
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RentalCars from "./pageComponents/RentalCars.jsx";
@@ -114,7 +118,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="378521593401-b7cq8jc0q6es09tn97vv7l2l69kklb5v.apps.googleusercontent.com">
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <RouterProvider router={router} />
+        {/* Wrap the app with the ThemeProvider */}
+        <ThemeProvider theme={lightTheme}>
+          <CssBaseline />  {/* Normalizes the styles */}
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </Provider>
     </QueryClientProvider>
   </GoogleOAuthProvider>

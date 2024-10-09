@@ -13,6 +13,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { FloatingWhatsApp } from '@carlos8a/react-whatsapp-floating-button';
 import whatsappDP from '../assets/images/whatsappDP.jpg'
 import UserIcon from '../assets/images/userIcon.png';
+import SearchBar from "./SearchBar.jsx";
+
 
 import IconButton from "@mui/material/IconButton";
 import {
@@ -464,6 +466,7 @@ export default function Navbar() {
           ))}
         </div>
       </Box>
+      <SearchBar />
       {/* User Icon */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <IconButton

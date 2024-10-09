@@ -9,6 +9,7 @@ import {
   Checkbox,
   ToggleButtonGroup,
   ToggleButton,
+  useMediaQuery, useTheme
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
@@ -35,6 +36,8 @@ const CarDetailsPage = (props) => {
   // const [loadingData, setLoadingData] = useState(true);
   const [rows, setRows] = useState([]);
   // const [price, setPrice] = useState(0);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [currentImage, setCurrentImage] = useState(null);
   const [openEnquiryModal, setOpenEnquiryModal] = useState(false);
@@ -279,30 +282,30 @@ const CarDetailsPage = (props) => {
     <>
       {carInfo && (
         <>
-          <Container>
-            <Grid
-              container
-              spacing={2}
-              p={3}
-              xs={12}
-              // md={10}
-              ml={"auto"}
-              mr={"auto"}
-            >
-              <Grid item xs={11}>
-                <Typography variant="h2" style={{ fontWeight: 'bold' }}>{carInfo.name}</Typography>
+          <Container maxWidth="lg">
+            <Grid container spacing={2} p={3}>
+              <Grid item xs={12} md={11} ml="auto" mr="auto">
+                <Typography
+                  variant={isMobile ? "h4" : "h2"}
+                  style={{ fontWeight: 'bold' }}
+                >
+                  {carInfo.name}
+                </Typography>
               </Grid>
-              <Grid item my={3.2} xs={11} md={7}>
+
+              {/* Car Image */}
+              <Grid item xs={12} md={7}>
                 <>
                   <img
                     style={{
-                      height: "25em",
+                      height: "auto",
                       width: "100%",
                       borderRadius: "10px",
+                      objectFit: "cover"
                     }}
                     src={links.backendUrl + "/" + currentImage}
-                  ></img>
-
+                    alt="Car"
+                  />
                   <Grid container>
                     <ScrollingImageComponent
                       handleImageChange={handleImageChange}
@@ -311,8 +314,9 @@ const CarDetailsPage = (props) => {
                   </Grid>
                 </>
               </Grid>
-              <Grid item my={3.2} xs={11} md={5}>
-                {/* contact or inquire seller */}
+
+              {/* Contact/Inquiry Section */}
+              <Grid item xs={12} md={5}>
                 <Container maxWidth="sm">
                   <Box sx={{ textAlign: "center", marginBottom: 1 }}>
                     <Typography>Estimated Price</Typography>
@@ -323,17 +327,25 @@ const CarDetailsPage = (props) => {
                       Excl. Govt. Charges
                     </Typography>
                   </Box>
-
+                  {/* Wishlist Button */}
+                  <Grid xs={12} mt={3} mb={2}>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleAddToWishlist}
+                      fullWidth
+                      endIcon={<FavoriteIcon />}
+                    >
+                      {isLoggedIn && isInWishlist
+                        ? "Remove From Wishlist"
+                        : "Add To Wishlist"}
+                    </Button>
+                  </Grid>
                   <Typography variant="h5" align="center" gutterBottom>
                     Check Availability
                   </Typography>
-                  {/* <TextField
-                    fullWidth
-                    label="Name"
-                    required
-                    variant="outlined"
-                    margin="dense"
-                  /> */}
+
+                  {/* Form Fields */}
                   <TextField
                     fullWidth
                     label="Subject"
@@ -352,7 +364,6 @@ const CarDetailsPage = (props) => {
                   <TextField
                     fullWidth
                     label="Comments"
-                    // defaultValue="Hello, is this car still available?"
                     value={EnquiryFormData.enquiryText.value}
                     onChange={(e) => {
                       setEnquiryFormData((state) => {
@@ -375,40 +386,26 @@ const CarDetailsPage = (props) => {
                   >
                     Send Enquiry
                   </Button>
-                  <Grid xs={12} mt={3}>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={() => {
-                        handleAddToWishlist();
-                      }}
-                      fullWidth
-                      endIcon={<FavoriteIcon />}
-                    >
-                      {isLoggedIn && isInWishlist
-                        ? "Remove From Wishlist"
-                        : "Add To Wishlist"}
-                    </Button>
-                  </Grid>
+
+
                 </Container>
               </Grid>
             </Grid>
-            <Container item xs={11}>
-              <Typography variant="h4">Description</Typography>
-              <Typography mt={1}>{carInfo.description}</Typography>
-            </Container>
           </Container>
+
+
         </>
       )}
 
-      <Grid container xs={11} md={10} mb={4} ml={"auto"} mr={"auto"} mt={4}>
-        <Typography variant="h2">  Key Features</Typography>
+      <Grid container xs={12} md={10} mb={4} ml="auto" mr="auto" mt={4}>
+        <Typography variant="h2">Key Features</Typography>
       </Grid>
 
-      <Grid container xs={11} md={10} mb={4} ml={"auto"} mr={"auto"} mt={4}>
+      <Grid container xs={12} md={10} mb={4} ml="auto" mr="auto" mt={4}>
         <CustomizedTable headerCols={headCols} rows={rows} />
       </Grid>
-      <ReviewsComponent />
+
+      <ReviewsComponent />c
       {/* 
       Sticky Enquire Now Button
       <Button sx={{

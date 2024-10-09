@@ -148,43 +148,43 @@ const ManageUsers = () => {
       });
   };
 
-  const handleEmailSearch = ()=>{
+  const handleEmailSearch = () => {
     setPage(1);
     setSearchText('');
     dispatch(startLoader());
-    axios.post(links.backendUrl + '/search-user-by-email',{
+    axios.post(links.backendUrl + '/search-user-by-email', {
       email: emailSearchText
     })
-    .then((response) => {
-      dispatch(endLoader());
-      if (response.status < 200 || response.status > 299) {
-        let newError = {
-          message: response.data.message,
-        };
-        throw newError;
-      } else {
-        setRows(response.data.user);
-        setTotal(response.data.total);
-      }
-    })
-    .catch((err) => {
-      dispatch(endLoader());
+      .then((response) => {
+        dispatch(endLoader());
+        if (response.status < 200 || response.status > 299) {
+          let newError = {
+            message: response.data.message,
+          };
+          throw newError;
+        } else {
+          setRows(response.data.user);
+          setTotal(response.data.total);
+        }
+      })
+      .catch((err) => {
+        dispatch(endLoader());
 
-      console.log("error while user search:- ", err);
-      Swal.fire({
-        title: "Error",
-        text: err.messaage,
-        icon: "error",
+        console.log("error while user search:- ", err);
+        Swal.fire({
+          title: "Error",
+          text: err.messaage,
+          icon: "error",
+        });
       });
-    }); 
   }
   return (
     <>
       <Grid container justifyContent={"center"}>
         <Grid container mt={5} xs={10} justifyContent={"space-between"}>
-        <Grid item mb={4} xs={12}>
-          <Typography variant="h4">Manage Users</Typography>
-        </Grid>
+          <Grid item mb={4} xs={12}>
+            <Typography variant="h4">Manage Users</Typography>
+          </Grid>
           <Grid item xs={10} md={3}>
             <Button
               variant="contained"
@@ -194,81 +194,81 @@ const ManageUsers = () => {
             >
               Reset
             </Button>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <FormControl
-                sx={{
-                  width: "100%",
+          </Grid>
+          <Grid item xs={6} md={4}>
+            <FormControl
+              sx={{
+                width: "100%",
+              }}
+              variant="outlined"
+            >
+              <OutlinedInput
+                id="outlined-adornment-search-by-email"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <SearchIcon
+                      onClick={() => {
+                        handleSearch();
+                      }}
+                    />
+                  </InputAdornment>
+                }
+                aria-describedby="outlined-search-helper-text"
+                inputProps={{
+                  "aria-label": "search",
                 }}
-                variant="outlined"
-              >
-                <OutlinedInput
-                  id="outlined-adornment-search-by-email"
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <SearchIcon
-                        onClick={() => {
-                          handleSearch();
-                        }}
-                      />
-                    </InputAdornment>
+                placeholder="Email Search"
+                fullWidth
+                onChange={(e) => setEmailSearchText(e.target.value)}
+                value={emailSearchText}
+                onKeyDown={(e) => {
+                  if (e.key == "Enter") {
+                    // console.log('search text',searchText)
+                    handleEmailSearch();
                   }
-                  aria-describedby="outlined-search-helper-text"
-                  inputProps={{
-                    "aria-label": "search",
-                  }}
-                  placeholder="Email Search"
-                  fullWidth
-                  onChange={(e) => setEmailSearchText(e.target.value)}
-                  value={emailSearchText}
-                  onKeyDown={(e) => {
-                    if (e.key == "Enter") {
-                      // console.log('search text',searchText)
-                      handleEmailSearch();
-                    }
-                  }}
-                />
-                {/* <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText> */}
-              </FormControl>
-            </Grid>
+                }}
+              />
+              {/* <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText> */}
+            </FormControl>
+          </Grid>
 
-            <Grid item xs={6} md={4}>
-              <FormControl
-                sx={{
-                  width: "100%",
+          <Grid item xs={6} md={4}>
+            <FormControl
+              sx={{
+                width: "100%",
+              }}
+              variant="outlined"
+            >
+              <OutlinedInput
+                id="outlined-adornment-search"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <SearchIcon
+                      onClick={() => {
+                        handleSearch();
+                      }}
+                    />
+                  </InputAdornment>
+                }
+                aria-describedby="outlined-search-helper-text"
+                inputProps={{
+                  "aria-label": "search",
                 }}
-                variant="outlined"
-              >
-                <OutlinedInput
-                  id="outlined-adornment-search"
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <SearchIcon
-                        onClick={() => {
-                          handleSearch();
-                        }}
-                      />
-                    </InputAdornment>
+                placeholder="Global Search"
+                fullWidth
+                onChange={(e) => setSearchText(e.target.value)}
+                value={searchText}
+                onKeyDown={(e) => {
+                  if (e.key == "Enter") {
+                    // console.log('search text',searchText)
+                    handleSearch();
                   }
-                  aria-describedby="outlined-search-helper-text"
-                  inputProps={{
-                    "aria-label": "search",
-                  }}
-                  placeholder="Global Search"
-                  fullWidth
-                  onChange={(e) => setSearchText(e.target.value)}
-                  value={searchText}
-                  onKeyDown={(e) => {
-                    if (e.key == "Enter") {
-                      // console.log('search text',searchText)
-                      handleSearch();
-                    }
-                  }}
-                />
-                {/* <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText> */}
-              </FormControl>
-            </Grid>
-          
+                }}
+              />
+              {/* <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText> */}
+            </FormControl>
+          </Grid>
+
         </Grid>
 
         <Grid item mx={3} mt={5} mb={5} xs={10}>

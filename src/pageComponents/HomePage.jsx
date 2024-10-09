@@ -91,8 +91,17 @@ const HomePage = () => {
             </header> */}
       <Grid container>
         {width <= 900 ? <JumbotronMobile /> : <Jumbotron />}
-        <Grid container mb={2} xs={8} ml={"auto"} mr={"auto"} marginTop={7} >
-          <Typography variant="h3" >Looking for cars?</Typography>
+        <Grid
+          container
+          mb={2}
+          xs={8}
+          mr={"auto"}
+          ml={5}
+          marginTop={7}
+          justifyContent="left"
+
+        >
+          <Typography variant="h3">Looking for cars?</Typography>
         </Grid>
         <SearchCarsComponent />
 

@@ -1,0 +1,51 @@
+.search-bar-container {
+    position: relative;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-input {
+    width: 0;
+    opacity: 0;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #1b3142;
+    /* Add outline color */
+    border-radius: 4px;
+    outline: none;
+    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.search-input.visible {
+    width: 200px;
+    opacity: 1;
+}
+
+.search-btn {
+    background-color: transparent;
+    /* Button outline */
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-btn i {
+    color: #1b3142;
+    /* Set search icon color */
+    transition: color 0.3s ease-in-out;
+}
+
+.search-form.expanded .search-btn i {
+    color: #030303;
+    /* Optional: Change the color when hovered */
+}
+
+.search-form.expanded .search-input {
+    width: 200px;
+}
