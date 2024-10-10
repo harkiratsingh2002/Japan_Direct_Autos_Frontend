@@ -1,11 +1,21 @@
 import { useState } from "react";
-import { Button, Grid, TextField, Typography, Divider, Box, Link as MuiLink } from "@mui/material";
+import {
+  Button,
+  Grid,
+  TextField,
+  Typography,
+  Divider,
+  Box,
+  Link as MuiLink,
+} from "@mui/material";
 import myColors from "../assets/util/myColors";
 import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram } from "@mui/icons-material";
-import logo from "../assets/images/whatsappDP.jpg"
+import logo from "../assets/images/whatsappDP.jpg";
+import links from "../assets/util/links";
+import Swal from "sweetalert2";
 
 const Footer = () => {
   const [subscribeEmail, setSubscribeEmail] = useState("");
@@ -36,6 +46,7 @@ const Footer = () => {
       .then((data) => {
         dispatch(endLoader());
         setLoading(false);
+        console.log("data:-", data);
         Swal.fire({
           title: "Success",
           text: data.message,
@@ -64,7 +75,12 @@ const Footer = () => {
       }}
     >
       {/* Horizontal Container for Two Halves */}
-      <Grid container spacing={4} justifyContent="space-between" alignItems="flex-start">
+      <Grid
+        container
+        spacing={4}
+        justifyContent="space-between"
+        alignItems="flex-start"
+      >
         {/* First Half: Links Section */}
         <Grid container item xs={12} md={6} spacing={4}>
           {/* Product Links */}
@@ -75,21 +91,33 @@ const Footer = () => {
             <ul style={{ listStyle: "none", padding: 0 }}>
               <li>
                 <Link to="/new-cars" style={{ textDecoration: "none" }}>
-                  <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  <Typography
+                    color={myColors.offWhite}
+                    mb={0.7}
+                    variant="body1"
+                  >
                     New Cars
                   </Typography>
                 </Link>
               </li>
               <li>
                 <Link to="/used-cars" style={{ textDecoration: "none" }}>
-                  <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  <Typography
+                    color={myColors.offWhite}
+                    mb={0.7}
+                    variant="body1"
+                  >
                     Used Cars
                   </Typography>
                 </Link>
               </li>
               <li>
                 <Link to="/rental-cars" style={{ textDecoration: "none" }}>
-                  <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  <Typography
+                    color={myColors.offWhite}
+                    mb={0.7}
+                    variant="body1"
+                  >
                     Rental Cars
                   </Typography>
                 </Link>
@@ -105,21 +133,36 @@ const Footer = () => {
             <ul style={{ listStyle: "none", padding: 0 }}>
               <li>
                 <Link to="/contact-us" style={{ textDecoration: "none" }}>
-                  <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  <Typography
+                    color={myColors.offWhite}
+                    mb={0.7}
+                    variant="body1"
+                  >
                     Contact Us
                   </Typography>
                 </Link>
               </li>
               <li>
                 <Link to="/about-us" style={{ textDecoration: "none" }}>
-                  <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                  <Typography
+                    color={myColors.offWhite}
+                    mb={0.7}
+                    variant="body1"
+                  >
                     About Us
                   </Typography>
                 </Link>
               </li>
               <li>
-                <Link to="https://api.whatsapp.com/send/?phone=61451420125&text=dsd" style={{ textDecoration: "none" }}>
-                  <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                <Link
+                  to="https://api.whatsapp.com/send/?phone=61451420125&text=dsd"
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography
+                    color={myColors.offWhite}
+                    mb={0.7}
+                    variant="body1"
+                  >
                     Whatsapp Us
                   </Typography>
                 </Link>
@@ -173,21 +216,31 @@ const Footer = () => {
                   style={{ height: 80, marginLeft: '11em' }} // Adjust height as needed
                 />
               </Grid> */}
-
-
             </Grid>
           </Grid>
 
           {/* Social Media Links */}
           <Grid item>
             <Box display="flex" gap={2}>
-              <MuiLink href="https://facebook.com" target="_blank" color={myColors.offWhite}>
+              <MuiLink
+                href="https://facebook.com"
+                target="_blank"
+                color={myColors.offWhite}
+              >
                 <Facebook />
               </MuiLink>
-              <MuiLink href="https://twitter.com" target="_blank" color={myColors.offWhite}>
+              <MuiLink
+                href="https://twitter.com"
+                target="_blank"
+                color={myColors.offWhite}
+              >
                 <Twitter />
               </MuiLink>
-              <MuiLink href="https://instagram.com" target="_blank" color={myColors.offWhite}>
+              <MuiLink
+                href="https://instagram.com"
+                target="_blank"
+                color={myColors.offWhite}
+              >
                 <Instagram />
               </MuiLink>
             </Box>
@@ -200,9 +253,9 @@ const Footer = () => {
 
       {/* Copyright Statement */}
       <Typography variant="body2" color={myColors.offWhite}>
-        &copy; {new Date().getFullYear()} Japan Direct Autos. All rights reserved.
+        &copy; {new Date().getFullYear()} Japan Direct Autos. All rights
+        reserved.
       </Typography>
-
     </Box>
   );
 };

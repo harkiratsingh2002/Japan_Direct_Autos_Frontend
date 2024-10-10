@@ -203,7 +203,6 @@ const AddCarForm = () => {
   console.log("adminEmail:- ", adminEmail);
   // finalCarFormData.append('email',adminEmail)
   const nextClickedHandler = (page) => {
-
     setOnForm(page);
   };
   const carFormDataInitital = {
@@ -243,23 +242,52 @@ const AddCarForm = () => {
 
   const validateForm = (currentForm) => {
     switch (currentForm) {
-      case 'basicInformation':
+      case "basicInformation":
         // Check if the basic information fields are not empty
-        return carFormData.name && carFormData.stockId && carFormData.make && carFormData.brand && carFormData.year && carFormData.price && carFormData.body && carFormData.oldOrNew;
-      case 'specificationInformation':
+        return (
+          carFormData.name &&
+          carFormData.stockId &&
+          carFormData.make &&
+          carFormData.brand &&
+          carFormData.year &&
+          carFormData.price &&
+          carFormData.body &&
+          carFormData.oldOrNew
+        );
+      case "specificationInformation":
         // Ensure all specifications are filled
-        return carFormData.engine && carFormData.suspension && carFormData.grade && carFormData.chassisNo && carFormData.odometer && carFormData.model && carFormData.transmission && carFormData.fuelType && carFormData.mileage && carFormData.seatingCapacity && carFormData.mileage && carFormData.color;
-      case 'descriptionInformation':
+        return (
+          carFormData.engine &&
+          carFormData.suspension &&
+          carFormData.grade &&
+          carFormData.chassisNo &&
+          carFormData.odometer &&
+          carFormData.model &&
+          carFormData.transmission &&
+          carFormData.fuelType &&
+          carFormData.mileage &&
+          carFormData.seatingCapacity &&
+          carFormData.mileage &&
+          carFormData.color
+        );
+      case "descriptionInformation":
         // Description must not be empty
         return carFormData.description.length > 0;
-      case 'adminInfo':
+      case "adminInfo":
         // Check if admin information fields are not empty
-        return adminInfo.costPrice && adminInfo.brokerForwarderHandlingFees && adminInfo.preShipInspection && adminInfo.inlandTransport && adminInfo.freightInsurance && adminInfo.gst && adminInfo.customClearance;
+        return (
+          adminInfo.costPrice &&
+          adminInfo.brokerForwarderHandlingFees &&
+          adminInfo.preShipInspection &&
+          adminInfo.inlandTransport &&
+          adminInfo.freightInsurance &&
+          adminInfo.gst &&
+          adminInfo.customClearance
+        );
       default:
         return true;
     }
-  }
-
+  };
 
   const [carFormData, setCarFormData] = useState(carFormDataInitital);
   const [adminInfo, setAdminInfo] = useState(adminInfoInitial);
@@ -354,7 +382,6 @@ const AddCarForm = () => {
         <Grid pt={2} container justifyContent={"space-between"} item xs={12}>
           <Grid item xs={5}>
             <CssTextField
-
               required
               onChange={(e) => {
                 setCarFormData((oldState) => {
@@ -423,7 +450,6 @@ const AddCarForm = () => {
       </Grid>
     </>
   );
-
 
   const descriptionForm = (
     <Grid
@@ -975,7 +1001,7 @@ const AddCarForm = () => {
         setOnForm(pages[currPageIndex + 1]);
       } else {
         // Optionally show an error message
-        alert('Please fill all required fields.');
+        alert("Please fill all required fields.");
       }
     }
   };
@@ -1020,15 +1046,10 @@ const AddCarForm = () => {
               </CustomButton>
             )}
 
-
             {onForm != "addImages" && (
-              <CustomButton
-                variant="contained"
-                onClick={handleNext}
-              >
+              <CustomButton variant="contained" onClick={handleNext}>
                 Next
               </CustomButton>
-
             )}
             {onForm == "addImages" && (
               <CustomButton
@@ -1082,6 +1103,15 @@ const AddCarForm = () => {
                           adminInfo: adminInfo,
                         })
                         .then((response) => {
+                          // send subscriber emails
+                          axios
+                            .get(links.backendUrl + "/send-mails")
+                            .then((res) => {
+                              console.log("mail send response", res.data);
+                            })
+                            .catch((err) => {
+                              console.log("mail send err", err);
+                            });
                           if (
                             finalCarFormData.get("oldOrNew") == "new" ||
                             finalCarFormData.get("oldOrNew") == "New"
