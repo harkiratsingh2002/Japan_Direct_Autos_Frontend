@@ -201,6 +201,45 @@ const MobileNavbarDrawer = (props) => {
             />
           </ListItemButton>
         </ListItem>
+        <ListItemButton onClick={handleClick}>
+          <ListItemText
+            sx={{
+              color: myColors.textBlack,
+            }}
+            primary={"Buy"}
+          />
+        </ListItemButton>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={openCars}
+          onClose={props.closeDrawer}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          <Link to={"/new-cars"}>
+            <MenuItem
+              sx={{
+                color: myColors.textBlack,
+              }}
+              onClick={props.closeDrawer}
+            >
+              Featured Cars
+            </MenuItem>
+          </Link>
+          <Link to={"/used-cars"}>
+            <MenuItem
+              sx={{
+                color: myColors.textBlack,
+              }}
+              onClick={props.closeDrawer}
+            >
+              Used Cars
+            </MenuItem>
+          </Link>
+
+        </Menu>
         {navLinks.map((navItem, index) => (
           <>
             <ListItem key={index} disablePadding>
@@ -220,54 +259,7 @@ const MobileNavbarDrawer = (props) => {
             </ListItem>
           </>
         ))}
-        <ListItemButton onClick={handleClick}>
-          <ListItemText
-            sx={{
-              color: myColors.textBlack,
-            }}
-            primary={"Buy/Rent"}
-          />
-        </ListItemButton>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={openCars}
-          onClose={props.closeDrawer}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-        >
-          <Link to={"/featured-cars"}>
-            <MenuItem
-              sx={{
-                color: myColors.textBlack,
-              }}
-              onClick={props.closeDrawer}
-            >
-              featured Cars
-            </MenuItem>
-          </Link>
-          <Link to={"/used-cars"}>
-            <MenuItem
-              sx={{
-                color: myColors.textBlack,
-              }}
-              onClick={props.closeDrawer}
-            >
-              Used Cars
-            </MenuItem>
-          </Link>
-          <Link to={"/rental-cars"}>
-            <MenuItem
-              sx={{
-                color: myColors.textBlack,
-              }}
-              onClick={props.closeDrawer}
-            >
-              Rental Cars
-            </MenuItem>
-          </Link>
-        </Menu>
+
         {role == "admin" &&
           adminLinks.map((linkItem, index) => {
             return (

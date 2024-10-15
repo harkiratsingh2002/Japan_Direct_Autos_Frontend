@@ -111,7 +111,7 @@ const UsedCars = () => {
                 key={newCar.id}
                 xs={11}
                 md={4}
-                sx={{ display: 'flex', flexDirection: 'column' }}
+                sx={{ display: "flex", justifyContent: "center" }}
               >
                 <CarCardComponent car={newCar} sx={{ flexGrow: 1 }} />
               </Grid>

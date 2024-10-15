@@ -111,7 +111,7 @@ const RentalCars = () => {
               </Grid>
             ))
             : rentalCars.map((rentalCar) => (
-              <Grid item key={rentalCar.id} sx={{ display: "flex" }} xs={11} mb={2} md={4}>
+              <Grid item key={rentalCar.id} sx={{ display: "flex", justifyContent: "center" }} xs={11} mb={2} md={4}>
                 <CarCardComponent car={rentalCar} />
               </Grid>
             ))}
