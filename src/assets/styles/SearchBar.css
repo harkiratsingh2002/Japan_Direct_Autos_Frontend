@@ -1,51 +1,54 @@
+/* Container Styles */
 .search-bar-container {
     position: relative;
+    transition: width 0.3s ease;
 }
 
+/* Collapsed State */
+.search-bar-container.collapsed {
+    width: 40px;
+    /* Adjust as needed */
+}
+
+/* Expanded State */
+.search-bar-container.expanded {
+    width: 30%;
+    /* Adjust as needed */
+}
+
+/* Search Icon Button */
+.search-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Search Form */
 .search-form {
     display: flex;
     align-items: center;
-    transition: all 0.3s ease-in-out;
 }
 
+/* Search Input */
 .search-input {
-    width: 0;
-    opacity: 0;
-    padding: 5px;
-    font-size: 16px;
-    border: 1px solid #1b3142;
-    /* Add outline color */
-    border-radius: 4px;
-    outline: none;
-    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.search-input.visible {
-    width: 200px;
-    opacity: 1;
-}
-
-.search-btn {
-    background-color: transparent;
-    /* Button outline */
+    flex: 1;
     padding: 5px 10px;
+    border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+/* Search Button */
+.search-btn {
+    background: none;
+    border: none;
     cursor: pointer;
-    font-size: 18px;
-    transition: all 0.3s ease-in-out;
+
 }
 
-.search-btn i {
-    color: #1b3142;
-    /* Set search icon color */
-    transition: color 0.3s ease-in-out;
-}
+/* Close Button */
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
 
-.search-form.expanded .search-btn i {
-    color: #030303;
-    /* Optional: Change the color when hovered */
-}
-
-.search-form.expanded .search-input {
-    width: 200px;
 }

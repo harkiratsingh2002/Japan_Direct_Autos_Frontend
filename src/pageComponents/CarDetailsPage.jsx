@@ -41,9 +41,10 @@ const CarDetailsPage = (props) => {
 
   const [currentImage, setCurrentImage] = useState(null);
   const [openEnquiryModal, setOpenEnquiryModal] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const wishlist = useSelector((state) => state.userDataSlice.wishlist);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [EnquiryFormData, setEnquiryFormData] = useState({
     subject: {
       value: "",
@@ -55,92 +56,120 @@ const CarDetailsPage = (props) => {
       error: "",
       hasError: false,
     },
+    email: {
+      value: "",
+      error: "",
+      hasError: false,
+    },
   });
+
+  useEffect(() => {
+    if (localStorage.getItem("userData")) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+
   const navigate = useNavigate();
 
   let carId = params.carId;
   const handleSendEnquiry = () => {
+    let userToken = null;
     if (localStorage.getItem("userData")) {
-      let userToken = JSON.parse(localStorage.getItem("userData")).userToken;
-      console.log("userToken", userToken);
-      let enquiryData = {
-        // carRating: reviewFormData.carRating.value,
-        // carReviewText: reviewFormData.carReviewText.value,
-        enquirySubject: EnquiryFormData.subject.value,
-        enquiryText: EnquiryFormData.enquiryText.value,
-        carId: carId,
-        carLink: window.location.href,
-      };
-      if (
-        EnquiryFormData.subject.value.length != 0 &&
-        EnquiryFormData.enquiryText.value.length != 0
-      ) {
-        dispatch(startLoader());
-        fetch(links.backendUrl + "/send-enquiry", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${userToken}`,
-          },
-          body: JSON.stringify(enquiryData),
-        })
-          .then((res) => {
-            if (res.status < 200 || res.status > 299) {
-              res.json().then((err) => {
-                // alert(err.message)})
-                dispatch(endLoader());
-                Swal.fire({
-                  title: "error",
-                  text: err.message,
-                  icon: "error",
-                  // confirmButtonText: 'Cool'
-                });
-              });
-            }
+      userToken = JSON.parse(localStorage.getItem("userData")).userToken;
+    }
 
-            return res.json();
-          })
-          .then((result) => {
-            // alert(result.message);
-            dispatch(endLoader());
+    let enquiryData = {
+      enquirySubject: EnquiryFormData.subject.value,
+      enquiryText: EnquiryFormData.enquiryText.value,
+      carId: carId,
+      carLink: window.location.href,
+    };
 
-            Swal.fire({
-              title: "Success",
-              text: result.message,
-              icon: "info",
-              // confirmButtonText: 'Cool'
-            });
-            // props.handleCloseModal();
-            setEnquiryFormData({
-              subject: {
-                value: "",
-                error: "",
-                hasError: false,
-              },
-              enquiryText: {
-                value: "Hello, is this car still available?",
-                error: "",
-                hasError: false,
-              },
-            });
-          });
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: "Both subject and comments are required.",
-          icon: "error",
-        });
-      }
-      // window.location.reload(true);
-    } else {
+    // Validate form fields
+    if (
+      EnquiryFormData.subject.value.length === 0 ||
+      EnquiryFormData.enquiryText.value.length === 0
+    ) {
       Swal.fire({
         title: "Error",
-        text: "Login before sending enquiry.",
+        text: "Both subject and comments are required.",
         icon: "error",
       });
-      navigate("/login");
+      return;
     }
+
+    // Handle anonymous users
+    if (!isLoggedIn) {
+      if (EnquiryFormData.email.value.length === 0) {
+        Swal.fire({
+          title: "Error",
+          text: "Email is required.",
+          icon: "error",
+        });
+        return;
+      } else {
+        // Basic email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(EnquiryFormData.email.value)) {
+          Swal.fire({
+            title: "Error",
+            text: "Please enter a valid email address.",
+            icon: "error",
+          });
+          return;
+        }
+        enquiryData.email = EnquiryFormData.email.value;
+      }
+    }
+
+    dispatch(startLoader());
+
+    const fetchOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(enquiryData),
+    };
+
+    if (userToken) {
+      fetchOptions.headers.authorization = `Bearer ${userToken}`;
+    }
+
+    fetch(`${links.backendUrl}/send-enquiry`, fetchOptions)
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then((err) => {
+            dispatch(endLoader());
+            Swal.fire({
+              title: "Error",
+              text: err.message,
+              icon: "error",
+            });
+            throw new Error(err.message);
+          });
+        }
+        return res.json();
+      })
+      .then((result) => {
+        dispatch(endLoader());
+        Swal.fire({
+          title: "Success",
+          text: result.message,
+          icon: "success",
+        });
+        setEnquiryFormData({
+          subject: { value: "", error: "", hasError: false },
+          enquiryText: { value: "", error: "", hasError: false },
+          email: { value: "", error: "", hasError: false },
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
+
   // let myRows = [];
   const handleOpenEnquiry = () => {
     setOpenEnquiryModal(true);
@@ -289,7 +318,7 @@ const CarDetailsPage = (props) => {
                   variant={isMobile ? "h4" : "h2"}
                   style={{ fontWeight: 'bold' }}
                 >
-                  {carInfo.name}
+                  {carInfo.name} ({carInfo.grade})
                 </Typography>
               </Grid>
 
@@ -345,32 +374,51 @@ const CarDetailsPage = (props) => {
                     Check Availability
                   </Typography>
 
-                  {/* Form Fields */}
+
+                  {/* Conditionally render Email field */}
+                  {!isLoggedIn && (
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      value={EnquiryFormData.email.value}
+                      required
+                      onChange={(e) => {
+                        setEnquiryFormData((state) => ({
+                          ...state,
+                          email: { ...state.email, value: e.target.value },
+                        }));
+                      }}
+                      variant="outlined"
+                      margin="dense"
+                    />
+                  )}
+
+                  {/* Subject Field */}
                   <TextField
                     fullWidth
                     label="Subject"
                     value={EnquiryFormData.subject.value}
                     required
                     onChange={(e) => {
-                      setEnquiryFormData((state) => {
-                        let newState = { ...state };
-                        newState.subject.value = e.target.value;
-                        return newState;
-                      });
+                      setEnquiryFormData((state) => ({
+                        ...state,
+                        subject: { ...state.subject, value: e.target.value },
+                      }));
                     }}
                     variant="outlined"
                     margin="dense"
                   />
+
+                  {/* Comments Field */}
                   <TextField
                     fullWidth
                     label="Comments"
                     value={EnquiryFormData.enquiryText.value}
                     onChange={(e) => {
-                      setEnquiryFormData((state) => {
-                        let newState = { ...state };
-                        newState.enquiryText.value = e.target.value;
-                        return newState;
-                      });
+                      setEnquiryFormData((state) => ({
+                        ...state,
+                        enquiryText: { ...state.enquiryText, value: e.target.value },
+                      }));
                     }}
                     variant="outlined"
                     margin="normal"
@@ -386,6 +434,7 @@ const CarDetailsPage = (props) => {
                   >
                     Send Enquiry
                   </Button>
+
 
 
                 </Container>

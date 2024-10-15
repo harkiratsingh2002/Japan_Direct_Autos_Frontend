@@ -92,7 +92,7 @@ const CarCardComponent = (props) => {
     <>
       <Card
         sx={{
-          maxWidth: 345,
+          maxWidth: 280,
           // width: props.inMobile ? 280 : 345,
           minWidth: 280,
           display: "inline-flex",
@@ -136,9 +136,9 @@ const CarCardComponent = (props) => {
               Learn More
             </Button>
           </Link>
-          <Button size="small" onClick={handleOpenEnquiry}>
+          {/* <Button size="small" onClick={handleOpenEnquiry}>
             Enquire
-          </Button>
+          </Button> */}
           {props.inWishlist && (
             <IconButton
               size="large"
@@ -153,11 +153,11 @@ const CarCardComponent = (props) => {
           )}
         </CardActions>
       </Card>
-      <EnquireNowModal
+      {/* <EnquireNowModal
         openModal={openEnquiryModal}
         handleCloseModal={handleCloseEnquiry}
         carId={props.car._id}
-      />
+      /> */}
     </>
   );
 };

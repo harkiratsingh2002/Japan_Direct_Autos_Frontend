@@ -42,6 +42,13 @@ import axios from "axios";
 import { Margin } from "@mui/icons-material";
 
 const navLinks = [
+
+  {
+    linkName: "Rent",
+    link: "/rental-cars",
+    visibleTo: "All",
+  },
+
   {
     linkName: "Home",
     link: "/",
@@ -58,7 +65,7 @@ const navLinks = [
     linkName: "Contact Us",
     link: "/contact-us",
     visibleTo: "All",
-  },
+  }
 ];
 
 const adminLinks = [
@@ -67,7 +74,7 @@ const adminLinks = [
     link: "/Dashboard/main",
     visibleTo: "Admin",
   },
-];
+]
 
 const dynamicLink = [
   {
@@ -426,7 +433,7 @@ export default function Navbar() {
       <Box sx={{ flexGrow: 1 }}>
         <div style={NavLinkStyles}>
           <Button onClick={handleClick} sx={NavLinkStyles}>
-            {"Buy/Rent"}
+            {"Buy"}
           </Button>
           <Menu
             id="basic-menu"
@@ -447,23 +454,20 @@ export default function Navbar() {
                 Used Cars
               </MenuItem>
             </Link>
-            <Link to={"/rental-cars"}>
-              <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>
-                Rental Cars
-              </MenuItem>
-            </Link>
+
           </Menu>
+          {navLinks.map((linkObj) => (
+            <Link to={linkObj.link} key={linkObj.linkName}>
+              <Button sx={NavLinkStyles}>{linkObj.linkName}</Button>
+            </Link>
+          ))}
           {role === "admin" &&
             adminLinks.map((linkObj) => (
               <Link to={linkObj.link} key={linkObj.linkName}>
                 <Button sx={NavLinkStyles}>{linkObj.linkName}</Button>
               </Link>
             ))}
-          {navLinks.map((linkObj) => (
-            <Link to={linkObj.link} key={linkObj.linkName}>
-              <Button sx={NavLinkStyles}>{linkObj.linkName}</Button>
-            </Link>
-          ))}
+
         </div>
       </Box>
       <SearchBar />
@@ -594,7 +598,9 @@ export default function Navbar() {
               component="div"
               sx={{ flexGrow: 1 }}
             >
-              <img src={logo} alt="" height={50} />
+              <Link to="/">
+                <img src={logo} alt="" height={50} />
+              </Link>
             </Typography>
             {width <= 900 ? mobileMenu : desktopMenu}
           </Toolbar>

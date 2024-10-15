@@ -1,230 +1,230 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { Grid, Rating, TextField } from "@mui/material";
-import importantFormFunctions from "../assets/util/importantFormFunctions";
-import links from "../assets/util/links";
+import React, { useEffect, useState } from "react";
+import { useMediaQuery } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
+import { Box, Button, Grid, Modal, TextField } from "@mui/material";
+import Swal from "sweetalert2";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
-import { useMediaQuery } from '@mui/material';
-
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  //   border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import links from "../assets/util/links";
 
 const EnquireNowModal = (props) => {
   const navigate = useNavigate();
   const params = useParams();
-  const matches = useMediaQuery('(max-width:600px)');
-  if(matches){
-    style.width = '65%'
-  }
-  // const [carRatingValue,setCarRatingValue] = React.useState(0);
-  let userToken = null;
-  if (localStorage.getItem("userData")) {
-    userToken = JSON.parse(localStorage.getItem("userData")).userToken;
-    console.log("userToken", userToken);
-  }
-  const [EnquiryFormData, setEnquiryFormData] = React.useState({
+  const matches = useMediaQuery("(max-width:600px)");
+  const dispatch = useDispatch();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [EnquiryFormData, setEnquiryFormData] = useState({
     subject: {
       value: "",
       error: "",
       hasError: false,
     },
     enquiryText: {
+      value: "Hello, is this car still available?",
+      error: "",
+      hasError: false,
+    },
+    email: {
       value: "",
       error: "",
       hasError: false,
     },
   });
-  const dispatch = useDispatch()
 
-  const handleReviewFormDataSubmit = () => {
-    if (importantFormFunctions.checkRequired(EnquiryFormData.subject.value)) {
-      // alert('Rating feild is required.');
-      Swal.fire({
-        title: "error",
-        text: "Subject is required.",
-        icon: "error",
-        // confirmButtonText: 'Cool'
-      });
-    } else if (
-      importantFormFunctions.checkRequired(EnquiryFormData.enquiryText.value)
+  useEffect(() => {
+    if (localStorage.getItem("userData")) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const carId = props.carId;
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: matches ? "65%" : 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const handleSendEnquiry = () => {
+    const userData = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")) : null;
+    let userToken = userData ? userData.userToken : null;
+    let email = userData ? userData.email : null; // Retrieve email from userData
+
+    let enquiryData = {
+      enquirySubject: EnquiryFormData.subject.value.trim(),
+      enquiryText: EnquiryFormData.enquiryText.value.trim(),
+      carId: carId,
+      carLink: window.location.href,
+      email: email, // Include email
+    };
+
+    // Validate form fields
+    if (
+      enquiryData.enquirySubject.length === 0 ||
+      enquiryData.enquiryText.length === 0
     ) {
-      // alert('Please add a review to continue.');
       Swal.fire({
-        title: "error",
-        text: "Please add enquiry message to continue.",
+        title: "Error",
+        text: "Both subject and comments are required.",
         icon: "error",
-        // confirmButtonText: 'Cool'
       });
-    } else if (
-      !importantFormFunctions.checkReviewLength(
-        EnquiryFormData.enquiryText.value
-      )
-    ) {
-      // alert('review must be less than 500 words');
-      Swal.fire({
-        title: "error",
-        text: "Enquiry must be less than 500 words",
-        icon: "error",
-        // confirmButtonText: 'Cool'
-      });
-    } else {
-      // post Review
-      let enquiryData = {
-        // carRating: reviewFormData.carRating.value,
-        // carReviewText: reviewFormData.carReviewText.value,
-        enquirySubject: EnquiryFormData.subject.value,
-        enquiryText: EnquiryFormData.enquiryText.value,
-        carId: props.carId,
-        carLink: window.location.href,
-      };
-      if (userToken) {
-        dispatch(startLoader());
-        fetch(links.backendUrl + "/send-enquiry", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${userToken}`,
-          },
-          body: JSON.stringify(enquiryData),
-        })
-          .then((res) => {
-            if (res.status < 200 || res.status > 299) {
-              res.json().then((err) => {
-                // alert(err.message)})
-                dispatch(endLoader())
-                Swal.fire({
-                  title: "error",
-                  text: err.message,
-                  icon: "error",
-                  // confirmButtonText: 'Cool'
-                });
-              });
-            }
+      return;
+    }
 
-            return res.json();
-          })
-          .then((result) => {
-            // alert(result.message);
-            dispatch(endLoader())
-
-            Swal.fire({
-              title: "Success",
-              text: result.message,
-              icon: "info",
-              // confirmButtonText: 'Cool'
-            });
-            props.handleCloseModal();
-            setEnquiryFormData({
-              subject: {
-                value: "",
-                error: "",
-                hasError: false,
-              },
-              enquiryText: {
-                value: "",
-                error: "",
-                hasError: false,
-              },
-            });
-            // window.location.reload(true);
-          });
-      } else {
+    // Handle anonymous users
+    if (!isLoggedIn) {
+      const emailValue = EnquiryFormData.email.value.trim();
+      if (emailValue.length === 0) {
         Swal.fire({
-          title: "error",
-          text: "Login before placing an enquiry.",
+          title: "Error",
+          text: "Email is required.",
           icon: "error",
-          // confirmButtonText: 'Cool'
         });
-        navigate("/login");
+        return;
+      } else {
+        // Basic email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailValue)) {
+          Swal.fire({
+            title: "Error",
+            text: "Please enter a valid email address.",
+            icon: "error",
+          });
+          return;
+        }
+        enquiryData.email = emailValue; // Overwrite email with user input
       }
     }
-    // let emailTest = importantFormFunctions.checkEmail
+
+    dispatch(startLoader());
+
+    const fetchOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(userToken && { Authorization: `Bearer ${userToken}` }),
+      },
+      body: JSON.stringify(enquiryData),
+    };
+
+    fetch(`${links.backendUrl}/send-enquiry`, fetchOptions)
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then((err) => {
+            dispatch(endLoader());
+            Swal.fire({
+              title: "Error",
+              text: err.message,
+              icon: "error",
+            });
+            throw new Error(err.message);
+          });
+        }
+        return res.json();
+      })
+      .then((result) => {
+        dispatch(endLoader());
+        Swal.fire({
+          title: "Success",
+          text: result.message,
+          icon: "success",
+        });
+        setEnquiryFormData({
+          subject: { value: "", error: "", hasError: false },
+          enquiryText: { value: "", error: "", hasError: false },
+          email: { value: "", error: "", hasError: false },
+        });
+      })
+      .catch((error) => {
+        dispatch(endLoader());
+        console.error("Error:", error);
+        Swal.fire({
+          title: "Error",
+          text: error.message || "An unexpected error occurred.",
+          icon: "error",
+        });
+      });
   };
+
   return (
-    <>
-      <>
-        {/* <Button onClick={handleOpen}>Open modal</Button> */}
-        <Modal
-          open={props.openModal}
-          onClose={props.handleCloseModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Grid container>
-              <Grid item xs={12} 
-              md={12}>
-                {/* <Typography component="legend">Enquiry Subject</Typography> */}
-                <TextField
-                  value={EnquiryFormData.subject.value}
-                  onChange={(e) => {
-                    setEnquiryFormData((oldState) => {
-                      let newState = { ...oldState };
-                      newState.subject.value = e.target.value;
-                      return newState;
-                    });
-                  }}
-                  fullWidth
-                  id="standard-basic"
-                  label="Subject"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item mt={2} xs={12}
-              md={12}>
-                <TextField
-                  value={EnquiryFormData.enquiryText.value}
-                  onChange={(e) => {
-                    setEnquiryFormData((oldState) => {
-                      let newState = { ...oldState };
-                      newState.enquiryText.value = e.target.value;
-                      return newState;
-                    });
-                  }}
-                  fullWidth
-                  multiline
-                  rows={4}
-                  id="standard-basic"
-                  label="Your Enquiry"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid
-                onClick={handleReviewFormDataSubmit}
-                item
-                mt={3}
-                xs={8}
-                md={12}
-                alignSelf={"center"}
-              >
-                <Button variant="contained" color="primary">
-                  Send Enquiry
-                </Button>
-              </Grid>
-            </Grid>
-            {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography> */}
-          </Box>
-        </Modal>
-      </>
-    </>
+    <Modal
+      open={props.openModal}
+      onClose={props.handleCloseModal}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <Grid container>
+          <Grid item xs={12} md={12}>
+            {/* Conditionally render Email field */}
+            {!isLoggedIn && (
+              <TextField
+                fullWidth
+                label="Email"
+                value={EnquiryFormData.email.value}
+                required
+                onChange={(e) => {
+                  setEnquiryFormData((state) => ({
+                    ...state,
+                    email: { ...state.email, value: e.target.value },
+                  }));
+                }}
+                variant="outlined"
+                margin="dense"
+              />
+            )}
+
+            {/* Subject Field */}
+            <TextField
+              fullWidth
+              label="Subject"
+              value={EnquiryFormData.subject.value}
+              required
+              onChange={(e) => {
+                setEnquiryFormData((state) => ({
+                  ...state,
+                  subject: { ...state.subject, value: e.target.value },
+                }));
+              }}
+              variant="outlined"
+              margin="dense"
+            />
+
+            {/* Comments Field */}
+            <TextField
+              fullWidth
+              label="Comments"
+              value={EnquiryFormData.enquiryText.value}
+              onChange={(e) => {
+                setEnquiryFormData((state) => ({
+                  ...state,
+                  enquiryText: { ...state.enquiryText, value: e.target.value },
+                }));
+              }}
+              variant="outlined"
+              margin="normal"
+              multiline
+              rows={2}
+            />
+
+            <Button
+              variant="contained"
+              onClick={handleSendEnquiry}
+              color="warning"
+              fullWidth
+            >
+              Send Enquiry
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    </Modal>
   );
 };
 

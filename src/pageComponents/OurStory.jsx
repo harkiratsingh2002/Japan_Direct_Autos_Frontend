@@ -5,6 +5,24 @@ import familyImage from '../assets/images/aboutUs2.jpeg';
 import headingImage from '../assets/images/aboutUsHeading.jpg';
 
 const AboutUsPage = () => {
+  // Define the testimonials array
+  const testimonials = [
+    {
+      name: 'John Smith',
+      quote:
+        'Japan Direct Autos made my car buying experience effortless and enjoyable. Highly recommend!',
+    },
+    {
+      name: 'Emily Johnson',
+      quote: 'Fantastic service and great value. I love my new car!',
+    },
+    {
+      name: 'Michael Brown',
+      quote:
+        'The team was incredibly helpful and knowledgeable. Five stars!',
+    },
+  ];
+
   return (
     <div>
       {/* Hero Section */}
@@ -30,7 +48,7 @@ const AboutUsPage = () => {
           },
         }}
       >
-
+        {/* Add content here if needed */}
       </Box>
 
       {/* Introduction */}
@@ -48,57 +66,42 @@ const AboutUsPage = () => {
               Our Story
             </Typography>
             <Typography variant="body1" paragraph>
-              Welcome to <strong>Japan Direct Autos</strong>, a family-owned business
-              based in Adelaide, Australia. We specialize in importing high-quality,
-              reliable, and affordable cars from Japan to provide our customers with the
-              best driving experience without breaking the bank.
+              Welcome to <strong>Japan Direct Autos</strong>, a family-owned
+              business based in Adelaide, Australia. We specialize in importing
+              high-quality, reliable, and affordable cars from Japan to provide
+              our customers with the best driving experience without breaking
+              the bank.
             </Typography>
             <Typography variant="body1" paragraph>
-              Our passion for cars started over 25 years ago when we realized the
-              potential of Japanese vehicles in offering unmatched reliability and value.
-              Since then, we've been committed to connecting the people of Adelaide with
-              their perfect car.
+              Our passion for cars started over 25 years ago when we realized
+              the potential of Japanese vehicles in offering unmatched
+              reliability and value. Since then, we've been committed to
+              connecting the people of Adelaide with their perfect car.
             </Typography>
           </Grid>
         </Grid>
       </Container>
+      {/* Customer Testimonials */}
+      <Container sx={{ py: { xs: 4, md: 6 } }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Customer Testimonials
+        </Typography>
+        <Grid container spacing={4}>
+          {testimonials.map((testimonial, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <Paper elevation={3} sx={{ p: 3 }}>
+                <Typography variant="body1" gutterBottom>
+                  "{testimonial.quote}"
+                </Typography>
+                <Typography variant="subtitle1" align="right">
+                  - {testimonial.name}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
 
-      {/* Our Values */}
-      <Box sx={{ bgcolor: 'grey.100', py: { xs: 4, md: 6 } }}>
-        <Container>
-          <Typography variant="h4" align="center" gutterBottom>
-            Our Values
-          </Typography>
-          <Grid container spacing={4}>
-            {[
-              {
-                title: 'Quality',
-                description:
-                  'We ensure every car meets our strict quality standards before offering it to you.',
-              },
-              {
-                title: 'Integrity',
-                description:
-                  'Honesty and transparency are at the core of our business practices.',
-              },
-              {
-                title: 'Customer Satisfaction',
-                description:
-                  'Your happiness is our success. We strive to exceed your expectations.',
-              },
-            ].map((value, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
-                  <Typography variant="h5" gutterBottom>
-                    {value.title}
-                  </Typography>
-                  <Typography variant="body1">{value.description}</Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
 
       {/* Why Choose Us */}
       <Container sx={{ py: { xs: 4, md: 6 } }}>
@@ -141,6 +144,43 @@ const AboutUsPage = () => {
           </Grid>
         </Grid>
       </Container>
+
+      {/* Our Values */}
+      <Box sx={{ bgcolor: 'grey.100', py: { xs: 4, md: 6 } }}>
+        <Container>
+          <Typography variant="h4" align="center" gutterBottom>
+            Our Values
+          </Typography>
+          <Grid container spacing={4}>
+            {[
+              {
+                title: 'Quality',
+                description:
+                  'We ensure every car meets our strict quality standards before offering it to you.',
+              },
+              {
+                title: 'Integrity',
+                description:
+                  'Honesty and transparency are at the core of our business practices.',
+              },
+              {
+                title: 'Customer Satisfaction',
+                description:
+                  'Your happiness is our success. We strive to exceed your expectations.',
+              },
+            ].map((value, index) => (
+              <Grid item xs={12} md={4} key={index}>
+                <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
+                  <Typography variant="h5" gutterBottom>
+                    {value.title}
+                  </Typography>
+                  <Typography variant="body1">{value.description}</Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
 
       {/* Contact Information */}
       <Box
