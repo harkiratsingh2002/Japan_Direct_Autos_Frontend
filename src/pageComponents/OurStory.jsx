@@ -26,18 +26,11 @@ const AboutUsPage = () => {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             filter: 'blur(4px)', // Adjust the blur intensity here
-            zIndex: -1,
+            zIndex: 0,
           },
         }}
       >
-        <Container maxWidth="md">
-          <Typography variant="h3" component="h1" gutterBottom>
-            About Us
-          </Typography>
-          <Typography variant="h5">
-            Bringing Reliable Japanese Cars to Adelaide Since 1995
-          </Typography>
-        </Container>
+
       </Box>
 
       {/* Introduction */}

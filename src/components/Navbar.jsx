@@ -230,14 +230,14 @@ const MobileNavbarDrawer = (props) => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <Link to={"/new-cars"}>
+          <Link to={"/featured-cars"}>
             <MenuItem
               sx={{
                 color: myColors.textBlack,
               }}
               onClick={props.closeDrawer}
             >
-              New Cars
+              featured Cars
             </MenuItem>
           </Link>
           <Link to={"/used-cars"}>
@@ -439,7 +439,7 @@ export default function Navbar() {
           >
             <Link to={"/new-cars"}>
               <MenuItem sx={{ color: myColors.textBlack }} onClick={handleClose}>
-                New Cars
+                Featured Cars
               </MenuItem>
             </Link>
             <Link to={"/used-cars"}>

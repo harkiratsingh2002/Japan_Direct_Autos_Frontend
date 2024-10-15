@@ -76,7 +76,7 @@ const RentalCars = () => {
 
       <Grid container mt={3} mb={3} justifyContent={"center"}>
         <Grid item xs={8}>
-          <Typography mb={2} variant="h5">
+          <Typography mb={2} variant="h2">
             {"Rental Cars"}
           </Typography>
         </Grid>

@@ -53,13 +53,20 @@ const RegistrationPage = () => {
     };
     // checking required
     Object.keys(registerformdata).some((key) => {
-      if (registerformdata[key] == "" || registerformdata[key].length == 0) {
-        error.err = true;
-        error.message = "All feilds are Required.";
-        return true;
+      // Skip the 'twoStepVerify' field during validation
+      if (key === "twoStepVerify") {
+        return false; // Continue checking other fields
       }
-      return false;
+
+      if (registerformdata[key] === "" || registerformdata[key].length === 0) {
+        error.err = true;
+        error.message = "All fields are required.";
+        return true; // Stop further validation if any required field is empty
+      }
+
+      return false; // No validation errors, continue
     });
+
     // checking email
     if (!error.err) {
       function isValidEmail(email) {
@@ -92,7 +99,6 @@ const RegistrationPage = () => {
       // send data to backend.
       let url = links.backendUrl + "/signup-customer";
       console.log("register form data:- ", registerformdata);
-      dispatch(startLoader());
       fetch(url, {
         method: "POST",
         body: JSON.stringify(registerformdata), // This is the data you want to send
@@ -115,6 +121,8 @@ const RegistrationPage = () => {
           return response.json();
         })
         .then((data) => {
+          dispatch(endLoader);
+
           console.log(data);
           Swal.fire({
             title: "Success",
@@ -122,7 +130,6 @@ const RegistrationPage = () => {
             icon: "success",
             // confirmButtonText: 'Cool'
           });
-          dispatch(endLoader);
 
           navigate("/login");
         })

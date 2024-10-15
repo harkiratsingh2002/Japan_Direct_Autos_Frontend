@@ -79,7 +79,7 @@ const NewCars = () => {
       <Grid container mt={3} mb={3} justifyContent={"center"}>
         <Grid item xs={8}>
           <Typography mb={2} variant="h2">
-            {"New Cars"}
+            {"Featured Cars"}
           </Typography>
         </Grid>
 

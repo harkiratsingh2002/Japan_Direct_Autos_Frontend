@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useMediaQuery } from "@mui/material"; // Import useMediaQuery for responsiveness
+
 import {
   Box,
   Grid,
@@ -29,6 +31,7 @@ const ContactUs = () => {
     email: "",
     message: "",
   });
+  const isSmallScreen = useMediaQuery("(max-width:700px)");
 
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
@@ -86,7 +89,9 @@ const ContactUs = () => {
 
       // alert('Thank you for contacting us!');
     }
+
   };
+
 
   return (
     <Box
@@ -262,7 +267,7 @@ const ContactUs = () => {
       </Grid>
       <div>
         <FloatingWhatsApp
-          buttonStyle={{ marginRight: "5.5%", marginBottom: "-0.5%" }}
+          buttonStyle={{ marginRight: isSmallScreen ? "16%" : "7%", marginBottom: isSmallScreen ? "-1.5%" : "-0.6%" }}
           phoneNumber="61451420125" // Required
           accountName="Japan Direct Autos" // Optional
           avatar={whatsappDP} // Optional

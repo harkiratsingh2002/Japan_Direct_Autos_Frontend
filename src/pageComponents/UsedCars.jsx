@@ -31,7 +31,7 @@ const UsedCars = () => {
       .then((carsData) => {
         console.log("cars:- ", carsData);
         setUsedCars(carsData.cars);
-        setCount(Math.ceil(carsData.count/6));
+        setCount(Math.ceil(carsData.count / 6));
         dispatch(endLoader())
       });
   }, []);
@@ -66,7 +66,7 @@ const UsedCars = () => {
 
       <Grid container mt={3} mb={3} justifyContent={"center"}>
         <Grid item xs={8}>
-          <Typography variant="h5" mb={2}>Used Cars</Typography>
+          <Typography variant="h2" mb={2}>Used Cars</Typography>
         </Grid>
         <Grid container justifyContent={"center"} xs={12} spacing={2} md={9}>
           {usedCars.map((newCar) => {

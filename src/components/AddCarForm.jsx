@@ -179,7 +179,7 @@ function CarTypeSelector(props) {
   );
 }
 function OldNewSelector(props) {
-  const carTypes = ["New", "Used", "Rental"];
+  const carTypes = ["Featured", "Used", "Rental"];
   return (
     <Autocomplete
       disablePortal
@@ -189,7 +189,7 @@ function OldNewSelector(props) {
       value={props.value}
       //   sx={{ width: 300 }}
       renderInput={(params) => (
-        <TextField {...params} label="Old Or New or Rental" />
+        <TextField {...params} label="Featured/Used/Rental" />
       )}
     />
   );

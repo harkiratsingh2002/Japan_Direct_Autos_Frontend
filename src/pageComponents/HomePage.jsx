@@ -15,7 +15,7 @@ import SearchCarsComponent from "../components/SearchCarsComponent";
 // import { Outlet } from "react-router-dom";
 const HomePage = () => {
   const width = useWindowWidth();
-  const [newCars, setNewCars] = useState([]);
+  const [newCars, setnewCars] = useState([]);
   const [usedCars, setUsedCars] = useState([]);
   const [rentalCars, setRentalCars] = useState([]);
 
@@ -25,6 +25,17 @@ const HomePage = () => {
   const handleOverlayClose = () => {
     setOverlayVisible(false);
   };
+
+  const cardStyle = {
+    width: "300px",
+    height: "400px",
+    borderRadius: "16px",
+    padding: "16px",
+    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+    marginBottom: "16px",
+    backgroundColor: "#fff",
+  };
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -39,7 +50,7 @@ const HomePage = () => {
       })
       .then((carsData) => {
         console.log("cars:- ", carsData);
-        setNewCars(carsData.cars);
+        setnewCars(carsData.cars);
         // setCount(carsData.count);
       })
       .catch((err) => {
@@ -105,7 +116,6 @@ const HomePage = () => {
         </Grid>
         <SearchCarsComponent />
 
-
         <Grid
           container
           marginTop={3}
@@ -115,19 +125,21 @@ const HomePage = () => {
         >
           <Grid item xs={12} textAlign={"center"}>
             <Typography textAlign={"center"} variant="h2">
-              New Cars
+              Featured Cars
             </Typography>
           </Grid>
-          {/* <Typography variant="h5">Top New Cars</Typography> */}
         </Grid>
+
         <Grid
           container
           marginLeft={"auto"}
           marginRight={"auto"}
           xs={10}
+          justifyContent={"space-around"}
         >
-          <ScrollContainer carType={"new"} cars={newCars} />
+          <ScrollContainer carType={"new"} cars={newCars} cardStyle={cardStyle} />
         </Grid>
+
         <Grid
           container
           marginTop={4}
@@ -140,8 +152,8 @@ const HomePage = () => {
               Used Cars
             </Typography>
           </Grid>
-          {/* <Typography variant="h5">Top Used Cars</Typography> */}
         </Grid>
+
         <Grid
           container
           mb={4}
@@ -150,11 +162,11 @@ const HomePage = () => {
           xs={10}
           justifyContent={"space-around"}
         >
-          <ScrollContainer carType={"used"} cars={usedCars} />
+          <ScrollContainer carType={"used"} cars={usedCars} cardStyle={cardStyle} />
         </Grid>
+
         <Grid
           container
-
           marginLeft={"auto"}
           marginRight={"auto"}
           xs={10}
@@ -164,8 +176,8 @@ const HomePage = () => {
               Rental Cars
             </Typography>
           </Grid>
-          {/* <Typography variant="h5">Top Rental Cars</Typography> */}
         </Grid>
+
         <Grid
           container
           mb={4}
@@ -174,11 +186,12 @@ const HomePage = () => {
           xs={10}
           justifyContent={"space-around"}
         >
-          <ScrollContainer carType={"Rental"} cars={rentalCars} />
+          <ScrollContainer carType={"Rental"} cars={rentalCars} cardStyle={cardStyle} />
         </Grid>
+
       </Grid>
 
-      <div></div>
+
     </>
   );
 };
