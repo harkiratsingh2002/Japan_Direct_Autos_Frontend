@@ -96,7 +96,7 @@ const Footer = () => {
                     mb={0.7}
                     variant="body1"
                   >
-                    New Cars
+                    Featured Cars
                   </Typography>
                 </Link>
               </li>
@@ -229,13 +229,7 @@ const Footer = () => {
               >
                 <Facebook />
               </MuiLink>
-              <MuiLink
-                href="https://twitter.com"
-                target="_blank"
-                color={myColors.offWhite}
-              >
-                <Twitter />
-              </MuiLink>
+
               <MuiLink
                 href="https://instagram.com"
                 target="_blank"

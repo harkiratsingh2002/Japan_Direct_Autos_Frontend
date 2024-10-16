@@ -256,8 +256,8 @@ const CarDetailsPage = (props) => {
             { seatingCapacity: finalcarInfoResult.car.seatingCapacity },
             { year: finalcarInfoResult.car.year },
             { mileage: finalcarInfoResult.car.mileage },
-            { brand: finalcarInfoResult.car.brand },
             { make: finalcarInfoResult.car.make },
+            { Engine: finalcarInfoResult.car.engine },
             { odometer: finalcarInfoResult.car.odometer },
             { model: finalcarInfoResult.car.model },
             { oldOrNew: finalcarInfoResult.car.oldOrNew },
@@ -440,6 +440,10 @@ const CarDetailsPage = (props) => {
                 </Container>
               </Grid>
             </Grid>
+            <Container item xs={11}>
+              <Typography variant="h4">Description</Typography>
+              <Typography mt={1}>{carInfo.description}</Typography>
+            </Container>
           </Container>
 
 

@@ -86,8 +86,9 @@ const NewCars = () => {
 
   return (
     <>
+
       {/* All cars title */}
-      <Grid container mt={3} mb={3} justifyContent={"center"}>
+      <Grid container mt={3} mb={3} justifyContent="center">
         <Grid item xs={8}>
           <Typography mb={2} variant="h2" align="center" sx={{ fontWeight: 'bold' }}>
             {"Featured Cars"}
@@ -98,7 +99,7 @@ const NewCars = () => {
           <SearchCarsComponent />
         </Grid>
 
-        <Grid container justifyContent={"center"} xs={12} spacing={2} md={9}>
+        <Grid container justifyContent="center" xs={12} spacing={2} md={9}>
           {loading
             ? Array.from(new Array(6)).map((_, index) => (
               <Grid item key={index} sx={{ display: "flex" }} xs={11} mb={2} md={4}>
@@ -117,7 +118,7 @@ const NewCars = () => {
         </Grid>
 
         {!loading && (
-          <Grid container justifyContent={"center"} xs={12} md={9}>
+          <Grid container justifyContent="center" xs={12} md={9}>
             <Pagination
               count={count}
               page={page}

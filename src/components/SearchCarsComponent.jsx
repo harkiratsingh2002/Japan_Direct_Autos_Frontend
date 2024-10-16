@@ -8,6 +8,7 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  Button,
 } from "@mui/material";
 
 import { useState } from "react";
@@ -73,19 +74,17 @@ const SearchCarsComponent = () => {
         container
         justifyContent="center"
         alignItems="center"
-        ml="auto"
-        mr="auto"
-        spacing={2}
-        sx={{ width: '100%', maxWidth: 'lg' }}
+        spacing={3}
+        sx={{ width: '100%', padding: 2 }}
       >
         {/* Search Bar */}
-        <Grid item xs={12} sm={8} md={6}>
-          <FormControl fullWidth variant="filled">
+        <Grid item xs={12} sm={8} md={7}>
+          <FormControl fullWidth variant="outlined">
             <OutlinedInput
               id="outlined-adornment-search"
               endAdornment={
                 <InputAdornment position="end">
-                  {/* You can add an icon here if needed */}
+                  <SearchIcon /> {/* Optional: Add an icon for better UX */}
                 </InputAdornment>
               }
               aria-describedby="outlined-search-helper-text"
@@ -103,14 +102,15 @@ const SearchCarsComponent = () => {
         </Grid>
 
         {/* Sorting Dropdown */}
-        <Grid item xs={12} sm={4} md={3}>
-          <FormControl fullWidth variant="filled">
+        <Grid item xs={12} sm={4} md={2}>
+          <FormControl fullWidth variant="outlined">
             <InputLabel id="sort-label">Sort By</InputLabel>
             <Select
               labelId="sort-label"
               id="sort-select"
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
+              label="Sort By"
             >
               <MenuItem value="price_asc">Price: Low to High</MenuItem>
               <MenuItem value="price_desc">Price: High to Low</MenuItem>
@@ -121,23 +121,19 @@ const SearchCarsComponent = () => {
         </Grid>
 
         {/* Search Button */}
-        <Grid item xs={12} sm={12} md={3}>
-          <button
+        <Grid item xs={12} sm={12} md={2}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
             onClick={handleSearch}
-            style={{
-              backgroundColor: '#1976d2',
-              color: 'white',
-              padding: '10px 20px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              width: '100%',
-            }}
+            sx={{ padding: '10px 0' }}
           >
             Search
-          </button>
+          </Button>
         </Grid>
       </Grid>
+
 
       {searchResult && (
         <Grid container justifyContent="center" my={4} ml="auto" mr="auto" spacing={2} sx={{ width: '100%', maxWidth: 'lg' }}>

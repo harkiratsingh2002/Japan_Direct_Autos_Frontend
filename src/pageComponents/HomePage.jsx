@@ -30,7 +30,7 @@ const HomePage = () => {
     width: "300px",
     height: "400px",
     borderRadius: "16px",
-    padding: "16px",
+    padding: "10px",
     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
     marginBottom: "16px",
     backgroundColor: "#fff",
@@ -102,94 +102,94 @@ const HomePage = () => {
             </header> */}
       <Grid container>
         {width <= 900 ? <JumbotronMobile /> : <Jumbotron />}
-        <Grid
-          container
-          mb={2}
-          xs={8}
-          mr={"auto"}
-          ml={5}
-          marginTop={7}
-          justifyContent="left"
-
-        >
-          <Typography variant="h3">Looking for cars?</Typography>
-        </Grid>
-        <SearchCarsComponent />
-
-        <Grid
-          container
-          marginTop={3}
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          xs={10}
-        >
-          <Grid item xs={12} textAlign={"center"}>
-            <Typography textAlign={"center"} variant="h2">
-              Featured Cars
-            </Typography>
-          </Grid>
-        </Grid>
-
-        <Grid
-          container
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          xs={10}
-          justifyContent={"space-around"}
-        >
-          <ScrollContainer carType={"new"} cars={newCars} cardStyle={cardStyle} />
-        </Grid>
-
-        <Grid
-          container
-          marginTop={4}
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          xs={10}
-        >
-          <Grid item xs={12} textAlign={"center"}>
-            <Typography textAlign={"center"} variant="h2">
-              Used Cars
-            </Typography>
-          </Grid>
-        </Grid>
-
-        <Grid
-          container
-          mb={4}
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          xs={10}
-          justifyContent={"space-around"}
-        >
-          <ScrollContainer carType={"used"} cars={usedCars} cardStyle={cardStyle} />
-        </Grid>
-
-        <Grid
-          container
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          xs={10}
-        >
-          <Grid item xs={12} textAlign={"center"}>
-            <Typography textAlign={"center"} variant="h2">
-              Rental Cars
-            </Typography>
-          </Grid>
-        </Grid>
-
-        <Grid
-          container
-          mb={4}
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          xs={10}
-          justifyContent={"space-around"}
-        >
-          <ScrollContainer carType={"Rental"} cars={rentalCars} cardStyle={cardStyle} />
-        </Grid>
-
       </Grid>
+      <Grid
+        container
+        mb={2}
+        xs={12}
+        mr={"auto"}
+
+        marginTop={7}
+        justifyContent="center"
+
+      >
+        <Typography variant="h3">Looking for cars?</Typography>
+      </Grid>
+      <SearchCarsComponent />
+
+      <Grid
+        container
+        marginTop={3}
+        marginLeft={"auto"}
+        marginRight={"auto"}
+        xs={10}
+      >
+        <Grid item xs={12} textAlign={"center"}>
+          <Typography textAlign={"center"} variant="h2">
+            Featured Cars
+          </Typography>
+        </Grid>
+      </Grid>
+
+      <Grid
+        container
+        marginLeft={"auto"}
+        marginRight={"auto"}
+        xs={10}
+        justifyContent={"space-around"}
+      >
+        <ScrollContainer carType={"Featured"} cars={newCars} cardStyle={cardStyle} />
+      </Grid>
+
+      <Grid
+        container
+        marginTop={4}
+        marginLeft={"auto"}
+        marginRight={"auto"}
+        xs={10}
+      >
+        <Grid item xs={12} textAlign={"center"}>
+          <Typography textAlign={"center"} variant="h2">
+            Used Cars
+          </Typography>
+        </Grid>
+      </Grid>
+
+      <Grid
+        container
+        mb={4}
+        marginLeft={"auto"}
+        marginRight={"auto"}
+        xs={10}
+        justifyContent={"space-around"}
+      >
+        <ScrollContainer carType={"used"} cars={usedCars} cardStyle={cardStyle} />
+      </Grid>
+
+      <Grid
+        container
+        marginLeft={"auto"}
+        marginRight={"auto"}
+        xs={10}
+      >
+        <Grid item xs={12} textAlign={"center"}>
+          <Typography textAlign={"center"} variant="h2">
+            Rental Cars
+          </Typography>
+        </Grid>
+      </Grid>
+
+      <Grid
+        container
+        mb={4}
+        marginLeft={"auto"}
+        marginRight={"auto"}
+        xs={10}
+        justifyContent={"space-around"}
+      >
+        <ScrollContainer carType={"Rental"} cars={rentalCars} cardStyle={cardStyle} />
+      </Grid>
+
 
 
     </>

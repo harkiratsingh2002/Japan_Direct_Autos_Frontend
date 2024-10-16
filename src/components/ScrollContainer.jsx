@@ -70,16 +70,16 @@ function ScrollContainer(props) {
           })}
           <Card
             sx={{
-              maxWidth: matches ? 240 : 345, // Reduced card width for mobile
+              maxWidth: matches ? 240 : 360, // Reduced card width for mobile
               minWidth: 240,
-              maxHeight: 240, // Smaller height for mobile
+              maxHeight: 360, // Smaller height for mobile
               marginTop: 5,
               display: "inline-flex",
               justifyContent: "space-between",
               flexDirection: "column",
-              borderRadius: "32px",
+              borderRadius: "10px",
               background: "#e0e0e0",
-              boxShadow: "24px 24px 26px #a8a8a8, -24px -24px 26px #ffffff",
+              // boxShadow: "24px 24px 26px #a8a8a8, -24px -24px 26px #ffffff",
               cursor: "pointer",
             }}
             onClick={() => {
