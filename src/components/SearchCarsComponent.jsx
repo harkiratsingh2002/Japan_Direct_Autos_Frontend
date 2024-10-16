@@ -9,6 +9,9 @@ import {
   MenuItem,
   InputLabel,
   Button,
+  List,
+  ListItem,
+  Box
 } from "@mui/material";
 
 import { useState } from "react";
@@ -19,10 +22,12 @@ import { useDispatch } from "react-redux";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 import links from "../assets/util/links";
 import Swal from "sweetalert2";
+import _ from "lodash"; // Import lodash for debouncing
 
 const SearchCarsComponent = () => {
   const [searchResult, setSearchResult] = useState(null);
   const [searchText, setSearchText] = useState("");
+  const [suggestions, setSuggestions] = useState([]); // New state for dynamic suggestions
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [sortOption, setSortOption] = useState(""); // New state for sorting
@@ -68,6 +73,30 @@ const SearchCarsComponent = () => {
       });
   };
 
+  // Debounced function for real-time suggestions
+  const fetchSuggestions = _.debounce((value) => {
+    axios
+      .post(links.backendUrl + "/suggest-cars", {
+        searchText: value,
+      })
+      .then((response) => {
+        setSuggestions(response.data.suggestions); // Set suggestions for dynamic display
+      })
+      .catch((err) => {
+        console.log("Error during fetching suggestions: ", err);
+      });
+  }, 300); // Debounce with a 300ms delay
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchText(value);
+    if (value) {
+      fetchSuggestions(value); // Fetch suggestions as user types
+    } else {
+      setSuggestions([]); // Clear suggestions when input is empty
+    }
+  };
+
   return (
     <>
       <Grid
@@ -77,20 +106,20 @@ const SearchCarsComponent = () => {
         spacing={3}
         sx={{ width: '100%', padding: 2 }}
       >
-        {/* Search Bar */}
-        <Grid item xs={12} sm={8} md={7}>
+        {/* Search Bar and Suggestions Container */}
+        <Grid item xs={12} sm={8} md={7} sx={{ position: 'relative' }}>
           <FormControl fullWidth variant="outlined">
             <OutlinedInput
               id="outlined-adornment-search"
               endAdornment={
                 <InputAdornment position="end">
-                  <SearchIcon /> {/* Optional: Add an icon for better UX */}
+                  <SearchIcon />
                 </InputAdornment>
               }
               aria-describedby="outlined-search-helper-text"
               inputProps={{ "aria-label": "search" }}
               placeholder="Search Cars"
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={handleInputChange} // Call handleInputChange when typing
               value={searchText}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -99,6 +128,41 @@ const SearchCarsComponent = () => {
               }}
             />
           </FormControl>
+
+          {/* Displaying Search Suggestions with Absolute Positioning */}
+          {suggestions.length > 0 && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: "100%", // Positioning the suggestions right below the search bar
+                left: 0,
+                right: 0,
+                zIndex: 1000,
+                backgroundColor: "#fff",
+                border: "1px solid #ddd",
+                borderRadius: 1,
+                boxShadow: 2,
+                maxHeight: 200,
+                overflowY: "auto",
+              }}
+            >
+              <List>
+                {suggestions.map((suggestion, index) => (
+                  <ListItem
+                    button
+                    key={index}
+                    onClick={() => {
+                      setSearchText(suggestion.name); // Set selected suggestion to searchText
+                      handleSearch(); // Trigger the search for selected suggestion
+                      setSuggestions([]); // Clear the suggestions list after selection
+                    }}
+                  >
+                    {suggestion.name}
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          )}
         </Grid>
 
         {/* Sorting Dropdown */}
@@ -134,7 +198,7 @@ const SearchCarsComponent = () => {
         </Grid>
       </Grid>
 
-
+      {/* Search Results */}
       {searchResult && (
         <Grid container justifyContent="center" my={4} ml="auto" mr="auto" spacing={2} sx={{ width: '100%', maxWidth: 'lg' }}>
           <Grid item xs={12}>
