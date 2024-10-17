@@ -11,7 +11,8 @@ import {
   Button,
   List,
   ListItem,
-  Box
+  Box,
+  Container
 } from "@mui/material";
 
 import { useState } from "react";
@@ -99,132 +100,137 @@ const SearchCarsComponent = () => {
 
   return (
     <>
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        spacing={3}
-        sx={{ width: '100%', padding: 2 }}
-      >
-        {/* Search Bar and Suggestions Container */}
-        <Grid item xs={12} sm={8} md={7} sx={{ position: 'relative' }}>
-          <FormControl fullWidth variant="outlined">
-            <OutlinedInput
-              id="outlined-adornment-search"
-              endAdornment={
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              }
-              aria-describedby="outlined-search-helper-text"
-              inputProps={{ "aria-label": "search" }}
-              placeholder="Search Cars"
-              onChange={handleInputChange} // Call handleInputChange when typing
-              value={searchText}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch();
-                }
-              }}
-            />
-          </FormControl>
-
-          {/* Displaying Search Suggestions with Absolute Positioning */}
-          {suggestions.length > 0 && (
-            <Box
-              sx={{
-                position: "absolute",
-                top: "100%", // Positioning the suggestions right below the search bar
-                left: 0,
-                right: 0,
-                zIndex: 1000,
-                backgroundColor: "#fff",
-                border: "1px solid #ddd",
-                borderRadius: 1,
-                boxShadow: 2,
-                maxHeight: 200,
-                overflowY: "auto",
-              }}
-            >
-              <List>
-                {suggestions.map((suggestion, index) => (
-                  <ListItem
-                    button
-                    key={index}
-                    onClick={() => {
-                      setSearchText(suggestion.name); // Set selected suggestion to searchText
-                      handleSearch(); // Trigger the search for selected suggestion
-                      setSuggestions([]); // Clear the suggestions list after selection
-                    }}
-                  >
-                    {suggestion.name}
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          )}
-        </Grid>
-
-        {/* Sorting Dropdown */}
-        <Grid item xs={12} sm={4} md={2}>
-          <FormControl fullWidth variant="outlined">
-            <InputLabel id="sort-label">Sort By</InputLabel>
-            <Select
-              labelId="sort-label"
-              id="sort-select"
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-              label="Sort By"
-            >
-              <MenuItem value="price_asc">Price: Low to High</MenuItem>
-              <MenuItem value="price_desc">Price: High to Low</MenuItem>
-              <MenuItem value="year_asc">Year: Old to New</MenuItem>
-              <MenuItem value="year_desc">Year: New to Old</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-
-        {/* Search Button */}
-        <Grid item xs={12} sm={12} md={2}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={handleSearch}
-            sx={{ padding: '10px 0' }}
+      <>
+        <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+          <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+            spacing={3}
           >
-            Search
-          </Button>
-        </Grid>
-      </Grid>
+            {/* Search Bar and Suggestions Container */}
+            <Grid item xs={12} sm={8} md={7} sx={{ position: 'relative' }}>
+              <FormControl fullWidth variant="outlined">
+                <OutlinedInput
+                  id="outlined-adornment-search"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <SearchIcon />
+                    </InputAdornment>
+                  }
+                  aria-describedby="outlined-search-helper-text"
+                  inputProps={{ "aria-label": "search" }}
+                  placeholder="Search Cars"
+                  onChange={handleInputChange}
+                  value={searchText}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch();
+                    }
+                  }}
+                />
+              </FormControl>
 
-      {/* Search Results */}
-      {searchResult && (
-        <Grid container justifyContent="center" my={4} ml="auto" mr="auto" spacing={2} sx={{ width: '100%', maxWidth: 'lg' }}>
-          <Grid item xs={12}>
-            <Typography mb={2} variant="h4" align="center">
-              Search Results
-            </Typography>
+              {suggestions.length > 0 && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    right: 0,
+                    zIndex: 1000,
+                    backgroundColor: "#fff",
+                    border: "1px solid #ddd",
+                    borderRadius: 1,
+                    boxShadow: 2,
+                    maxHeight: 200,
+                    overflowY: "auto",
+                  }}
+                >
+                  <List>
+                    {suggestions.map((suggestion, index) => (
+                      <ListItem
+                        button
+                        key={index}
+                        onClick={() => {
+                          setSearchText(suggestion.name);
+                          handleSearch();
+                          setSuggestions([]);
+                        }}
+                      >
+                        {suggestion.name}
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              )}
+            </Grid>
+
+            {/* Sorting Dropdown */}
+            <Grid item xs={12} sm={4} md={2}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="sort-label">Sort By</InputLabel>
+                <Select
+                  labelId="sort-label"
+                  id="sort-select"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                  label="Sort By"
+                >
+                  <MenuItem value="price_asc">Price: Low to High</MenuItem>
+                  <MenuItem value="price_desc">Price: High to Low</MenuItem>
+                  <MenuItem value="year_asc">Year: Old to New</MenuItem>
+                  <MenuItem value="year_desc">Year: New to Old</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            {/* Search Button */}
+            <Grid item xs={12} sm={12} md={2}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleSearch}
+                sx={{ padding: '10px 0' }}
+              >
+                Search
+              </Button>
+            </Grid>
           </Grid>
-          <Grid container justifyContent="center" spacing={2} sx={{ width: '100%' }}>
-            {searchResult.map((newCar, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4} mb={2} display="flex" justifyContent="center">
-                <CarCardComponent car={newCar} />
+        </Container>
+
+        {/* Search Results */}
+        {searchResult && (
+          <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+            <Grid container justifyContent="center" spacing={2}>
+              <Grid item xs={12}>
+                <Typography mb={2} variant="h4" align="center">
+                  Search Results
+                </Typography>
               </Grid>
-            ))}
-          </Grid>
+              <Grid container justifyContent="center" spacing={2}>
+                {searchResult.map((newCar, index) => (
+                  <Grid item key={index} xs={12} sm={6} md={4} display="flex" justifyContent="center">
+                    <CarCardComponent car={newCar} />
+                  </Grid>
+                ))}
+              </Grid>
 
-          <Grid item xs={12} mt={3}>
-            <Pagination
-              count={count}
-              page={page}
-              color="primary"
-              onChange={handleChange}
-              sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}
-            />
-          </Grid>
-        </Grid>
-      )}
+              <Grid item xs={12} mt={3}>
+                <Pagination
+                  count={count}
+                  page={page}
+                  color="primary"
+                  onChange={handleChange}
+                  sx={{ display: 'flex', justifyContent: 'center' }}
+                />
+              </Grid>
+            </Grid>
+          </Container>
+        )}
+      </>
+
     </>
   );
 };

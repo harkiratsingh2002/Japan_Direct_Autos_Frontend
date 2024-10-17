@@ -116,7 +116,7 @@ const SearchBar = () => {
                                             },
                                         }}
                                     >
-                                        {suggestion.name} - {suggestion.year} - ${suggestion.price}
+                                        {suggestion.name}
                                     </ListItem>
                                 ))}
                             </List>
