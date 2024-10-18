@@ -16,6 +16,7 @@ import { Facebook, Twitter, Instagram } from "@mui/icons-material";
 import logo from "../assets/images/whatsappDP.jpg";
 import links from "../assets/util/links";
 import Swal from "sweetalert2";
+import privacyPolicy from "../assets/privacyPolicy.pdf";
 
 const Footer = () => {
   const [subscribeEmail, setSubscribeEmail] = useState("");
@@ -166,6 +167,18 @@ const Footer = () => {
                     Whatsapp Us
                   </Typography>
                 </Link>
+              </li>
+              <li>
+                <a
+                  href={privacyPolicy}
+                  target="_blank" // Opens in a new tab
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography color={myColors.offWhite} mb={0.7} variant="body1">
+                    Privacy Policy
+                  </Typography>
+                </a>
               </li>
             </ul>
           </Grid>

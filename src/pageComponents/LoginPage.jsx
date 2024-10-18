@@ -24,6 +24,7 @@ import Swal from "sweetalert2";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import GoogleIcon from "@mui/icons-material/Google";
+import googleIcon from "../assets/images/googleIcon.svg";
 import { endLoader, startLoader } from "../reduxStore/loadingSlice";
 import TwoStepVerifyModal from "../components/TwoStepVerifyModal";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -337,7 +338,7 @@ const LoginPage = () => {
                     id="outlined-adornment-password"
                     // placeholder="Password"
                     type={showPassword ? "text" : "password"}
-                    // variant="outlined"
+                  // variant="outlined"
                   />
                 </FormControl>
               </Grid>
@@ -365,7 +366,7 @@ const LoginPage = () => {
                   mt={2}
                   onClick={() => loginWithGoogle()}
                   fullWidth
-                  startIcon={<GoogleIcon />}
+                  startIcon={<img src={googleIcon} alt="Google" style={{ width: '24px', height: '24px' }} />}
                   variant="outlined"
                 >
                   Login with Google
