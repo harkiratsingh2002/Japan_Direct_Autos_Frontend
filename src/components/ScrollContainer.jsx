@@ -83,7 +83,7 @@ function ScrollContainer(props) {
               cursor: "pointer",
             }}
             onClick={() => {
-              if (props.carType === "new") {
+              if (props.carType === "Featured") {
                 navigate("/new-cars");
               } else if (props.carType === "used") {
                 navigate("/used-cars");

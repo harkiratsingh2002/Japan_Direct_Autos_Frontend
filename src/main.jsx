@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import ScrollToTop from './components/ScrollToTop.jsx';
 
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -48,8 +49,12 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navbar />,
-    children: [
+    element: (
+      <>
+        <ScrollToTop /> {/* Include ScrollToTop here */}
+        <Navbar />
+      </>
+    ), children: [
       {
         path: "/",
         element: <HomePage />,
@@ -121,6 +126,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         {/* Wrap the app with the ThemeProvider */}
         <ThemeProvider theme={lightTheme}>
           <CssBaseline />  {/* Normalizes the styles */}
+
           <RouterProvider router={router} />
         </ThemeProvider>
       </Provider>

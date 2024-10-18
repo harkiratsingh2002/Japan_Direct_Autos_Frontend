@@ -1,0 +1,56 @@
+/* Loader overlay styling */
+#myOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Container to hold the car and loading dots */
+.car-loader-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: drive 3s ease-in-out infinite;
+    /* Car moving back and forth */
+}
+
+/* Car image styling */
+.car-image {
+    width: 100px;
+    /* Smaller car size */
+    margin-bottom: 05px;
+    /* Less space between car and dots */
+}
+
+/* Dots placement under the car */
+.loading-dots {
+    margin-top: -50px;
+    /* Optional: Adjust based on design */
+}
+
+/* Keyframe animation for the car to move left and right */
+@keyframes drive {
+    0% {
+        transform: translateX(-100px);
+        /* Adjusted for smaller car */
+    }
+
+    50% {
+        transform: translateX(100px);
+        /* Adjusted for smaller car */
+    }
+
+    100% {
+        transform: translateX(-100px);
+        /* Adjusted for smaller car */
+    }
+}
