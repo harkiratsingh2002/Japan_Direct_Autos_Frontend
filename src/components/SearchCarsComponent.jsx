@@ -14,6 +14,7 @@ import {
   Box,
   Container
 } from "@mui/material";
+import React, { useEffect, useRef } from 'react';
 
 import { useState } from "react";
 import axios from "axios";
@@ -33,6 +34,9 @@ const SearchCarsComponent = () => {
   const [page, setPage] = useState(1);
   const [sortOption, setSortOption] = useState(""); // New state for sorting
   const dispatch = useDispatch();
+
+  const inputRef = useRef(null);
+  const suggestionBoxRef = useRef(null);
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -74,17 +78,16 @@ const SearchCarsComponent = () => {
       });
   };
 
-  // Debounced function for real-time suggestions
   const fetchSuggestions = _.debounce((value) => {
     axios
-      .post(links.backendUrl + "/suggest-cars", {
+      .post(links.backendUrl + '/suggest-cars', {
         searchText: value,
       })
       .then((response) => {
         setSuggestions(response.data.suggestions); // Set suggestions for dynamic display
       })
       .catch((err) => {
-        console.log("Error during fetching suggestions: ", err);
+        console.log('Error during fetching suggestions: ', err);
       });
   }, 300); // Debounce with a 300ms delay
 
@@ -97,6 +100,26 @@ const SearchCarsComponent = () => {
       setSuggestions([]); // Clear suggestions when input is empty
     }
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        suggestionBoxRef.current &&
+        !suggestionBoxRef.current.contains(event.target) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
+        // Clicked outside the suggestion box and input field
+        setSuggestions([]); // Clear suggestions
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
 
   return (
     <>
@@ -112,6 +135,8 @@ const SearchCarsComponent = () => {
             <Grid item xs={12} sm={8} md={7} sx={{ position: 'relative' }}>
               <FormControl fullWidth variant="outlined">
                 <OutlinedInput
+                  ref={inputRef}
+
                   id="outlined-adornment-search"
                   endAdornment={
                     <InputAdornment position="end">
@@ -133,18 +158,19 @@ const SearchCarsComponent = () => {
 
               {suggestions.length > 0 && (
                 <Box
+                  ref={suggestionBoxRef}
                   sx={{
-                    position: "absolute",
-                    top: "100%",
+                    position: 'absolute',
+                    top: '100%',
                     left: 0,
                     right: 0,
                     zIndex: 1000,
-                    backgroundColor: "#fff",
-                    border: "1px solid #ddd",
+                    backgroundColor: '#fff',
+                    border: '1px solid #ddd',
                     borderRadius: 1,
                     boxShadow: 2,
                     maxHeight: 200,
-                    overflowY: "auto",
+                    overflowY: 'auto',
                   }}
                 >
                   <List>
