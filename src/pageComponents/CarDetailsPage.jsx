@@ -38,13 +38,12 @@ const CarDetailsPage = (props) => {
   // const [price, setPrice] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [userData, setUserData] = useState({});
 
   const [currentImage, setCurrentImage] = useState(null);
   const [openEnquiryModal, setOpenEnquiryModal] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
-  const wishlist = useSelector((state) => state.userDataSlice.wishlist);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [EnquiryFormData, setEnquiryFormData] = useState({
     subject: {
       value: "",
@@ -57,17 +56,69 @@ const CarDetailsPage = (props) => {
       hasError: false,
     },
     email: {
-      value: "",
+      value: "", // Initially empty
       error: "",
       hasError: false,
     },
   });
 
+  let userToken = "";
+  const wishlist = useSelector((state) => state.userDataSlice.wishlist);
   useEffect(() => {
+    // Check if user is logged in and pre-fill email
     if (localStorage.getItem("userData")) {
+      const storedUserData = JSON.parse(localStorage.getItem("userData"));
+      userToken = storedUserData.userToken;
+
+      setEnquiryFormData((prevState) => ({
+        ...prevState,
+        email: { ...prevState.email, value: storedUserData.email }, // Pre-fill email from localStorage
+      }));
       setIsLoggedIn(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (userToken.length > 0) {
+      axios
+        .post(
+          links.backendUrl + "/get-user",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`, // Assuming it's a Bearer token
+            },
+          }
+        )
+        .then((result) => {
+          dispatch(endLoader());
+          if (result.data.status < 200 || result.data.status > 299) {
+            throw new Error("Error while getting user data.");
+          }
+          console.log("user data from get-user:", result.data.user);
+          localStorage.setItem("oldEmail", result.data.user.email);
+          setUserData(result.data.user); // Set user data in state
+        })
+        .catch((err) => {
+          console.log("Error while getting user data:", err);
+        });
+    }
+  }, [userToken]);
+
+  // Update EnquiryFormData when userData is fetched
+  useEffect(() => {
+    if (userData.email) {
+      setEnquiryFormData((prevState) => ({
+        ...prevState,
+        email: { ...prevState.email, value: userData.email }, // Update email field with fetched userData
+      }));
+    }
+  }, [userData]);
+
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
 
 
   const navigate = useNavigate();
@@ -75,8 +126,11 @@ const CarDetailsPage = (props) => {
   let carId = params.carId;
   const handleSendEnquiry = () => {
     let userToken = null;
+
+    // If the user is logged in, get the token (this part stays the same)
     if (localStorage.getItem("userData")) {
-      userToken = JSON.parse(localStorage.getItem("userData")).userToken;
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      userToken = userData.userToken;
     }
 
     let enquiryData = {
@@ -84,6 +138,7 @@ const CarDetailsPage = (props) => {
       enquiryText: EnquiryFormData.enquiryText.value,
       carId: carId,
       carLink: window.location.href,
+      enquiredByEmail: EnquiryFormData.email.value, // Always use the email from the input field
     };
 
     // Validate form fields
@@ -99,28 +154,24 @@ const CarDetailsPage = (props) => {
       return;
     }
 
-    // Handle anonymous users
-    if (!isLoggedIn) {
-      if (EnquiryFormData.email.value.length === 0) {
-        Swal.fire({
-          title: "Error",
-          text: "Email is required.",
-          icon: "error",
-        });
-        return;
-      } else {
-        // Basic email format validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(EnquiryFormData.email.value)) {
-          Swal.fire({
-            title: "Error",
-            text: "Please enter a valid email address.",
-            icon: "error",
-          });
-          return;
-        }
-        enquiryData.email = EnquiryFormData.email.value;
-      }
+    // Validate email
+    if (EnquiryFormData.email.value.length === 0) {
+      Swal.fire({
+        title: "Error",
+        text: "Email is required.",
+        icon: "error",
+      });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(EnquiryFormData.email.value)) {
+      Swal.fire({
+        title: "Error",
+        text: "Please enter a valid email address.",
+        icon: "error",
+      });
+      return;
     }
 
     dispatch(startLoader());
@@ -133,6 +184,7 @@ const CarDetailsPage = (props) => {
       body: JSON.stringify(enquiryData),
     };
 
+    // Attach the user token if logged in
     if (userToken) {
       fetchOptions.headers.authorization = `Bearer ${userToken}`;
     }
@@ -169,6 +221,17 @@ const CarDetailsPage = (props) => {
         console.error("Error:", error);
       });
   };
+  // Pre-fill email and disable input for logged-in users
+  useEffect(() => {
+    if (localStorage.getItem("userData")) {
+      const storedUserData = JSON.parse(localStorage.getItem("userData"));
+      setEnquiryFormData((prevState) => ({
+        ...prevState,
+        email: { ...prevState.email, value: storedUserData.email },
+      }));
+      setIsLoggedIn(true); // User is logged in
+    }
+  }, []);
 
   // let myRows = [];
   const handleOpenEnquiry = () => {
@@ -325,16 +388,7 @@ const CarDetailsPage = (props) => {
               {/* Car Image */}
               <Grid item xs={12} md={7}>
                 <>
-                  <img
-                    style={{
-                      height: "auto",
-                      width: "100%",
-                      borderRadius: "10px",
-                      objectFit: "cover"
-                    }}
-                    src={links.backendUrl + "/" + currentImage}
-                    alt="Car"
-                  />
+
                   <Grid container>
                     <ScrollingImageComponent
                       handleImageChange={handleImageChange}
@@ -375,24 +429,22 @@ const CarDetailsPage = (props) => {
                   </Typography>
 
 
-                  {/* Conditionally render Email field */}
-                  {!isLoggedIn && (
-                    <TextField
-                      fullWidth
-                      label="Email"
-                      value={EnquiryFormData.email.value}
-                      required
-                      onChange={(e) => {
-                        setEnquiryFormData((state) => ({
-                          ...state,
-                          email: { ...state.email, value: e.target.value },
-                        }));
-                      }}
-                      variant="outlined"
-                      margin="dense"
-                    />
-                  )}
-
+                  {/* Email Field: Disable input if logged in */}
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    value={EnquiryFormData.email.value} // Pre-filled for logged-in users
+                    required
+                    disabled={isLoggedIn} // Disable the input if the user is logged in
+                    onChange={(e) => {
+                      setEnquiryFormData((state) => ({
+                        ...state,
+                        email: { ...state.email, value: e.target.value },
+                      }));
+                    }}
+                    variant="outlined"
+                    margin="dense"
+                  />
                   {/* Subject Field */}
                   <TextField
                     fullWidth

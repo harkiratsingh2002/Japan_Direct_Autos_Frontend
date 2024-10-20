@@ -15,6 +15,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Carousel from "react-material-ui-carousel";
 import axios from "axios";
+import { useMediaQuery } from "@mui/material";
 import Swal from "sweetalert2";
 import links from "../assets/util/links";
 import EnquireNowModal from "./EnquireNowModal";
@@ -43,6 +44,8 @@ const CarCardComponent = ({ car, inWishlist: propInWishlist, setWishlistCars }) 
         });
     }
   }, [car._id]);
+
+  const matches = useMediaQuery("(max-width:600px)"); // Media query for responsiveness
 
   const handleOpenEnquiry = () => {
     setOpenEnquiryModal(true);
@@ -142,9 +145,7 @@ const CarCardComponent = ({ car, inWishlist: propInWishlist, setWishlistCars }) 
     <>
       <Card
         sx={{
-          width: 345,
-          maxWidth: 345,
-          minWidth: 280,
+          width: matches ? "270px" : "360px", // Explicit width change for mobile and desktop
           display: "inline-flex",
           justifyContent: "space-between",
           flexDirection: "column",
