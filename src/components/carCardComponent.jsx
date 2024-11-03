@@ -211,9 +211,9 @@ const CarCardComponent = ({ car, inWishlist: propInWishlist, setWishlistCars }) 
           <Link to={`/car-details/${car._id}`}>
             <Button size="small">Learn More</Button>
           </Link>
-          {/* <Button size="small" onClick={handleOpenEnquiry}>
+          <Button size="small" onClick={handleOpenEnquiry}>
             Enquire
-          </Button> */}
+          </Button>
           {inWishlist && (
             <IconButton
               size="large"
